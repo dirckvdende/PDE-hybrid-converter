@@ -10,6 +10,7 @@
 enum ExprNodeType {
     NODE_ERR,
     NODE_SYMB,
+    NODE_NUM,
     NODE_DERIV,
     NODE_ADD, NODE_SUB, NODE_MUL, NODE_DIV,
     NODE_LT, NODE_LTE, NODE_GT, NODE_GTE,
@@ -79,6 +80,24 @@ public:
      * @return A string representation of the expression
      */
     std::string str() const;
+
+    /**
+     * Find all occurrences of a specific subtree. Complexity of this operation
+     * is O(mn), where n and m are the sizes of this tree and the tree to search
+     * for
+     * @param other The tree to search for
+     * @param occ A vector that all of the occurrences will be appended to
+     */
+    void find(const ExprNode &other, std::vector<ExprNode *> &occ);
+
+    /**
+     * Substitute all occurrences of a specific subtree with another. Complexity
+     * of this operation is O(mn), where n and m are the sizes of this tree and
+     * the tree to search for
+     * @param search The tree to replace
+     * @param repl The tree to replace with
+     */
+    void replace(const ExprNode &search, const ExprNode &repl);
 
     // The node type
     ExprNodeType type;
