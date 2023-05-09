@@ -26,6 +26,28 @@ struct EquationNode {
 };
 
 /**
+ * Equation parse tree, which is a derived class from a vector of equation
+ * nodes, for extra functionality
+ */
+class EquationTree : public std::vector<EquationNode> {
+
+public:
+
+    /**
+     * Evaluate the (sub)tree given certain values
+     * @param vals The values of the symbols in the tree
+     * @param node The index of the node to take as root (default root node)
+     * @return The evaluated value of the parse tree root as a double, for
+     * binary values this will be 0.0 or 1.0
+     */
+    double eval(const std::unordered_map<std::string, double> &vals, size_t root
+    = SIZE_MAX) const;
+
+private:
+
+};
+
+/**
  * Object used to parse a vector of tokens to a parse tree, which is also
  * represented as a vector
  */
@@ -53,7 +75,7 @@ public:
      * Get the output parse tree as a vector, where the last item is the root
      * @return A reference to the output parse tree as a vector
      */
-    const std::vector<EquationNode> &getTree() const;
+    const EquationTree &getTree() const;
 
 private:
 
@@ -120,7 +142,7 @@ private:
     // Reference to the input tokens
     const std::vector<EquationToken> &tokens;
     // Output parse tree, last item is the root
-    std::vector<EquationNode> tree;
+    EquationTree tree;
     // Current position in the input stream
     size_t pos;
 
