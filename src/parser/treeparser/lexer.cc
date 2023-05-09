@@ -4,13 +4,13 @@
 #include <ostream>
 #include <string>
 
-Lexer::Lexer(const std::string &txt) : txt(txt), curIndex(0) {
+TreeLexer::TreeLexer(const std::string &txt) : txt(txt), curIndex(0) {
     prepareConfigOptions();
 }
 
-Lexer::~Lexer() { }
+TreeLexer::~TreeLexer() { }
 
-void Lexer::run() {
+void TreeLexer::run() {
     while (!atEnd()) {
         TokenType specialType;
         if (isWhitespaceChar(cur()))
@@ -28,11 +28,11 @@ void Lexer::run() {
     convertNameToken();
 }
 
-const std::vector<Token> &Lexer::getTokens() const {
+const std::vector<Token> &TreeLexer::getTokens() const {
     return tokens;
 }
 
-std::ostream &operator<<(std::ostream &os, const Lexer &lexer) {
+std::ostream &operator<<(std::ostream &os, const TreeLexer &lexer) {
     for (const Token &token : lexer.tokens) {
         switch (token.type) {
             case TOK_TEXT:
@@ -56,21 +56,21 @@ std::ostream &operator<<(std::ostream &os, const Lexer &lexer) {
     return os << std::flush;
 }
 
-char Lexer::cur() const {
+char TreeLexer::cur() const {
     if (curIndex >= txt.size())
         return '\0';
     return txt[curIndex];
 }
 
-void Lexer::next() {
+void TreeLexer::next() {
     curIndex++;
 }
 
-bool Lexer::atEnd() const {
+bool TreeLexer::atEnd() const {
     return curIndex >= txt.size();
 }
 
-void Lexer::convertNameToken() {
+void TreeLexer::convertNameToken() {
     if (tokens.empty())
         return;
     if (tokens.back().type != TOK_TEXT)
@@ -80,18 +80,18 @@ void Lexer::convertNameToken() {
     tokens.back().type = TOK_NAME;
 }
 
-void Lexer::prepareConfigOptions() {
-    for (const ConfigOption &option : settings.configOptions)
+void TreeLexer::prepareConfigOptions() {
+    for (const TreeConfigOption &option : settings.configOptions)
         configNames.emplace(option.name, &option);
 }
 
-bool Lexer::lastTokenWasText() const {
+bool TreeLexer::lastTokenWasText() const {
     if (tokens.empty())
         return false;
     return tokens.back().type == TOK_TEXT;
 }
 
-bool Lexer::isSpecialChar(char c, TokenType &type) {
+bool TreeLexer::isSpecialChar(char c, TokenType &type) {
     switch (c) {
         case '{':
             type = TOK_LBRACE;
@@ -108,6 +108,6 @@ bool Lexer::isSpecialChar(char c, TokenType &type) {
     return false;
 }
 
-bool Lexer::isWhitespaceChar(char c) {
+bool TreeLexer::isWhitespaceChar(char c) {
     return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 }

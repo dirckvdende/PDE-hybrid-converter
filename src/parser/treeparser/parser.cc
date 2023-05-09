@@ -5,14 +5,14 @@
 #include "parser.h"
 #include "settings.h"
 
-ParseNode::ParseNode(const ParseNodeType type) : type(type) { }
+TreeParseNode::TreeParseNode(const TreeParseNodeType type) : type(type) { }
 
-ParseNode::~ParseNode() {
-    for (ParseNode *child : children)
+TreeParseNode::~TreeParseNode() {
+    for (TreeParseNode *child : children)
         delete child;
 }
 
-std::ostream &ParseNode::print(std::ostream &os, size_t depth) {
+std::ostream &TreeParseNode::print(std::ostream &os, size_t depth) {
     for (size_t i = 0; i < depth; i++)
         os << "  ";
     switch (type) {
@@ -30,70 +30,70 @@ std::ostream &ParseNode::print(std::ostream &os, size_t depth) {
             break;
     }
     os << name << "; " << text << '\n';
-    for (ParseNode *child : children)
+    for (TreeParseNode *child : children)
         child->print(os, depth + 1);
     return os;
 }
 
-Parser::Parser(const std::vector<Token> &tokens) : tokens(tokens),
+TreeParser::TreeParser(const std::vector<Token> &tokens) : tokens(tokens),
 root(nullptr), curIndex(0) {
     prepareConfigOptions();
 }
 
-Parser::~Parser() {
+TreeParser::~TreeParser() {
     delete root;
 }
 
-void Parser::run() {
+void TreeParser::run() {
     root = readRoot();
 }
 
-std::ostream &operator<<(std::ostream &os, const Parser &parser) {
+std::ostream &operator<<(std::ostream &os, const TreeParser &parser) {
     if (parser.root == nullptr)
         return os;
     return parser.root->print(os, 0);
 }
 
-const Token &Parser::cur() const {
+const Token &TreeParser::cur() const {
     if (curIndex >= tokens.size())
         return tokens.back();
     return tokens[curIndex];
 }
 
-void Parser::next() {
+void TreeParser::next() {
     curIndex++;
 }
 
-bool Parser::atEnd() const {
+bool TreeParser::atEnd() const {
     return curIndex >= tokens.size();
 }
 
-bool Parser::accept(TokenType type) const {
+bool TreeParser::accept(TokenType type) const {
     if (atEnd())
         return false;
     return cur().type == type;
 }
 
-void Parser::expect(TokenType type) {
+void TreeParser::expect(TokenType type) {
     if (!accept(type))
         error("Unexpected token");
 }
 
-void Parser::error(std::string content) {
+void TreeParser::error(std::string content) {
     std::cerr << "ERROR: " << content << std::endl;
     exit(1);
 }
 
-ParseNode *Parser::readRoot() {
-    ParseNode *node = new ParseNode(NODE_ROOT);
+TreeParseNode *TreeParser::readRoot() {
+    TreeParseNode *node = new TreeParseNode(NODE_ROOT);
     while (!atEnd())
         node->children.push_back(readConfigEntry());
     return node;
 }
 
-ParseNode *Parser::readConfigEntry() {
+TreeParseNode *TreeParser::readConfigEntry() {
     expect(TOK_NAME);
-    const ConfigOption &option = *configNames[cur().content];
+    const TreeConfigOption &option = *configNames[cur().content];
     switch (option.type) {
         case OPT_TEXT:
             return readTextEntry();
@@ -105,9 +105,9 @@ ParseNode *Parser::readConfigEntry() {
     return nullptr;
 }
 
-ParseNode *Parser::readTextEntry() {
+TreeParseNode *TreeParser::readTextEntry() {
     expect(TOK_NAME);
-    ParseNode *node = new ParseNode(NODE_TEXT);
+    TreeParseNode *node = new TreeParseNode(NODE_TEXT);
     node->name = cur().content;
     next();
     expect(TOK_TEXT);
@@ -118,9 +118,9 @@ ParseNode *Parser::readTextEntry() {
     return node;
 }
 
-ParseNode *Parser::readTreeEntry(bool isNamed) {
+TreeParseNode *TreeParser::readTreeEntry(bool isNamed) {
     expect(TOK_NAME);
-    ParseNode *node = new ParseNode(isNamed ? NODE_NAMED_TREE : NODE_TREE);
+    TreeParseNode *node = new TreeParseNode(isNamed ? NODE_NAMED_TREE : NODE_TREE);
     node->name = cur().content;
     next();
     if (isNamed) {
@@ -140,7 +140,7 @@ ParseNode *Parser::readTreeEntry(bool isNamed) {
     return node;
 }
 
-void Parser::prepareConfigOptions() {
-    for (const ConfigOption &option : settings.configOptions)
+void TreeParser::prepareConfigOptions() {
+    for (const TreeConfigOption &option : settings.configOptions)
         configNames.emplace(option.name, &option);
 }

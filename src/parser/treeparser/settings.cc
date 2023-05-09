@@ -1,7 +1,7 @@
 
 #include "settings.h"
 
-const Settings settings = {
+const TreeSettings settings = {
     {
         { "pde", OPT_NAMED_TREE },
         { "equation", OPT_TEXT },

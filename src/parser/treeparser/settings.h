@@ -12,7 +12,7 @@
  * If the type is named tree, then a name is expected first, then a subtree
  * enclosed by {} (semicolon optional)
  */
-enum ConfigOptionType {
+enum TreeConfigOptionType {
     OPT_TEXT,
     OPT_TREE,
     OPT_NAMED_TREE,
@@ -23,19 +23,19 @@ enum ConfigOptionType {
  * Name gives the identifier that the option starts with, type gives the
  * type (see above)
  */
-struct ConfigOption {
+struct TreeConfigOption {
     std::string name;
-    ConfigOptionType type = OPT_TEXT;
+    TreeConfigOptionType type = OPT_TEXT;
 };
 
 // Stores all configuration options
-extern const std::vector<ConfigOption> configOptions;
+extern const std::vector<TreeConfigOption> configOptions;
 
 /**
  * Contains all global settings
  */
-struct Settings {
-    std::vector<ConfigOption> configOptions;
+struct TreeSettings {
+    std::vector<TreeConfigOption> configOptions;
 };
 
-extern const Settings settings;
+extern const TreeSettings settings;
