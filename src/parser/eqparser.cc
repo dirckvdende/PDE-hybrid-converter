@@ -5,6 +5,44 @@
 #include <unordered_map>
 #include <vector>
 
+double EquationTree::eval(const std::unordered_map<std::string, double> &vals,
+size_t root = SIZE_MAX) const {
+    root = std::min(root, size() - 1);
+    const EquationNode &node = this->at(root);
+    switch (node.type) {
+        case NODE_ERR:
+            return 0.0;
+        case NODE_NUM:
+            return std::stod(node.content);
+        case NODE_SYMB:
+            if (vals.find(node.content) == vals.end())
+                throw std::runtime_error("Could not find value for "
+                "substitution");
+            return vals.at(node.content);
+        case NODE_DERIV:
+            throw std::runtime_error("Could not substitute derivative");
+        case NODE_ADD:
+            return eval(vals, node.children[0]) + eval(vals, node.children[1]);
+        case NODE_SUB:
+            return eval(vals, node.children[0]) - eval(vals, node.children[1]);
+        case NODE_MUL:
+            return eval(vals, node.children[0]) * eval(vals, node.children[1]);
+        case NODE_DIV:
+            return eval(vals, node.children[0]) / eval(vals, node.children[1]);
+        case NODE_LT:
+            return eval(vals, node.children[0]) < eval(vals, node.children[1]);
+        case NODE_GT:
+            return eval(vals, node.children[0]) > eval(vals, node.children[1]);
+        case NODE_LTE:
+            return eval(vals, node.children[0]) <= eval(vals, node.children[1]);
+        case NODE_GTE:
+            return eval(vals, node.children[0]) >= eval(vals, node.children[1]);
+        case NODE_EQ:
+            return eval(vals, node.children[0]) == eval(vals, node.children[1]);
+    }
+    return 0.0;
+}
+
 EquationParser::EquationParser(const std::vector<EquationToken> &tokens) : tokens(tokens) { }
 
 EquationParser::~EquationParser() { }
@@ -13,7 +51,7 @@ void EquationParser::run() {
     readEquality();
 }
 
-const std::vector<EquationNode> &EquationParser::getTree() const {
+const EquationTree &EquationParser::getTree() const {
     return tree;
 }
 
