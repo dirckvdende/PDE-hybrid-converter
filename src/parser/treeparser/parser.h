@@ -13,10 +13,10 @@
  * a name
  */
 enum TreeParseNodeType {
-    NODE_TEXT,
-    NODE_TREE,
-    NODE_NAMED_TREE,
-    NODE_ROOT,
+    TREENODE_TEXT,
+    TREENODE_TREE,
+    TREENODE_NAMED_TREE,
+    TREENODE_ROOT,
 };
 
 /**
@@ -63,6 +63,12 @@ public:
      * @return The output stream
      */
     friend std::ostream &operator<<(std::ostream &os, const TreeParser &parser);
+
+    /**
+     * Get the root node of the parse tree
+     * @return A pointer to the parse tree root node
+     */
+    TreeParseNode *getRoot() const;
 
 private:
 
