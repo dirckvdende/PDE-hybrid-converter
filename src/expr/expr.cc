@@ -40,6 +40,7 @@ ExprNode &ExprNode::operator=(const ExprNode &other) {
     content = other.content;
     for (ExprNode *child : other.children)
         children.push_back(new ExprNode(*child));
+    return *this;
 }
 
 ExprNode &ExprNode::operator[](size_t index) {

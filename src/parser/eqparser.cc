@@ -6,7 +6,7 @@
 #include <vector>
 
 double EquationTree::eval(const std::unordered_map<std::string, double> &vals,
-size_t root = SIZE_MAX) const {
+size_t root) const {
     root = std::min(root, size() - 1);
     const EquationNode &node = this->at(root);
     switch (node.type) {
