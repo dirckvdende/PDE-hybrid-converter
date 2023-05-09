@@ -66,6 +66,8 @@ public:
      * Used to access a child of this node
      * @param index The index of the child to access
      * @return The child at the given index
+     * @note If the index is larger than the children vector size, the vector
+     * will be extended with error nodes
      */
     ExprNode &operator[](size_t index);
 

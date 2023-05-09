@@ -44,6 +44,8 @@ ExprNode &ExprNode::operator=(const ExprNode &other) {
 }
 
 ExprNode &ExprNode::operator[](size_t index) {
+    while (children.size() <= index)
+        children.push_back(new ExprNode(NODE_ERR));
     return *children[index];
 }
 
