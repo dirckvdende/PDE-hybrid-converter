@@ -16,16 +16,16 @@ std::ostream &TreeParseNode::print(std::ostream &os, size_t depth) {
     for (size_t i = 0; i < depth; i++)
         os << "  ";
     switch (type) {
-        case NODE_TEXT:
+        case TREENODE_TEXT:
             os << "TEXT  ";
             break;
-        case NODE_TREE:
+        case TREENODE_TREE:
             os << "TREE  ";
             break;
-        case NODE_NAMED_TREE:
+        case TREENODE_NAMED_TREE:
             os << "NTREE ";
             break;
-        case NODE_ROOT:
+        case TREENODE_ROOT:
             os << "ROOT  ";
             break;
     }
@@ -52,6 +52,10 @@ std::ostream &operator<<(std::ostream &os, const TreeParser &parser) {
     if (parser.root == nullptr)
         return os;
     return parser.root->print(os, 0);
+}
+
+TreeParseNode *TreeParser::getRoot() const {
+    return root;
 }
 
 const Token &TreeParser::cur() const {
@@ -85,7 +89,7 @@ void TreeParser::error(std::string content) {
 }
 
 TreeParseNode *TreeParser::readRoot() {
-    TreeParseNode *node = new TreeParseNode(NODE_ROOT);
+    TreeParseNode *node = new TreeParseNode(TREENODE_ROOT);
     while (!atEnd())
         node->children.push_back(readConfigEntry());
     return node;
@@ -107,7 +111,7 @@ TreeParseNode *TreeParser::readConfigEntry() {
 
 TreeParseNode *TreeParser::readTextEntry() {
     expect(TOK_NAME);
-    TreeParseNode *node = new TreeParseNode(NODE_TEXT);
+    TreeParseNode *node = new TreeParseNode(TREENODE_TEXT);
     node->name = cur().content;
     next();
     expect(TOK_TEXT);
@@ -120,7 +124,7 @@ TreeParseNode *TreeParser::readTextEntry() {
 
 TreeParseNode *TreeParser::readTreeEntry(bool isNamed) {
     expect(TOK_NAME);
-    TreeParseNode *node = new TreeParseNode(isNamed ? NODE_NAMED_TREE : NODE_TREE);
+    TreeParseNode *node = new TreeParseNode(isNamed ? TREENODE_NAMED_TREE : TREENODE_TREE);
     node->name = cur().content;
     next();
     if (isNamed) {
