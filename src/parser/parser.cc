@@ -7,9 +7,7 @@
 #include <stdexcept>
 #include <vector>
 
-Parser::Parser(const std::string &txt) : txt(txt) {
-
-}
+Parser::Parser(const std::string &txt) : txt(txt) { }
 
 Parser::~Parser() { }
 
