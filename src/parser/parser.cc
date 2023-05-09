@@ -1,9 +1,11 @@
 
+#include "eqlexer.h"
 #include "parser.h"
 #include "treeparser/lexer.h"
 #include "treeparser/parser.h"
 #include <string>
 #include <stdexcept>
+#include <vector>
 
 Parser::Parser(const std::string &txt) : txt(txt) {
 
@@ -13,7 +15,7 @@ Parser::~Parser() { }
 
 void Parser::run() {
     runTreeParser();
-    // TODO: implement
+    parseEquations();
 }
 
 void Parser::runTreeParser() {
@@ -36,6 +38,20 @@ void Parser::runTreeParser() {
         if (child->name == "pde")
             invalidConfig();
         *refMap.at(child->name) = child->text;
+    }
+}
+
+void Parser::parseEquations() {
+    std::vector<std::pair<std::string *, std::vector<EquationToken> *>>
+    toConvert = {
+        { &equation, &equationTokens },
+        { &boundary, &boundaryTokens },
+        { &domain, &domainTokens },
+    };
+    for (const auto &item : toConvert) {
+        EquationLexer lexer(*item.first);
+        lexer.run();
+        *item.second = lexer.getTokens();
     }
 }
 
