@@ -15,6 +15,10 @@ enum EquationTokenType {
     EQTOK_LT, EQTOK_GT, EQTOK_LTE, EQTOK_GTE, EQTOK_EQ,
 };
 
+/**
+ * Token in an equation, which has a type and "content", which can be literal
+ * content or formatted information about the token
+ */
 struct EquationToken {
     EquationTokenType type;
     std::string content;

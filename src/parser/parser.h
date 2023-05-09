@@ -1,7 +1,9 @@
 
 #pragma once
 
+#include "token.h"
 #include <string>
+#include <vector>
 
 /**
  * Parses the input by first parsing the tree, then the individual text
@@ -36,6 +38,11 @@ private:
     void runTreeParser();
 
     /**
+     * Convert the equation, boundary, and domain to tokens
+     */
+    void parseEquations();
+
+    /**
      * Throw an error for giving an invalid configuration file
      */
     void invalidConfig();
@@ -47,5 +54,7 @@ private:
     // The main differential equation, boundary condition, and domain, as
     // strings
     std::string equation, boundary, domain;
+    // Token vectors for equation, boundary, and domain
+    std::vector<EquationToken> equationTokens, boundaryTokens, domainTokens;
 
 };
