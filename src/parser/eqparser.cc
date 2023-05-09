@@ -68,7 +68,10 @@ bool EquationParser::atEnd() const {
 }
 
 bool EquationParser::accept(std::vector<EquationTokenType> types) const {
-
+    for (EquationTokenType type : types)
+        if (cur().type == type)
+            return true;
+    return false;
 }
 
 void EquationParser::expect(std::vector<EquationTokenType> types) {
