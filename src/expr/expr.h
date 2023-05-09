@@ -9,6 +9,11 @@
  */
 enum ExprNodeType {
     NODE_ERR,
+    NODE_SYMB,
+    NODE_DERIV,
+    NODE_ADD, NODE_SUB, NODE_MUL, NODE_DIV,
+    NODE_LT, NODE_LTE, NODE_GT, NODE_GTE,
+    NODE_EQ, NODE_NEQ,
 };
 
 /**
@@ -69,6 +74,12 @@ public:
      */
     size_t size() const;
 
+    /**
+     * Convert this expression (back) to a string
+     * @return A string representation of the expression
+     */
+    std::string str() const;
+
     // The node type
     ExprNodeType type;
     // Node children (pointers)
@@ -77,5 +88,11 @@ public:
     std::string content;
 
 private:
+
+    /**
+     * Convert a binary operator to a string
+     * @return A string representation of the expression
+     */
+    std::string binaryStr() const;
 
 };

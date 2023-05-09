@@ -1,6 +1,7 @@
 
 #include "expr.h"
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 ExprNode::ExprNode(const ExprNodeType type) : type(type) { }
@@ -47,4 +48,37 @@ ExprNode &ExprNode::operator[](size_t index) {
 
 size_t ExprNode::size() const {
     return children.size();
+}
+
+std::string ExprNode::str() const {
+    switch (type) {
+        case NODE_ERR:
+            return "[ERR]";
+        case NODE_SYMB:
+            return content;
+        case NODE_DERIV:
+            return "d" + content + "(" + children[0]->str() + ")";
+        case NODE_ADD:
+        case NODE_SUB:
+        case NODE_MUL:
+        case NODE_DIV:
+        case NODE_LT:
+        case NODE_LTE:
+        case NODE_GT:
+        case NODE_GTE:
+        case NODE_EQ:
+        case NODE_NEQ:
+            return binaryStr();
+    }
+    return "[ERR]";
+}
+
+std::string ExprNode::binaryStr() const {
+    static const std::unordered_map<ExprNodeType, std::string> typeMap = {
+        {NODE_ADD, "+"}, {NODE_SUB, "-"}, {NODE_MUL, "*"}, {NODE_DIV, "/"},
+        {NODE_LT, "<"}, {NODE_LTE, "<="}, {NODE_GT, ">"}, {NODE_GTE, ">="},
+        {NODE_EQ, "=="}, {NODE_NEQ, "!="},
+    };
+    return "(" + children[0]->str() + typeMap.at(type) + children[1]->str() +
+    ")";
 }
