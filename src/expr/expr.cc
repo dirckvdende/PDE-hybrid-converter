@@ -55,6 +55,7 @@ std::string ExprNode::str() const {
         case NODE_ERR:
             return "[ERR]";
         case NODE_SYMB:
+        case NODE_NUM:
             return content;
         case NODE_DERIV:
             return "d" + content + "(" + children[0]->str() + ")";
@@ -71,6 +72,22 @@ std::string ExprNode::str() const {
             return binaryStr();
     }
     return "[ERR]";
+}
+
+void ExprNode::find(const ExprNode &other, std::vector<ExprNode *> &occ) {
+    if (*this == other) {
+        occ.push_back(this);
+        return;
+    }
+    for (ExprNode *child : children)
+        child->find(other, occ);
+}
+
+void ExprNode::replace(const ExprNode &search, const ExprNode &repl) {
+    std::vector<ExprNode *> occ;
+    find(search, occ);
+    for (ExprNode *node : occ)
+        *node = repl;
 }
 
 std::string ExprNode::binaryStr() const {
