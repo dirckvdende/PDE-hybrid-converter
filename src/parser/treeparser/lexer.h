@@ -30,7 +30,7 @@ struct Token {
 /**
  * The lexer converts the input stream into tokens
  */
-class Lexer {
+class TreeLexer {
 
 public:
 
@@ -39,12 +39,12 @@ public:
      * @param txt The input text to be parsed, which should not change while the
      * lexer is being run
      */
-    Lexer(const std::string &txt);
+    TreeLexer(const std::string &txt);
 
     /**
      * Destructor
      */
-    ~Lexer();
+    ~TreeLexer();
 
     /**
      * Run the lexer, the output is stored in the lexer object
@@ -64,7 +64,7 @@ public:
      * @param lexer The lexer object
      * @return The output stream
      */
-    friend std::ostream &operator<<(std::ostream &os, const Lexer &lexer);
+    friend std::ostream &operator<<(std::ostream &os, const TreeLexer &lexer);
 
 private:
 
@@ -128,6 +128,6 @@ private:
     // Output tokens
     std::vector<Token> tokens;
     // Config option names map
-    std::unordered_map<std::string, const ConfigOption *> configNames;
+    std::unordered_map<std::string, const TreeConfigOption *> configNames;
 
 };
