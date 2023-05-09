@@ -35,7 +35,7 @@ std::ostream &TreeParseNode::print(std::ostream &os, size_t depth) {
     return os;
 }
 
-TreeParser::TreeParser(const std::vector<Token> &tokens) : tokens(tokens),
+TreeParser::TreeParser(const std::vector<TreeToken> &tokens) : tokens(tokens),
 root(nullptr), curIndex(0) {
     prepareConfigOptions();
 }
@@ -58,7 +58,7 @@ TreeParseNode *TreeParser::getRoot() const {
     return root;
 }
 
-const Token &TreeParser::cur() const {
+const TreeToken &TreeParser::cur() const {
     if (curIndex >= tokens.size())
         return tokens.back();
     return tokens[curIndex];
@@ -72,13 +72,13 @@ bool TreeParser::atEnd() const {
     return curIndex >= tokens.size();
 }
 
-bool TreeParser::accept(TokenType type) const {
+bool TreeParser::accept(TreeTokenType type) const {
     if (atEnd())
         return false;
     return cur().type == type;
 }
 
-void TreeParser::expect(TokenType type) {
+void TreeParser::expect(TreeTokenType type) {
     if (!accept(type))
         error("Unexpected token");
 }
@@ -96,7 +96,7 @@ TreeParseNode *TreeParser::readRoot() {
 }
 
 TreeParseNode *TreeParser::readConfigEntry() {
-    expect(TOK_NAME);
+    expect(TREETOK_NAME);
     const TreeConfigOption &option = *configNames[cur().content];
     switch (option.type) {
         case OPT_TEXT:
@@ -110,36 +110,36 @@ TreeParseNode *TreeParser::readConfigEntry() {
 }
 
 TreeParseNode *TreeParser::readTextEntry() {
-    expect(TOK_NAME);
+    expect(TREETOK_NAME);
     TreeParseNode *node = new TreeParseNode(TREENODE_TEXT);
     node->name = cur().content;
     next();
-    expect(TOK_TEXT);
+    expect(TREETOK_TEXT);
     node->text = cur().content;
     next();
-    expect(TOK_SEMICOL);
+    expect(TREETOK_SEMICOL);
     next();
     return node;
 }
 
 TreeParseNode *TreeParser::readTreeEntry(bool isNamed) {
-    expect(TOK_NAME);
+    expect(TREETOK_NAME);
     TreeParseNode *node = new TreeParseNode(isNamed ? TREENODE_NAMED_TREE : TREENODE_TREE);
     node->name = cur().content;
     next();
     if (isNamed) {
-        expect(TOK_TEXT);
+        expect(TREETOK_TEXT);
         node->text = cur().content;
         next();
     }
-    expect(TOK_LBRACE);
+    expect(TREETOK_LBRACE);
     next();
-    while (!accept(TOK_RBRACE))
+    while (!accept(TREETOK_RBRACE))
         node->children.push_back(readConfigEntry());
-    expect(TOK_RBRACE);
+    expect(TREETOK_RBRACE);
     next();
     // Ignore semicolon after brace
-    if (accept(TOK_SEMICOL))
+    if (accept(TREETOK_SEMICOL))
         next();
     return node;
 }

@@ -10,20 +10,20 @@
 /**
  * Token type
  */
-enum TokenType {
+enum TreeTokenType {
     // Normal text
-    TOK_TEXT,
+    TREETOK_TEXT,
     // Config option name
-    TOK_NAME,
+    TREETOK_NAME,
     // Special characters
-    TOK_LBRACE, TOK_RBRACE, TOK_SEMICOL,
+    TREETOK_LBRACE, TREETOK_RBRACE, TREETOK_SEMICOL,
 };
 
 /**
  * A lexer token is stored as a type and possible content (text)
  */
-struct Token {
-    TokenType type;
+struct TreeToken {
+    TreeTokenType type;
     std::string content;
 };
 
@@ -56,7 +56,7 @@ public:
      * run
      * @return A reference to the output token vector
      */
-    const std::vector<Token> &getTokens() const;
+    const std::vector<TreeToken> &getTokens() const;
 
     /**
      * Output tokens for debugging
@@ -111,7 +111,7 @@ private:
      * @return A boolean indicating if the given character is a special
      * character
      */
-    static bool isSpecialChar(char c, TokenType &type);
+    static bool isSpecialChar(char c, TreeTokenType &type);
 
     /**
      * Check if a certain character is a whitespace character
@@ -126,7 +126,7 @@ private:
     // Current character index
     size_t curIndex;
     // Output tokens
-    std::vector<Token> tokens;
+    std::vector<TreeToken> tokens;
     // Config option names map
     std::unordered_map<std::string, const TreeConfigOption *> configNames;
 
