@@ -1,6 +1,5 @@
 
-#ifndef TREEPARSER_SETTINGS_H
-#define TREEPARSER_SETTINGS_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -40,5 +39,3 @@ struct Settings {
 };
 
 extern const Settings settings;
-
-#endif

@@ -1,6 +1,5 @@
 
-#ifndef TREEPARSER_LEXER_H
-#define TREEPARSER_LEXER_H
+#pragma once
 
 #include <ostream>
 #include <string>
@@ -132,5 +131,3 @@ private:
     std::unordered_map<std::string, const ConfigOption *> configNames;
 
 };
-
-#endif
