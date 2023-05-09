@@ -40,6 +40,11 @@ private:
     /**
      * Convert the equation, boundary, and domain to tokens
      */
+    void lexEquations();
+
+    /**
+     * Convert equation, boundary, and domain to parse tree vectors
+     */
     void parseEquations();
 
     /**
@@ -56,5 +61,7 @@ private:
     std::string equation, boundary, domain;
     // Token vectors for equation, boundary, and domain
     std::vector<EquationToken> equationTokens, boundaryTokens, domainTokens;
+    // Parsed equations
+    std::vector<EquationNode> equationTree, boundaryTree, domainTree;
 
 };
