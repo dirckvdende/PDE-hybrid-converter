@@ -7,6 +7,7 @@
  * Type of an equation token
  */
 enum EquationTokenType {
+    EQTOK_ERR,
     EQTOK_SYMB,
     EQTOK_DERIV,
     EQTOK_NUM,
