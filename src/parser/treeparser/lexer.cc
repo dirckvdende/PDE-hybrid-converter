@@ -12,7 +12,7 @@ TreeLexer::~TreeLexer() { }
 
 void TreeLexer::run() {
     while (!atEnd()) {
-        TokenType specialType;
+        TreeTokenType specialType;
         if (isWhitespaceChar(cur()))
             convertNameToken();
         if (isSpecialChar(cur(), specialType)) {
@@ -21,33 +21,33 @@ void TreeLexer::run() {
         } else if (lastTokenWasText()) {
             tokens.back().content.push_back(cur());
         } else if (!isWhitespaceChar(cur())) {
-            tokens.push_back({ TOK_TEXT, std::string(1, cur()) });
+            tokens.push_back({ TREETOK_TEXT, std::string(1, cur()) });
         }
         next();
     }
     convertNameToken();
 }
 
-const std::vector<Token> &TreeLexer::getTokens() const {
+const std::vector<TreeToken> &TreeLexer::getTokens() const {
     return tokens;
 }
 
 std::ostream &operator<<(std::ostream &os, const TreeLexer &lexer) {
-    for (const Token &token : lexer.tokens) {
+    for (const TreeToken &token : lexer.tokens) {
         switch (token.type) {
-            case TOK_TEXT:
+            case TREETOK_TEXT:
                 os << "TEXT  ";
                 break;
-            case TOK_NAME:
+            case TREETOK_NAME:
                 os << "NAME  ";
                 break;
-            case TOK_LBRACE:
+            case TREETOK_LBRACE:
                 os << "{     ";
                 break;
-            case TOK_RBRACE:
+            case TREETOK_RBRACE:
                 os << "}     ";
                 break;
-            case TOK_SEMICOL:
+            case TREETOK_SEMICOL:
                 os << ";     ";
                 break;
         }
@@ -73,11 +73,11 @@ bool TreeLexer::atEnd() const {
 void TreeLexer::convertNameToken() {
     if (tokens.empty())
         return;
-    if (tokens.back().type != TOK_TEXT)
+    if (tokens.back().type != TREETOK_TEXT)
         return;
     if (configNames.find(tokens.back().content) == configNames.end())
         return;
-    tokens.back().type = TOK_NAME;
+    tokens.back().type = TREETOK_NAME;
 }
 
 void TreeLexer::prepareConfigOptions() {
@@ -88,19 +88,19 @@ void TreeLexer::prepareConfigOptions() {
 bool TreeLexer::lastTokenWasText() const {
     if (tokens.empty())
         return false;
-    return tokens.back().type == TOK_TEXT;
+    return tokens.back().type == TREETOK_TEXT;
 }
 
-bool TreeLexer::isSpecialChar(char c, TokenType &type) {
+bool TreeLexer::isSpecialChar(char c, TreeTokenType &type) {
     switch (c) {
         case '{':
-            type = TOK_LBRACE;
+            type = TREETOK_LBRACE;
             return true;
         case '}':
-            type = TOK_RBRACE;
+            type = TREETOK_RBRACE;
             return true;
         case ';':
-            type = TOK_SEMICOL;
+            type = TREETOK_SEMICOL;
             return true;
         default:
             break;
