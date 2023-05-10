@@ -3,6 +3,7 @@
 
 #include "expr/expr.h"
 #include "util.h"
+#include <string>
 #include <vector>
 #include <unordered_set>
 
@@ -65,7 +66,7 @@ private:
     // Expression that evaluates to true on the domain
     const ExprNode &expr;
     // The names of the dimensions, in order
-    std::vector<std::string> dims;
+    const std::vector<std::string> dims;
     // Initial point inside the domain (used as pivot)
     std::vector<double> init;
     // List of grid cells contained in the domain, not normalized for scale and
