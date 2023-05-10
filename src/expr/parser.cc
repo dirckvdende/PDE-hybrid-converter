@@ -1,5 +1,6 @@
 
 #include "parser.h"
+#include <algorithm>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -11,6 +12,7 @@ tree(ExprNode(NODE_ERR)) { }
 ExprParser::~ExprParser() { }
 
 void ExprParser::run() {
+    pos = 0;
     ExprNode *expr = readEquality();
     tree = *expr;
     delete expr;
@@ -40,8 +42,14 @@ bool ExprParser::accept(std::vector<ExprTokenType> types) const {
 }
 
 void ExprParser::expect(std::vector<ExprTokenType> types) {
-    if (!accept(types))
-        throw std::runtime_error("Could not parse input");
+    if (!accept(types)) {
+        std::sort(types.begin(), types.end());
+        std::string typeList = std::to_string(types.front());
+        for (size_t i = 1; i < types.size(); i++)
+            typeList.append(", " + std::to_string(types[i]));
+        throw std::runtime_error("Could not parse input, expected (" + typeList
+        + ") at position " + std::to_string(pos));
+    }
 }
 
 ExprNode *ExprParser::readEquality() {
