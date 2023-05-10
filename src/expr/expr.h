@@ -31,6 +31,15 @@ public:
     ExprNode(const ExprNodeType type);
 
     /**
+     * Constructor
+     * @param type The type of the node
+     * @param children Pointers to the children of the parse node
+     * @param content The content of the parse node
+     */
+    ExprNode(const ExprNodeType type, const std::vector<ExprNode *> &children,
+    std::string content = "");
+
+    /**
      * Destructor
      */
     ~ExprNode();
