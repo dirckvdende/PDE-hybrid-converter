@@ -1,6 +1,7 @@
 
 #include "domain.h"
 #include "expr/expr.h"
+#include <string>
 #include <unordered_map>
 #include <vector>
 #include <queue>
@@ -10,6 +11,7 @@ std::vector<std::string> &dims) : scale(scale), expr(expr), dims(dims) { }
 
 void GridDomain::findDomain(const std::vector<double> &init) {
     this->init = init;
+    cells.clear();
     // Flood-fill to find domain
     std::queue<std::vector<int>> q;
     q.push(std::vector<int>(init.size(), 0));
@@ -21,7 +23,7 @@ void GridDomain::findDomain(const std::vector<double> &init) {
             std::vector<int> neg = cur, pos = cur;
             neg[i]--, pos[i]++;
             for (const std::vector<int> &e : {pos, neg}) {
-                if (inDomain(e)) {
+                if (cells.find(e) == cells.end() && inDomain(e)) {
                     if (cells.size() >= maxSize)
                         throw std::runtime_error("Exceeded maximum grid size");
                     q.push(e);
@@ -57,7 +59,7 @@ bool GridDomain::inDomain(const std::vector<int> &pos) const {
     std::vector<double> realPos;
     convertPos(pos, realPos);
     ExprNode eq = expr;
-    for (size_t i = 0; realPos.size(); i++) {
+    for (size_t i = 0; i < realPos.size(); i++) {
         ExprNode search(NODE_SYMB, {}, dims[i]);
         ExprNode repl(NODE_NUM, {}, std::to_string(realPos[i]));
         eq.replace(search, repl);
@@ -68,7 +70,6 @@ bool GridDomain::inDomain(const std::vector<int> &pos) const {
 void GridDomain::convertPos(const std::vector<int> &pos, std::vector<double>
 &out) const {
     out.clear();
-    out.reserve(out.size());
     for (size_t i = 0; i < pos.size(); i++)
         out.push_back(double(pos[i]) * scale - init[i]);
 }
