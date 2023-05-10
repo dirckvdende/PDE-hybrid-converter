@@ -49,6 +49,10 @@ ExprNode &ExprNode::operator[](size_t index) {
     return *children[index];
 }
 
+const ExprNode &ExprNode::operator[](size_t index) const {
+    return *children[index];
+}
+
 size_t ExprNode::size() const {
     return children.size();
 }
@@ -91,6 +95,36 @@ void ExprNode::replace(const ExprNode &search, const ExprNode &repl) {
     find(search, occ);
     for (ExprNode *node : occ)
         *node = repl;
+}
+
+double ExprNode::eval() const {
+    switch (type) {
+        case NODE_NUM:
+            return std::stod(content);
+        case NODE_ADD:
+            return operator[](0).eval() + operator[](1).eval();
+        case NODE_SUB:
+            return operator[](0).eval() - operator[](1).eval();
+        case NODE_MUL:
+            return operator[](0).eval() * operator[](1).eval();
+        case NODE_DIV:
+            return operator[](0).eval() / operator[](1).eval();
+        case NODE_LT:
+            return operator[](0).eval() < operator[](1).eval();
+        case NODE_LTE:
+            return operator[](0).eval() <= operator[](1).eval();
+        case NODE_GT:
+            return operator[](0).eval() > operator[](1).eval();
+        case NODE_GTE:
+            return operator[](0).eval() >= operator[](1).eval();
+        case NODE_EQ:
+            return operator[](0).eval() == operator[](1).eval();
+        case NODE_NEQ:
+            return operator[](0).eval() != operator[](1).eval();
+        default:
+            throw std::runtime_error("Could not evaluate expression");
+    }
+    return 0.0;
 }
 
 std::string ExprNode::binaryStr() const {
