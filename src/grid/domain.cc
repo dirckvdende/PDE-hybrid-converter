@@ -32,6 +32,27 @@ void GridDomain::findDomain(const std::vector<double> &init) {
     }
 }
 
+std::string GridDomain::str() const {
+    if (dims.size() != 2)
+        throw std::runtime_error("Cannot convert non-2D grid to string");
+    std::vector<std::pair<int, int>> ranges(dims.size(), {0, 0});
+    for (const std::vector<int> &cell : cells) {
+        for (size_t i = 0; i < cell.size(); i++) {
+            if (cell[i] < ranges[i].first)
+                ranges[i].first = cell[i];
+            if (cell[i] > ranges[i].second)
+                ranges[i].second = cell[i];
+        }
+    }
+    std::string out;
+    for (int x = ranges[0].first; x <= ranges[0].second; x++) {
+        for (int y = ranges[1].first; y <= ranges[1].second; y++)
+            out.push_back(cells.find({x, y}) != cells.end() ? '1' : '0');
+        out.push_back('\n');
+    }
+    return out;
+}
+
 bool GridDomain::inDomain(const std::vector<int> &pos) const {
     std::vector<double> realPos;
     convertPos(pos, realPos);
