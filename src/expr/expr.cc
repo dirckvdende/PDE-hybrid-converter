@@ -6,6 +6,10 @@
 
 ExprNode::ExprNode(const ExprNodeType type) : type(type) { }
 
+ExprNode::ExprNode(const ExprNodeType type, const std::vector<ExprNode *> &
+children, std::string content) : type(type), children(children),
+content(content) { }
+
 ExprNode::~ExprNode() {
     for (ExprNode *child : children)
         delete child;
@@ -65,7 +69,8 @@ std::string ExprNode::str() const {
         case NODE_NUM:
             return content;
         case NODE_DERIV:
-            return "d" + content + "(" + children[0]->str() + ")";
+            return "d[" + content.substr(0, content.find(';')) + "](" +
+            content.substr(content.find(';') + 1) + ")";
         case NODE_ADD:
         case NODE_SUB:
         case NODE_MUL:
