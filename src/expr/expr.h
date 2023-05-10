@@ -72,6 +72,14 @@ public:
     ExprNode &operator[](size_t index);
 
     /**
+     * Used to access a child of this node as a constant reference
+     * @param index The index of the child to access
+     * @return A constant reference to the child at the given index
+     * @warning Will throw an error if index if too high
+     */
+    const ExprNode &operator[](size_t index) const;
+
+    /**
      * Get the number of children of this expression node
      * @return The number of children
      */
@@ -100,6 +108,14 @@ public:
      * @param repl The tree to replace with
      */
     void replace(const ExprNode &search, const ExprNode &repl);
+
+    /**
+     * Evaluate an expression. If there are still derivatives or symbols left,
+     * an error is thrown
+     * @return The evaluated value as a double. Other types are implicitly
+     * coverted to boolean
+     */
+    double eval() const;
 
     // The node type
     ExprNodeType type;
