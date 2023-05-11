@@ -8,7 +8,7 @@
 /**
  * A grid that stores expressions
  */
-class ExprGrid : public HyperGrid<ExprNode> {
+class ExprGrid : public HyperGrid<ExprNode *> {
 
 public:
 
