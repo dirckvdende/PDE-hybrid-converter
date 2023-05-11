@@ -35,6 +35,12 @@ private:
      */
     void readInputFile();
 
+    /**
+     * Output debug text, if debug mode is enabled
+     * @param txt The debug text to display
+     */
+    void debugLog(std::string txt) const;
+
     // Command line argument parser
     CmdArgs args;
     // Input file contents
