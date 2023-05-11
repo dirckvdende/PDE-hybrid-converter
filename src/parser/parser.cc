@@ -12,7 +12,10 @@
 
 Parser::Parser(const std::string &txt) : txt(txt) { }
 
-Parser::~Parser() { }
+Parser::~Parser() {
+    for (const std::pair<std::string, ExprNode *> &field : fieldExpr)
+        delete field.second;
+}
 
 void Parser::run() {
     runTreeParser();
