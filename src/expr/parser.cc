@@ -13,7 +13,7 @@ ExprParser::~ExprParser() { }
 
 void ExprParser::run() {
     pos = 0;
-    ExprNode *expr = readEquality();
+    ExprNode *expr = readAndOr();
     tree = *expr;
     delete expr;
 }
@@ -52,6 +52,17 @@ void ExprParser::expect(std::vector<ExprTokenType> types) {
     }
 }
 
+ExprNode *ExprParser::readAndOr() {
+    ExprNode *left = readEquality();
+    while (accept({EXPRTOK_AND, EXPRTOK_OR})) {
+        ExprNodeType type = cur().type == EXPRTOK_AND ? NODE_AND : NODE_OR;
+        next();
+        ExprNode *right = readEquality();
+        left = new ExprNode(type, {left, right});
+    }
+    return left;
+}
+
 ExprNode *ExprParser::readEquality() {
     ExprNode *left = readSum();
     if (!accept({EXPRTOK_LT, EXPRTOK_LTE, EXPRTOK_GT, EXPRTOK_GTE, EXPRTOK_EQ}))
@@ -81,14 +92,21 @@ ExprNode *ExprParser::readSum() {
 }
 
 ExprNode *ExprParser::readProduct() {
-    ExprNode *left = readTerm();
+    ExprNode *left = readMinus();
     while (accept({EXPRTOK_MUL, EXPRTOK_DIV})) {
         ExprNodeType type = cur().type == EXPRTOK_MUL ? NODE_MUL : NODE_DIV;
         next();
-        ExprNode *right = readTerm();
+        ExprNode *right = readMinus();
         left = new ExprNode(type, {left, right});
     }
     return left;
+}
+
+ExprNode *ExprParser::readMinus() {
+    if (!accept({EXPRTOK_SUB}))
+        return readTerm();
+    next();
+    return new ExprNode(NODE_MINUS, {readTerm()});
 }
 
 ExprNode *ExprParser::readTerm() {
@@ -105,7 +123,7 @@ ExprNode *ExprParser::readTerm() {
         return readDeriv();
     } else if (accept({EXPRTOK_LBRACE})) {
         next();
-        ExprNode *result = readEquality();
+        ExprNode *result = readAndOr();
         next();
         return result;
     }

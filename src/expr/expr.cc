@@ -71,16 +71,9 @@ std::string ExprNode::str() const {
         case NODE_DERIV:
             return "d[" + content.substr(0, content.find(';')) + "](" +
             content.substr(content.find(';') + 1) + ")";
-        case NODE_ADD:
-        case NODE_SUB:
-        case NODE_MUL:
-        case NODE_DIV:
-        case NODE_LT:
-        case NODE_LTE:
-        case NODE_GT:
-        case NODE_GTE:
-        case NODE_EQ:
-        case NODE_NEQ:
+        case NODE_MINUS:
+            return "-(" + children[0]->str() + ")";
+        default:
             return binaryStr();
     }
     return "[ERR]";
@@ -126,6 +119,12 @@ double ExprNode::eval() const {
             return operator[](0).eval() == operator[](1).eval();
         case NODE_NEQ:
             return operator[](0).eval() != operator[](1).eval();
+        case NODE_AND:
+            return operator[](0).eval() && operator[](1).eval();
+        case NODE_OR:
+            return operator[](0).eval() || operator[](1).eval();
+        case NODE_MINUS:
+            return -operator[](0).eval();
         default:
             throw std::runtime_error("Could not evaluate expression");
     }
@@ -136,7 +135,8 @@ std::string ExprNode::binaryStr() const {
     static const std::unordered_map<ExprNodeType, std::string> typeMap = {
         {NODE_ADD, "+"}, {NODE_SUB, "-"}, {NODE_MUL, "*"}, {NODE_DIV, "/"},
         {NODE_LT, "<"}, {NODE_LTE, "<="}, {NODE_GT, ">"}, {NODE_GTE, ">="},
-        {NODE_EQ, "=="}, {NODE_NEQ, "!="},
+        {NODE_EQ, "=="}, {NODE_NEQ, "!="}, {NODE_AND, " and "},
+        {NODE_OR, " or "},
     };
     return "(" + children[0]->str() + typeMap.at(type) + children[1]->str() +
     ")";

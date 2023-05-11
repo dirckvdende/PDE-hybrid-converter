@@ -69,6 +69,14 @@ void ExprLexer::readIdent() {
         tokens.back().content.push_back(cur());
         next();
     }
+    if (tokens.back().content == "and") {
+        tokens.back().content.clear();
+        tokens.back().type = EXPRTOK_AND;
+    }
+    if (tokens.back().content == "or") {
+        tokens.back().content.clear();
+        tokens.back().type = EXPRTOK_OR;
+    }
 }
 
 void ExprLexer::readSpecialChar() {

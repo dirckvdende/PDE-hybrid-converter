@@ -15,6 +15,8 @@ enum ExprNodeType {
     NODE_ADD, NODE_SUB, NODE_MUL, NODE_DIV,
     NODE_LT, NODE_LTE, NODE_GT, NODE_GTE,
     NODE_EQ, NODE_NEQ,
+    NODE_AND, NODE_OR,
+    NODE_MINUS,
 };
 
 /**
