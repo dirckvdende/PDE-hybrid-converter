@@ -1,6 +1,9 @@
 
 #include "compiler.h"
+#include <ctime>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 
@@ -9,6 +12,7 @@ Compiler::Compiler(int argc, char *argv[]) : args(argc, argv) { }
 Compiler::~Compiler() { }
 
 void Compiler::run() {
+    debugLog("Reading file contents...");
     readInputFile();
 }
 
@@ -20,4 +24,13 @@ void Compiler::readInputFile() {
     stream << file.rdbuf();
     fileContents = stream.str();
     file.close();
+}
+
+void Compiler::debugLog(std::string txt) const {
+    if (!args.getDebugMode())
+        return;
+    time_t t = std::time(nullptr);
+    tm *tm = std::localtime(&t);
+    std::cout << "\033[90m[" << std::put_time(tm, "%H:%M:%S") << "]\033[0m ";
+    std::cout << txt << std::endl;
 }
