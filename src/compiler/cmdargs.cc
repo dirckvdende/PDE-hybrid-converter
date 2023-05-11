@@ -52,4 +52,5 @@ void CmdArgs::readArg() {
         exit(1);
     }
     filename = cur();
+    next();
 }
