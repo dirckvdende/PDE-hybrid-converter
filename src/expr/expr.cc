@@ -135,7 +135,7 @@ std::string ExprNode::binaryStr() const {
     static const std::unordered_map<ExprNodeType, std::string> typeMap = {
         {NODE_ADD, "+"}, {NODE_SUB, "-"}, {NODE_MUL, "*"}, {NODE_DIV, "/"},
         {NODE_LT, "<"}, {NODE_LTE, "<="}, {NODE_GT, ">"}, {NODE_GTE, ">="},
-        {NODE_EQ, "=="}, {NODE_NEQ, "!="}, {NODE_AND, " and "},
+        {NODE_EQ, "="}, {NODE_NEQ, "!="}, {NODE_AND, " and "},
         {NODE_OR, " or "},
     };
     return "(" + children[0]->str() + typeMap.at(type) + children[1]->str() +
