@@ -1,11 +1,13 @@
 
-#include "eqlexer.h"
-#include "eqparser.h"
+#include "expr/expr.h"
+#include "expr/lexer.h"
+#include "expr/parser.h"
 #include "parser.h"
 #include "treeparser/lexer.h"
 #include "treeparser/parser.h"
 #include <string>
 #include <stdexcept>
+#include <unordered_map>
 #include <vector>
 
 Parser::Parser(const std::string &txt) : txt(txt) { }
@@ -14,8 +16,20 @@ Parser::~Parser() { }
 
 void Parser::run() {
     runTreeParser();
-    lexEquations();
-    parseEquations();
+    if (!hasAllFields())
+        throw std::runtime_error("Not all required configuration options were "
+        "given");
+    parseExpressions();
+}
+
+const std::unordered_map<std::string, std::string> &Parser::getFieldValues()
+const {
+    return fieldValues;
+}
+
+const std::unordered_map<std::string, ExprNode *> &Parser::getFieldExpressions()
+const {
+    return fieldExpr;
 }
 
 void Parser::runTreeParser() {
@@ -29,44 +43,38 @@ void Parser::runTreeParser() {
     TreeParseNode *pde = root->children.front();
     if (pde->name != "pde")
         invalidConfig();
-    const std::unordered_map<std::string, std::string *> refMap = {
-        { "equation", &equation },
-        { "boundary", &boundary },
-        { "domain", &domain },
-    };
     for (TreeParseNode *child : pde->children) {
         if (child->name == "pde")
             invalidConfig();
-        *refMap.at(child->name) = child->text;
+        fieldValues[child->name] = child->text;
     }
 }
 
-void Parser::lexEquations() {
-    std::vector<std::pair<std::string *, std::vector<EquationToken> *>>
-    toConvert = {
-        { &equation, &equationTokens },
-        { &boundary, &boundaryTokens },
-        { &domain, &domainTokens },
+void Parser::parseExpressions() {
+    static const std::vector<std::string> exprFields = {
+        "equation", "func", "domain", "scale", "boundary", "init", "time",
+        "iterations",
     };
-    for (const auto &item : toConvert) {
-        EquationLexer lexer(*item.first);
+    for (const std::string &field : exprFields) {
+        ExprLexer lexer(fieldValues[field]);
         lexer.run();
-        *item.second = lexer.getTokens();
+        ExprParser parser(lexer.getTokens());
+        parser.run();
+        ExprNode *expr = new ExprNode(NODE_ERR);
+        *expr = parser.getTree();
+        fieldExpr.emplace(field, expr);
     }
 }
 
-void Parser::parseEquations() {
-    std::vector<std::pair<std::vector<EquationToken> *,
-    std::vector<EquationNode> *>> toConvert = {
-        { &equationTokens, &equationTree },
-        { &boundaryTokens, &boundaryTree },
-        { &domainTokens, &domainTree },
+bool Parser::hasAllFields() const {
+    static const std::vector<std::string> requiredFields = {
+        "dimensions", "equation", "func", "domain", "pivot", "scale",
+        "boundary", "init", "time", "iterations",
     };
-    for (const auto &item : toConvert) {
-        EquationParser parser(*item.first);
-        parser.run();
-        *item.second = parser.getTree();
-    }
+    for (const std::string &req : requiredFields)
+        if (fieldValues.find(req) == fieldValues.end())
+            return false;
+    return true;
 }
 
 void Parser::invalidConfig() {
