@@ -9,3 +9,7 @@ std::string gridToString(const std::vector<size_t> &pos) {
         out.append("_" + std::to_string(p));
     return out;
 }
+
+std::string gridFuncToString(std::string func, const std::vector<size_t> &pos) {
+    return func + "_" + gridToString(pos);
+}
