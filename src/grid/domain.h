@@ -35,12 +35,33 @@ public:
     void findDomain(const std::vector<double> &init);
 
     /**
+     * Determine the border cells of the grid domain, which depends on which
+     * cells are in the domain
+     * @param range The range in each dimension that the border needs to be
+     * extended
+     */
+    void findBorder(const std::vector<size_t> &range);
+
+    /**
      * Get a string representation of the grid, which is only possible for 2D
      * grids (for debugging). Has a 1 if a point is in the domain, and 0
      * otherwise
      * @return The string representation
      */
     std::string str() const;
+
+    /**
+     * Get the minimum and maximum coordinates of the grid cells, of both the
+     * domain and the border (not real coordinates)
+     * @return A vector of pairs, containing the minimum and maximum values per
+     * dimension
+     */
+    std::vector<std::pair<int, int>> getRanges() const;
+
+    /**
+     * Normalize the grid to only have positive integer coodinates
+     */
+    void normalize();
 
 private:
 
@@ -72,5 +93,7 @@ private:
     // List of grid cells contained in the domain, not normalized for scale and
     // initial point
     std::unordered_set<std::vector<int>, VectorHash> cells;
+    // List of border cells
+    std::unordered_set<std::vector<int>, VectorHash> borderCells;
 
 };
