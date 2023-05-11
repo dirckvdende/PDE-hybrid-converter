@@ -1,8 +1,9 @@
 
 #pragma once
 
-#include "token.h"
+#include "expr/expr.h"
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 /**
@@ -30,6 +31,19 @@ public:
      */
     void run();
 
+    /**
+     * Get the field values read from the configuration file as strings
+     * @return A constant reference to a map from field name to field value
+     */
+    const std::unordered_map<std::string, std::string> &getFieldValues() const;
+
+    /**
+     * Get the field expressions read from the configuration file
+     * @return A constant reference to a map from field name to field expression
+     */
+    const std::unordered_map<std::string, ExprNode *> &getFieldExpressions()
+    const;
+
 private:
 
     /**
@@ -38,14 +52,15 @@ private:
     void runTreeParser();
 
     /**
-     * Convert the equation, boundary, and domain to tokens
+     * Parse expression to ExprNode objects
      */
-    void lexEquations();
+    void parseExpressions();
 
     /**
-     * Convert equation, boundary, and domain to parse tree vectors
+     * Check if all required configuration options are present
+     * @return A boolean indicating if all configuration options are present
      */
-    void parseEquations();
+    bool hasAllFields() const;
 
     /**
      * Throw an error for giving an invalid configuration file
@@ -56,12 +71,9 @@ private:
     const std::string &txt;
     // The name of the PDE
     std::string systemName;
-    // The main differential equation, boundary condition, and domain, as
-    // strings
-    std::string equation, boundary, domain;
-    // Token vectors for equation, boundary, and domain
-    std::vector<EquationToken> equationTokens, boundaryTokens, domainTokens;
-    // Parsed equations
-    std::vector<EquationNode> equationTree, boundaryTree, domainTree;
+    // Configuration field values as strings
+    std::unordered_map<std::string, std::string> fieldValues;
+    // Field values as expressions (if applicable)
+    std::unordered_map<std::string, ExprNode *> fieldExpr;
 
 };
