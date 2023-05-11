@@ -1,6 +1,8 @@
 
-#include "parser/parser.h"
 #include "compiler.h"
+#include "grid/domain.h"
+#include "parser/parser.h"
+#include "util.h"
 #include <ctime>
 #include <fstream>
 #include <iomanip>
@@ -8,7 +10,8 @@
 #include <sstream>
 #include <stdexcept>
 
-Compiler::Compiler(int argc, char *argv[]) : args(argc, argv) { }
+Compiler::Compiler(int argc, char *argv[]) : args(argc, argv), domain(nullptr)
+{ }
 
 Compiler::~Compiler() { }
 
@@ -17,6 +20,8 @@ void Compiler::run() {
     readInputFile();
     debugLog("\nParsing input...\n");
     runParser();
+    debugLog("\nDetermining domain...\n");
+    findDomain();
     debugLog("");
 }
 
@@ -45,6 +50,22 @@ void Compiler::runParser() {
         fieldExpr.emplace(field.first, node);
         debugLog("Read expression: " + field.first + " -> " + node->str());
     }
+}
+
+void Compiler::findDomain() {
+    if (fieldExpr["scale"]->type != NODE_NUM)
+        throw std::runtime_error("Invalid \"scale\" option");
+    double scale = std::stod(fieldExpr["scale"]->content);
+    std::vector<std::string> dims = splitString(fieldValues["dimensions"]);
+    domain = new GridDomain(scale, *fieldExpr["domain"], dims);
+    std::vector<std::string> pivotStr = splitString(fieldValues["pivot"]);
+    std::vector<double> pivot;
+    for (const std::string &s : pivotStr)
+        pivot.push_back(std::stod(s));
+    domain->findDomain(pivot);
+    // TODO: Implement border range detection
+    domain->findBorder({1, 1});
+    debugLog(domain->str());
 }
 
 void Compiler::debugLog(std::string txt) const {

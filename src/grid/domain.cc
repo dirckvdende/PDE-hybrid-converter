@@ -63,7 +63,7 @@ void GridDomain::findBorder(const std::vector<size_t> &range) {
 
 std::string GridDomain::str() const {
     if (dims.size() != 2)
-        throw std::runtime_error("Cannot convert non-2D grid to string");
+        return "";
     std::vector<std::pair<int, int>> ranges = getRanges();
     std::string out;
     for (int x = ranges[0].first; x <= ranges[0].second; x++) {

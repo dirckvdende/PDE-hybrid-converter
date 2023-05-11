@@ -3,6 +3,7 @@
 
 #include "cmdargs.h"
 #include "expr/expr.h"
+#include "grid/domain.h"
 #include <string>
 #include <unordered_map>
 
@@ -44,6 +45,11 @@ private:
     void runParser();
 
     /**
+     * Determine the domain given in the input file
+     */
+    void findDomain();
+
+    /**
      * Output debug text, if debug mode is enabled
      * @param txt The debug text to display
      */
@@ -57,5 +63,7 @@ private:
     std::unordered_map<std::string, std::string> fieldValues;
     // Field values as expressions (if applicable)
     std::unordered_map<std::string, ExprNode *> fieldExpr;
+    // Domain object, which is null at initialization
+    GridDomain *domain;
 
 };
