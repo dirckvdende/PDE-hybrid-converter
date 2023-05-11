@@ -46,7 +46,7 @@ public:
      * Get a string representation of the grid, which is only possible for 2D
      * grids (for debugging). Has a 1 if a point is in the domain, and 0
      * otherwise
-     * @return The string representation
+     * @return The string representation, empty if the grid is not 2D
      */
     std::string str() const;
 
