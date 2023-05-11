@@ -68,6 +68,12 @@ private:
     void expect(std::vector<ExprTokenType> types);
 
     /**
+     * Read an and/or statement
+     * @return A pointer to the generated expression parse node
+     */
+    ExprNode *readAndOr();
+
+    /**
      * Read an (in)equality
      * @return A pointer to the generated expression parse node
      */
@@ -86,7 +92,13 @@ private:
     ExprNode *readProduct();
 
     /**
-     * Read a term in a product
+     * Read a minus sign (or multiple)
+     * @return A pointer to the generated expression parse node
+     */
+    ExprNode *readMinus();
+
+    /**
+     * Read a basic term
      * @return A pointer to the generated expression parse node
      */
     ExprNode *readTerm();
