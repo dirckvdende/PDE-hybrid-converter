@@ -31,6 +31,14 @@ public:
 
 private:
 
+    /**
+     * Get the coefficients of an approximation of a derivative in one variable
+     * @param n The number of times the derivative is taken
+     * @param scale The scale of the grid cells that the approximation is taken
+     * over
+     */
+    static std::vector<double> getCoeffs(size_t n, double scale);
+
     // Names of the spatial dimensions
     const std::vector<std::string> dims;
     // Map for dimension name indices
