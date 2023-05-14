@@ -30,7 +30,7 @@ public:
      * Constructor
      * @param type The type of the node
      */
-    ExprNode(const ExprNodeType type);
+    ExprNode(ExprNodeType type = NODE_ERR);
 
     /**
      * Constructor
@@ -38,19 +38,19 @@ public:
      * @param children Pointers to the children of the parse node
      * @param content The content of the parse node
      */
-    ExprNode(const ExprNodeType type, const std::vector<ExprNode *> &children,
+    ExprNode(ExprNodeType type, const std::vector<ExprNode *> &children,
     std::string content = "");
-
-    /**
-     * Destructor
-     */
-    ~ExprNode();
 
     /**
      * Copy constructor
      * @param other The expression to copy from
      */
     ExprNode(const ExprNode &other);
+
+    /**
+     * Destructor
+     */
+    ~ExprNode();
 
     /**
      * Check if two expressions are the same

@@ -4,21 +4,21 @@
 #include <unordered_map>
 #include <vector>
 
-ExprNode::ExprNode(const ExprNodeType type) : type(type) { }
+ExprNode::ExprNode(ExprNodeType type) : type(type) { }
 
-ExprNode::ExprNode(const ExprNodeType type, const std::vector<ExprNode *> &
+ExprNode::ExprNode(ExprNodeType type, const std::vector<ExprNode *> &
 children, std::string content) : type(type), children(children),
 content(content) { }
-
-ExprNode::~ExprNode() {
-    for (ExprNode *child : children)
-        delete child;
-}
 
 ExprNode::ExprNode(const ExprNode &other) : type(other.type),
 content(other.content) {
     for (ExprNode *child : other.children)
         children.push_back(new ExprNode(*child));
+}
+
+ExprNode::~ExprNode() {
+    for (ExprNode *child : children)
+        delete child;
 }
 
 bool ExprNode::operator==(const ExprNode &other) const {
