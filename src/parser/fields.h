@@ -9,6 +9,7 @@
  * An object to store all input fields in different formats
  */
 struct InputFields {
+    std::string str() const;
     size_t iterations;
     double time;
     ExprNode init;
