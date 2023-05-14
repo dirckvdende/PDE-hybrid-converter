@@ -2,6 +2,7 @@
 #pragma once
 
 #include "expr/expr.h"
+#include "fields.h"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -38,11 +39,11 @@ public:
     const std::unordered_map<std::string, std::string> &getFieldValues() const;
 
     /**
-     * Get the field expressions read from the configuration file
-     * @return A constant reference to a map from field name to field expression
+     * Get a reference to the entered input fields, given that run() has been
+     * called before
+     * @return A reference to an InputFields object containing all input fields
      */
-    const std::unordered_map<std::string, ExprNode *> &getFieldExpressions()
-    const;
+    const InputFields &getInputFields() const;
 
 private:
 
@@ -55,6 +56,27 @@ private:
      * Parse expression to ExprNode objects
      */
     void parseExpressions();
+
+    /**
+     * Parse a specific expression field
+     * @param str A reference to the string version of the expression
+     * @param out A reference to the field where the expression should be stored
+     */
+    void storeExpr(const std::string &str, ExprNode &out);
+
+    /**
+     * Parse a specific expression number field
+     * @param str A reference to the string version of the expression
+     * @param out A reference to the field where the number should be stored
+     */
+    void storeNumber(const std::string &str, double &out);
+
+    /**
+     * Parse a specific comma separated list field
+     * @param str A reference to the string version of the expression
+     * @param out A reference to the vector where the list should be stored
+     */
+    void storeCommaList(const std::string &str, std::vector<std::string> &out);
 
     /**
      * Check if all required configuration options are present
@@ -73,7 +95,7 @@ private:
     std::string systemName;
     // Configuration field values as strings
     std::unordered_map<std::string, std::string> fieldValues;
-    // Field values as expressions (if applicable)
-    std::unordered_map<std::string, ExprNode *> fieldExpr;
+    // Input fields as parsed variants
+    InputFields inputFields;
 
 };
