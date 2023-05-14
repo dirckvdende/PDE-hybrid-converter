@@ -4,6 +4,7 @@
 #include "cmdargs.h"
 #include "expr/expr.h"
 #include "grid/domain.h"
+#include "parser/fields.h"
 #include <string>
 #include <unordered_map>
 
@@ -59,11 +60,9 @@ private:
     CmdArgs args;
     // Input file contents
     std::string fileContents;
-    // Configuration field values as strings
-    std::unordered_map<std::string, std::string> fieldValues;
-    // Field values as expressions (if applicable)
-    std::unordered_map<std::string, ExprNode *> fieldExpr;
     // Domain object, which is null at initialization
     GridDomain *domain;
+    // Input fields as determined by the parser
+    InputFields inputFields;
 
 };
