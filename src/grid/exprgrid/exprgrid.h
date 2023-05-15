@@ -3,7 +3,8 @@
 
 #include "expr/expr.h"
 #include "gridpoint.h"
-#include "hypergrid.h"
+#include "grid/depgrid.h"
+#include "grid/hypergrid.h"
 #include <vector>
 
 /**
@@ -16,8 +17,9 @@ public:
     /**
      * Constructor
      * @param dims The dimensions of the grid
+     * @param maxSize Maximum group size
      */
-    ExprGrid(std::vector<size_t> dims);
+    ExprGrid(std::vector<size_t> dims, size_t maxSize);
 
     /**
      * Destructor
@@ -30,6 +32,17 @@ public:
      * (separated by newlines)
      */
     std::string str() const;
+
+    /**
+     * Get a constant reference to the dependency grid
+     * @return A constant reference to the dependency grid
+     */
+    const DependGrid &getDependGrid() const;
+
+    /**
+     * Generate groups on the dependency grid and calculate dependencies
+     */
+    void generateGroups();
 
 private:
 
@@ -66,5 +79,15 @@ private:
      * @return The expression for the derivative approximation
      */
     ExprNode getApprox(std::vector<size_t> deriv, std::vector<size_t> pos) const;
+
+    /**
+     * Divide the grid up into groups, using the "optimal hyperrectangle"
+     * algorithm
+     */
+    void joinGroups();
+
+    // A dependency grid to keep track of groups and which grid points need to
+    // be stored between iterations
+    DependGrid dependGrid;
 
 };
