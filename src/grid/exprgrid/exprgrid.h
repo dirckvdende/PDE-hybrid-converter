@@ -34,6 +34,25 @@ public:
 private:
 
     /**
+     * Generate point expressions for all grid points. Assumes that the grid
+     * point types have been generated
+     */
+    void generatePointExpr();
+
+    /**
+     * Generate a point expression for a specific point. Assumes that the grid
+     * point types have been generated
+     * @param index The index of the grid point
+     */
+    void generatePointExpr(size_t index);
+
+    /**
+     * Generate the border expression at a specific position
+     * @param index The index of the node to generate a border expression at
+     */
+    void generateBorderExpr(size_t index);
+
+    /**
      * Get an expression for referencing a specific grid point
      * @param pos The position of the grid point
      * @return A constant reference to the expression
