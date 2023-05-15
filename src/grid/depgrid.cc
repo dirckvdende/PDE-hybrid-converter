@@ -5,8 +5,11 @@
 #include <sstream>
 #include <stdexcept>
 
-DependGrid::DependGrid(std::vector<size_t> dims, std::vector<size_t> range,
-size_t maxSize) : GroupGrid(dims, maxSize), depends(dims), range(range) { }
+DependGrid::DependGrid(std::vector<size_t> dims, size_t maxSize,
+std::vector<size_t> range) : GroupGrid(dims, maxSize), depends(dims), range(range) {
+    if (range.empty())
+        range = std::vector<size_t>(dims.size(), 0);
+}
 
 DependGrid::~DependGrid() { }
 
@@ -88,4 +91,8 @@ void DependGrid::printDepend(std::ostream &os) const {
 
 std::vector<size_t> DependGrid::getRange() const {
     return range;
+}
+
+void DependGrid::setRange(const std::vector<size_t> &range) {
+    this->range = range;
 }
