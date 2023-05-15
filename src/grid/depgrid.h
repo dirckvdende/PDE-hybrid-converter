@@ -17,11 +17,12 @@ public:
     /**
      * Constructor
      * @param dims The dimensions of the grid
-     * @param range The range per dimension that dependencies span
      * @param maxSize The maximum group size
+     * @param range The range per dimension that dependencies span, default 0 in
+     * all dimensions
      */
-    DependGrid(std::vector<size_t> dims, std::vector<size_t> range, size_t
-    maxSize = SIZE_MAX);
+    DependGrid(std::vector<size_t> dims, size_t maxSize = SIZE_MAX,
+    std::vector<size_t> range = {});
 
     /**
      * Destructor
@@ -62,6 +63,12 @@ public:
      * @return The range per dimension as a vector
      */
     std::vector<size_t> getRange() const;
+
+    /**
+     * Set the range per dimension of the dependencies
+     * @param range The new range per dimension
+     */
+    void setRange(const std::vector<size_t> &range);
 
 private:
 
