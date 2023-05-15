@@ -3,14 +3,23 @@
 #include <stdexcept>
 #include <vector>
 
-ExprGrid::ExprGrid(std::vector<size_t> dims) : HyperGrid<ExprGridPoint>(dims)
-{ }
+ExprGrid::ExprGrid(std::vector<size_t> dims, size_t maxSize) :
+HyperGrid<ExprGridPoint>(dims), dependGrid(dims, maxSize) { }
 
 ExprGrid::~ExprGrid() { }
 
 std::string ExprGrid::str() const {
     // TODO: Implement
     return "";
+}
+
+const DependGrid &ExprGrid::getDependGrid() const {
+    return dependGrid;
+}
+
+void ExprGrid::generateGroups() {
+    joinGroups();
+    dependGrid.calc();
 }
 
 void ExprGrid::generatePointExpr() {
@@ -48,4 +57,8 @@ ExprNode ExprGrid::getApprox(std::vector<size_t> deriv, std::vector<size_t> pos)
 const {
     // TODO: Implement
     return ExprNode();
+}
+
+void ExprGrid::joinGroups() {
+    // TODO: implement
 }
