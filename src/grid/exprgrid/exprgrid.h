@@ -36,9 +36,9 @@ private:
     /**
      * Get an expression for referencing a specific grid point
      * @param pos The position of the grid point
-     * @return A constant pointer to the expression
+     * @return A constant reference to the expression
      */
-    const ExprNode *getPointExpr(std::vector<size_t> pos) const;
+    const ExprNode &getPointExpr(std::vector<size_t> pos) const;
 
     /**
      * Get the approximation of a certain derivative at a certain position
