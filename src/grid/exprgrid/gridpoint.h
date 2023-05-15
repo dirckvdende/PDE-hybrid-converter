@@ -7,6 +7,8 @@
  * Expression grid point domain inclusion type
  */
 enum ExprGridPointType {
+    // Error type, before types are assigned
+    GRIDPOINT_ERR,
     // Not inside the domain
     GRIDPOINT_NONE,
     // Inside the domain
@@ -20,6 +22,6 @@ enum ExprGridPointType {
  * domain, expression for referencing grid point, etc.
  */
 struct ExprGridPoint {
-    ExprGridPointType type;
-    ExprNode *pointExpr = nullptr;
+    ExprGridPointType type = GRIDPOINT_ERR;
+    ExprNode pointExpr;
 };
