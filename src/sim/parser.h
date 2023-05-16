@@ -1,7 +1,9 @@
 
 #pragma once
 
+#include "spec.h"
 #include <string>
+#include <vector>
 
 namespace sim {
 

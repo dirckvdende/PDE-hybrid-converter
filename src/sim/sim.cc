@@ -11,3 +11,7 @@ void Sim::setText(const std::string &txt) {
     this->txt = txt;
     parser.setText(txt);
 }
+
+void Sim::run() {
+    // TODO: implement
+}

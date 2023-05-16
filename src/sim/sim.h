@@ -2,6 +2,9 @@
 #pragma once
 
 #include "parser.h"
+#include "spec.h"
+#include <string>
+#include <vector>
 
 namespace sim {
 
@@ -28,12 +31,19 @@ public:
      */
     void setText(const std::string &txt);
 
+    /**
+     * Run the simulator
+     */
+    void run();
+
 private:
 
     // Input text
     std::string txt;
     // Parses the input text
     Parser parser;
+    // List of ODE specifications to process
+    std::vector<ODESystem> specs;
 
 };
 
