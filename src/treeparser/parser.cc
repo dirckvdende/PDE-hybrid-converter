@@ -43,6 +43,11 @@ Parser::~Parser() {
     delete root;
 }
 
+void Parser::setText(std::string txt) {
+    lexer.clearText();
+    lexer.append(txt);
+}
+
 void Parser::run() {
     prepareConfigOptions();
     root = readRoot();
@@ -143,6 +148,7 @@ ParseNode *Parser::readTreeEntry(bool isNamed) {
 }
 
 void Parser::prepareConfigOptions() {
+    configNames.clear();
     for (const ConfigOption &option : settings.configOptions)
         configNames.emplace(option.name, &option);
 }
