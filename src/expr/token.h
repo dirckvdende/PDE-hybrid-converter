@@ -17,6 +17,8 @@ enum TokenType {
     TOK_ADD, TOK_SUB, TOK_MUL, TOK_DIV,
     TOK_LT, TOK_GT, TOK_LTE, TOK_GTE, TOK_EQ,
     TOK_OR, TOK_AND,
+    TOK_INTEG,
+    TOK_COMMA, TOK_LBRACKET, TOK_RBRACKET,
 };
 
 /**

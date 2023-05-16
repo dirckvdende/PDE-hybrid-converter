@@ -128,6 +128,10 @@ ExprNode *Parser::readTerm() {
         ExprNode *result = readAndOr();
         next();
         return result;
+    } else if (accept({TOK_INTEG})) {
+        return readInteg();
+    } else if (accept({TOK_LBRACKET})) {
+        return readList();
     }
     return nullptr;
 }
@@ -150,6 +154,35 @@ ExprNode *Parser::readDeriv() {
         next();
     }
     expect({TOK_RBRACE});
+    next();
+    return node;
+}
+
+ExprNode *Parser::readInteg() {
+    expect({TOK_INTEG});
+    next();
+    expect({TOK_LBRACE});
+    next();
+    ExprNode *node = new ExprNode(NODE_INTEG);
+    node->children.push_back(readAndOr());
+    expect({TOK_COMMA});
+    next();
+    node->children.push_back(readAndOr());
+    expect({TOK_RBRACE});
+    next();
+    return node;
+}
+
+ExprNode *Parser::readList() {
+    expect({TOK_LBRACKET});
+    next();
+    ExprNode *node = new ExprNode(NODE_LIST);
+    node->children.push_back(readAndOr());
+    while (accept({TOK_COMMA})) {
+        next();
+        node->children.push_back(readAndOr());
+    }
+    expect({TOK_RBRACKET});
     next();
     return node;
 }

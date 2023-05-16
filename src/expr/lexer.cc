@@ -86,7 +86,8 @@ void Lexer::readSpecialChar() {
         { "(", TOK_LBRACE }, { ")", TOK_RBRACE }, { "+", TOK_ADD },
         { "-", TOK_SUB }, { "*", TOK_MUL }, { "/", TOK_DIV },
         { "<", TOK_LT }, { ">", TOK_GT }, { "<=", TOK_LTE },
-        { ">=", TOK_GTE }, { "=", TOK_EQ },
+        { ">=", TOK_GTE }, { "=", TOK_EQ }, { ",", TOK_COMMA },
+        { "[", TOK_LBRACKET }, { "]", TOK_RBRACKET },
     };
     std::string content;
     content.push_back(cur());
