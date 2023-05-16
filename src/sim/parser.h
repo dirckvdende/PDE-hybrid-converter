@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "treeparser/parser.h"
 #include "spec.h"
 #include <string>
 #include <vector>
@@ -37,8 +38,26 @@ public:
 
 private:
 
+    /**
+     * Run the tree parser
+     */
+    void runTreeParser();
+
+    /**
+     * Internal type to store ODE configurations where the values have not yet
+     * been parsed
+     */
+    struct ODEPreConfig {
+        // Pairs contain name and value of configuration
+        std::vector<std::pair<std::string, std::string>> entries;
+    };
+
     // Input text to be parsed
     std::string txt;
+    // Tree parser to read configuration entries as strings
+    treeparser::Parser treeParser;
+    // List of ODE configurations and configuration values
+    std::vector<ODEPreConfig> preConfig;
 
 };
 
