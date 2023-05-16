@@ -69,14 +69,6 @@ public:
     void updateSettings(const Settings &sett);
 
     /**
-     * For debugging, output the parse tree as a string
-     * @param os The output stream
-     * @param parser The parser which contains the parse tree
-     * @return The output stream
-     */
-    friend std::ostream &operator<<(std::ostream &os, const Parser &parser);
-
-    /**
      * Get the root node of the parse tree
      * @return A pointer to the parse tree root node
      */
