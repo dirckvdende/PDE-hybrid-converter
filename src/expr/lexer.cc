@@ -4,11 +4,13 @@
 #include <string>
 #include <unordered_map>
 
-ExprLexer::ExprLexer(const std::string &txt) : txt(txt) { }
+using namespace expr;
 
-ExprLexer::~ExprLexer() { }
+Lexer::Lexer(const std::string &txt) : txt(txt) { }
 
-void ExprLexer::run() {
+Lexer::~Lexer() { }
+
+void Lexer::run() {
     pos = 0;
     while (!atEnd()) {
         if (isWhitespace(cur()))
@@ -22,37 +24,37 @@ void ExprLexer::run() {
     }
 }
 
-const std::vector<ExprToken> &ExprLexer::getTokens() const {
+const std::vector<Token> &Lexer::getTokens() const {
     return tokens;
 }
 
-char ExprLexer::cur() const {
+char Lexer::cur() const {
     return pos < txt.size() ? txt[pos] : '\0';
 }
 
-void ExprLexer::next() {
+void Lexer::next() {
     pos++;
 }
 
-bool ExprLexer::atEnd() const {
+bool Lexer::atEnd() const {
     return pos >= txt.size();
 }
 
-bool ExprLexer::isWhitespace(char c) {
+bool Lexer::isWhitespace(char c) {
     for (char w : "\n \t\r")
         if (c == w)
             return true;
     return false;
 }
 
-bool ExprLexer::isIdentChar(char c) {
+bool Lexer::isIdentChar(char c) {
     return ('0' <= c && c <= '9') || ('a' <= c && c <= 'z') ||
     ('A' <= c && c <= 'Z') || c == '_';
 }
 
-void ExprLexer::readNum() {
+void Lexer::readNum() {
     bool foundDot = false;
-    tokens.push_back({EXPRTOK_NUM});
+    tokens.push_back({TOK_NUM});
     while (('0' <= cur() && cur() <= '9') || cur() == '.') {
         if (cur() == '.' && foundDot)
             return;
@@ -63,28 +65,28 @@ void ExprLexer::readNum() {
     }
 }
 
-void ExprLexer::readIdent() {
-    tokens.push_back({cur() == 'd' ? EXPRTOK_DERIV : EXPRTOK_SYMB});
+void Lexer::readIdent() {
+    tokens.push_back({cur() == 'd' ? TOK_DERIV : TOK_SYMB});
     while (isIdentChar(cur())) {
         tokens.back().content.push_back(cur());
         next();
     }
     if (tokens.back().content == "and") {
         tokens.back().content.clear();
-        tokens.back().type = EXPRTOK_AND;
+        tokens.back().type = TOK_AND;
     }
     if (tokens.back().content == "or") {
         tokens.back().content.clear();
-        tokens.back().type = EXPRTOK_OR;
+        tokens.back().type = TOK_OR;
     }
 }
 
-void ExprLexer::readSpecialChar() {
-    static const std::unordered_map<std::string, ExprTokenType> typeMap = {
-        { "(", EXPRTOK_LBRACE }, { ")", EXPRTOK_RBRACE }, { "+", EXPRTOK_ADD },
-        { "-", EXPRTOK_SUB }, { "*", EXPRTOK_MUL }, { "/", EXPRTOK_DIV },
-        { "<", EXPRTOK_LT }, { ">", EXPRTOK_GT }, { "<=", EXPRTOK_LTE },
-        { ">=", EXPRTOK_GTE }, { "=", EXPRTOK_EQ },
+void Lexer::readSpecialChar() {
+    static const std::unordered_map<std::string, TokenType> typeMap = {
+        { "(", TOK_LBRACE }, { ")", TOK_RBRACE }, { "+", TOK_ADD },
+        { "-", TOK_SUB }, { "*", TOK_MUL }, { "/", TOK_DIV },
+        { "<", TOK_LT }, { ">", TOK_GT }, { "<=", TOK_LTE },
+        { ">=", TOK_GTE }, { "=", TOK_EQ },
     };
     std::string content;
     content.push_back(cur());
