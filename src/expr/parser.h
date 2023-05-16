@@ -111,6 +111,18 @@ private:
      */
     ExprNode *readDeriv();
 
+    /**
+     * Read an intergral with initial value
+     * @return A pointer to the generated expression parse node
+     */
+    ExprNode *readInteg();
+
+    /**
+     * Read a list of expressions
+     * @return A pointer to the generated expression parse node
+     */
+    ExprNode *readList();
+
     // Reference to the input tokens
     const std::vector<Token> &tokens;
     // Output parse tree, last item is the root
