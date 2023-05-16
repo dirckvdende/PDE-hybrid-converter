@@ -75,6 +75,19 @@ std::string ExprNode::str() const {
             content.substr(content.find(';') + 1) + ")";
         case NODE_MINUS:
             return "-(" + children[0]->str() + ")";
+        case NODE_INTEG:
+            return "integ(" + children[0]->str() + ", " + children[1]->str() +
+            ")";
+        case NODE_LIST: {
+            std::string out = "[";
+            for (size_t i = 0; i < children.size(); i++) {
+                if (i != 0)
+                    out.append(", ");
+                out.append(children[i]->str());
+            }
+            out.push_back(']');
+            return out;
+        }
         default:
             return binaryStr();
     }
