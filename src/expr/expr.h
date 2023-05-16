@@ -19,6 +19,7 @@ enum NodeType {
     NODE_EQ, NODE_NEQ,
     NODE_AND, NODE_OR,
     NODE_MINUS,
+    NODE_INTEG, NODE_LIST,
 };
 
 /**
