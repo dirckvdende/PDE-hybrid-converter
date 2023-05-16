@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace spec {
+namespace sim {
 
 /**
  * Specification of a system of ODEs
