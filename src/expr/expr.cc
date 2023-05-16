@@ -4,9 +4,11 @@
 #include <unordered_map>
 #include <vector>
 
-ExprNode::ExprNode(ExprNodeType type) : type(type) { }
+using namespace expr;
 
-ExprNode::ExprNode(ExprNodeType type, const std::vector<ExprNode *> &
+ExprNode::ExprNode(NodeType type) : type(type) { }
+
+ExprNode::ExprNode(NodeType type, const std::vector<ExprNode *> &
 children, std::string content) : type(type), children(children),
 content(content) { }
 
@@ -132,7 +134,7 @@ double ExprNode::eval() const {
 }
 
 std::string ExprNode::binaryStr() const {
-    static const std::unordered_map<ExprNodeType, std::string> typeMap = {
+    static const std::unordered_map<NodeType, std::string> typeMap = {
         {NODE_ADD, "+"}, {NODE_SUB, "-"}, {NODE_MUL, "*"}, {NODE_DIV, "/"},
         {NODE_LT, "<"}, {NODE_LTE, "<="}, {NODE_GT, ">"}, {NODE_GTE, ">="},
         {NODE_EQ, "="}, {NODE_NEQ, "!="}, {NODE_AND, " and "},

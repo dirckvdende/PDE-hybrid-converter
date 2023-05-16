@@ -6,42 +6,44 @@
 #include <unordered_map>
 #include <vector>
 
-ExprParser::ExprParser(const std::vector<ExprToken> &tokens) : tokens(tokens),
+using namespace expr;
+
+Parser::Parser(const std::vector<Token> &tokens) : tokens(tokens),
 tree(ExprNode(NODE_ERR)) { }
 
-ExprParser::~ExprParser() { }
+Parser::~Parser() { }
 
-void ExprParser::run() {
+void Parser::run() {
     pos = 0;
     ExprNode *expr = readAndOr();
     tree = *expr;
     delete expr;
 }
 
-const ExprNode &ExprParser::getTree() const {
+const ExprNode &Parser::getTree() const {
     return tree;
 }
 
-ExprToken ExprParser::cur() const {
-    return pos < tokens.size() ? tokens[pos] : ExprToken{EXPRTOK_ERR};
+Token Parser::cur() const {
+    return pos < tokens.size() ? tokens[pos] : Token{TOK_ERR};
 }
 
-void ExprParser::next() {
+void Parser::next() {
     pos++;
 }
 
-bool ExprParser::atEnd() const {
+bool Parser::atEnd() const {
     return pos >= tokens.size();
 }
 
-bool ExprParser::accept(std::vector<ExprTokenType> types) const {
-    for (ExprTokenType type : types)
+bool Parser::accept(std::vector<TokenType> types) const {
+    for (TokenType type : types)
         if (cur().type == type)
             return true;
     return false;
 }
 
-void ExprParser::expect(std::vector<ExprTokenType> types) {
+void Parser::expect(std::vector<TokenType> types) {
     if (!accept(types)) {
         std::sort(types.begin(), types.end());
         std::string typeList = std::to_string(types.front());
@@ -52,10 +54,10 @@ void ExprParser::expect(std::vector<ExprTokenType> types) {
     }
 }
 
-ExprNode *ExprParser::readAndOr() {
+ExprNode *Parser::readAndOr() {
     ExprNode *left = readEquality();
-    while (accept({EXPRTOK_AND, EXPRTOK_OR})) {
-        ExprNodeType type = cur().type == EXPRTOK_AND ? NODE_AND : NODE_OR;
+    while (accept({TOK_AND, TOK_OR})) {
+        NodeType type = cur().type == TOK_AND ? NODE_AND : NODE_OR;
         next();
         ExprNode *right = readEquality();
         left = new ExprNode(type, {left, right});
@@ -63,27 +65,27 @@ ExprNode *ExprParser::readAndOr() {
     return left;
 }
 
-ExprNode *ExprParser::readEquality() {
+ExprNode *Parser::readEquality() {
     ExprNode *left = readSum();
-    if (!accept({EXPRTOK_LT, EXPRTOK_LTE, EXPRTOK_GT, EXPRTOK_GTE, EXPRTOK_EQ}))
+    if (!accept({TOK_LT, TOK_LTE, TOK_GT, TOK_GTE, TOK_EQ}))
         return left;
-    ExprTokenType type = cur().type;
+    TokenType type = cur().type;
     next();
     ExprNode *right = readSum();
-    const std::unordered_map<ExprTokenType, ExprNodeType> typeMap = {
-        { EXPRTOK_LT, NODE_LT },
-        { EXPRTOK_GT, NODE_GT },
-        { EXPRTOK_LTE, NODE_LTE },
-        { EXPRTOK_GTE, NODE_GTE },
-        { EXPRTOK_EQ, NODE_EQ },
+    const std::unordered_map<TokenType, NodeType> typeMap = {
+        { TOK_LT, NODE_LT },
+        { TOK_GT, NODE_GT },
+        { TOK_LTE, NODE_LTE },
+        { TOK_GTE, NODE_GTE },
+        { TOK_EQ, NODE_EQ },
     };
     return new ExprNode(typeMap.at(type), {left, right});
 }
 
-ExprNode *ExprParser::readSum() {
+ExprNode *Parser::readSum() {
     ExprNode *left = readProduct();
-    while (accept({EXPRTOK_ADD, EXPRTOK_SUB})) {
-        ExprNodeType type = cur().type == EXPRTOK_ADD ? NODE_ADD : NODE_SUB;
+    while (accept({TOK_ADD, TOK_SUB})) {
+        NodeType type = cur().type == TOK_ADD ? NODE_ADD : NODE_SUB;
         next();
         ExprNode *right = readProduct();
         left = new ExprNode(type, {left, right});
@@ -91,10 +93,10 @@ ExprNode *ExprParser::readSum() {
     return left;
 }
 
-ExprNode *ExprParser::readProduct() {
+ExprNode *Parser::readProduct() {
     ExprNode *left = readMinus();
-    while (accept({EXPRTOK_MUL, EXPRTOK_DIV})) {
-        ExprNodeType type = cur().type == EXPRTOK_MUL ? NODE_MUL : NODE_DIV;
+    while (accept({TOK_MUL, TOK_DIV})) {
+        NodeType type = cur().type == TOK_MUL ? NODE_MUL : NODE_DIV;
         next();
         ExprNode *right = readMinus();
         left = new ExprNode(type, {left, right});
@@ -102,26 +104,26 @@ ExprNode *ExprParser::readProduct() {
     return left;
 }
 
-ExprNode *ExprParser::readMinus() {
-    if (!accept({EXPRTOK_SUB}))
+ExprNode *Parser::readMinus() {
+    if (!accept({TOK_SUB}))
         return readTerm();
     next();
     return new ExprNode(NODE_MINUS, {readTerm()});
 }
 
-ExprNode *ExprParser::readTerm() {
-    expect({EXPRTOK_NUM, EXPRTOK_SYMB, EXPRTOK_DERIV, EXPRTOK_LBRACE});
-    if (accept({EXPRTOK_NUM})) {
+ExprNode *Parser::readTerm() {
+    expect({TOK_NUM, TOK_SYMB, TOK_DERIV, TOK_LBRACE});
+    if (accept({TOK_NUM})) {
         ExprNode *node = new ExprNode(NODE_NUM, {}, cur().content);
         next();
         return node;
-    } else if (accept({EXPRTOK_SYMB})) {
+    } else if (accept({TOK_SYMB})) {
         ExprNode *node = new ExprNode(NODE_SYMB, {}, cur().content);
         next();
         return node;
-    } else if (accept({EXPRTOK_DERIV})) {
+    } else if (accept({TOK_DERIV})) {
         return readDeriv();
-    } else if (accept({EXPRTOK_LBRACE})) {
+    } else if (accept({TOK_LBRACE})) {
         next();
         ExprNode *result = readAndOr();
         next();
@@ -130,24 +132,24 @@ ExprNode *ExprParser::readTerm() {
     return nullptr;
 }
 
-ExprNode *ExprParser::readDeriv() {
-    expect({EXPRTOK_DERIV});
+ExprNode *Parser::readDeriv() {
+    expect({TOK_DERIV});
     std::string content = cur().content.substr(1);
     if (content.size() == 0)
         throw std::runtime_error("Invalid derivative");
     next();
-    expect({EXPRTOK_LBRACE});
+    expect({TOK_LBRACE});
     next();
-    expect({EXPRTOK_DERIV, EXPRTOK_SYMB});
+    expect({TOK_DERIV, TOK_SYMB});
     ExprNode *node = nullptr;
-    if (accept({EXPRTOK_DERIV})) {
+    if (accept({TOK_DERIV})) {
         node = readDeriv();
         node->content = content + " " + node->content;
     } else {
         node = new ExprNode(NODE_DERIV, {}, content + ";" + cur().content);
         next();
     }
-    expect({EXPRTOK_RBRACE});
+    expect({TOK_RBRACE});
     next();
     return node;
 }

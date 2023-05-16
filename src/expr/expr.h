@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 
+namespace expr {
+
 /**
  * Expression node type
  */
-enum ExprNodeType {
+enum NodeType {
     NODE_ERR,
     NODE_SYMB,
     NODE_NUM,
@@ -30,7 +32,7 @@ public:
      * Constructor
      * @param type The type of the node
      */
-    ExprNode(ExprNodeType type = NODE_ERR);
+    ExprNode(NodeType type = NODE_ERR);
 
     /**
      * Constructor
@@ -38,7 +40,7 @@ public:
      * @param children Pointers to the children of the parse node
      * @param content The content of the parse node
      */
-    ExprNode(ExprNodeType type, const std::vector<ExprNode *> &children,
+    ExprNode(NodeType type, const std::vector<ExprNode *> &children,
     std::string content = "");
 
     /**
@@ -129,7 +131,7 @@ public:
     double eval() const;
 
     // The node type
-    ExprNodeType type;
+    NodeType type;
     // Node children (pointers)
     std::vector<ExprNode *> children;
     // Node content (optional)
@@ -144,3 +146,5 @@ private:
     std::string binaryStr() const;
 
 };
+
+}

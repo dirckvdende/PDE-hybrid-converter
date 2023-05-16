@@ -4,10 +4,12 @@
 #include "token.h"
 #include <vector>
 
+namespace expr {
+
 /**
  * Lexer for equations
  */
-class ExprLexer {
+class Lexer {
 
 public:
 
@@ -16,12 +18,12 @@ public:
      * @param txt A reference to the input text, should not be modified while
      * running the lexer
      */
-    ExprLexer(const std::string &txt);
+    Lexer(const std::string &txt);
 
     /**
      * Destructor
      */
-    ~ExprLexer();
+    ~Lexer();
 
     /**
      * Run the lexer, output tokens are stored
@@ -32,7 +34,7 @@ public:
      * Get a reference to the vector of output tokens
      * @return A reference to the output token vector
      */
-    const std::vector<ExprToken> &getTokens() const;
+    const std::vector<Token> &getTokens() const;
 
 private:
 
@@ -85,8 +87,10 @@ private:
     // Input text
     const std::string &txt;
     // Output tokens
-    std::vector<ExprToken> tokens;
+    std::vector<Token> tokens;
     // Current position in the input text
     size_t pos;
 
 };
+
+}

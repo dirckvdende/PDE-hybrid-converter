@@ -3,25 +3,29 @@
 
 #include <string>
 
+namespace expr {
+
 /**
  * Type of an expression token
  */
-enum ExprTokenType {
-    EXPRTOK_ERR,
-    EXPRTOK_SYMB,
-    EXPRTOK_DERIV,
-    EXPRTOK_NUM,
-    EXPRTOK_LBRACE, EXPRTOK_RBRACE,
-    EXPRTOK_ADD, EXPRTOK_SUB, EXPRTOK_MUL, EXPRTOK_DIV,
-    EXPRTOK_LT, EXPRTOK_GT, EXPRTOK_LTE, EXPRTOK_GTE, EXPRTOK_EQ,
-    EXPRTOK_OR, EXPRTOK_AND,
+enum TokenType {
+    TOK_ERR,
+    TOK_SYMB,
+    TOK_DERIV,
+    TOK_NUM,
+    TOK_LBRACE, TOK_RBRACE,
+    TOK_ADD, TOK_SUB, TOK_MUL, TOK_DIV,
+    TOK_LT, TOK_GT, TOK_LTE, TOK_GTE, TOK_EQ,
+    TOK_OR, TOK_AND,
 };
 
 /**
  * Token in an expression, which has a type and "content", which can be literal
  * content or formatted information about the token
  */
-struct ExprToken {
-    ExprTokenType type;
+struct Token {
+    TokenType type;
     std::string content;
 };
+
+}

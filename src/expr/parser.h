@@ -5,11 +5,13 @@
 #include "token.h"
 #include <vector>
 
+namespace expr {
+
 /**
  * Object used to parse a vector of tokens to a parse tree, which is also
  * represented as a vector
  */
-class ExprParser {
+class Parser {
 
 public:
 
@@ -17,12 +19,12 @@ public:
      * Constructor
      * @param tokens A reference to the input tokens
      */
-    ExprParser(const std::vector<ExprToken> &tokens);
+    Parser(const std::vector<Token> &tokens);
 
     /**
      * Destructor
      */
-    ~ExprParser();
+    ~Parser();
 
     /**
      * Run the equation parser
@@ -41,7 +43,7 @@ private:
      * Get the current token being read
      * @return The current token
      */
-    ExprToken cur() const;
+    Token cur() const;
 
     /**
      * Move to the next token in the input vector
@@ -59,13 +61,13 @@ private:
      * @param types The types to check for
      * @return A boolean indicating if the types match
      */
-    bool accept(std::vector<ExprTokenType> types) const;
+    bool accept(std::vector<TokenType> types) const;
 
     /**
      * Require that the current token is of one of the given types
      * @param types The types to require
      */
-    void expect(std::vector<ExprTokenType> types);
+    void expect(std::vector<TokenType> types);
 
     /**
      * Read an and/or statement
@@ -110,10 +112,12 @@ private:
     ExprNode *readDeriv();
 
     // Reference to the input tokens
-    const std::vector<ExprToken> &tokens;
+    const std::vector<Token> &tokens;
     // Output parse tree, last item is the root
     ExprNode tree;
     // Current position in the input stream
     size_t pos;
 
 };
+
+}
