@@ -1,5 +1,6 @@
 
 #include "sim.h"
+#include <fstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -90,5 +91,14 @@ void Sim::runSystem(const ODESystem &system) {
 }
 
 void Sim::outputEmit(std::string filename) const {
-    // TODO: implement
+    std::ofstream file(filename);
+    if (!file.is_open())
+        throw std::runtime_error("Could not open output file");
+    for (const auto &emit : emitVals) {
+        file << emit.first;
+        for (const double &v : emit.second)
+            file << ' ' << v;
+        file << '\n';
+    }
+    file.close();
 }
