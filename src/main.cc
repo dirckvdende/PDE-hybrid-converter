@@ -27,7 +27,7 @@ int runCompiler(int argc, char *argv[]) {
 int runSim(int argc, char *argv[]) {
     std::string filename;
     for (int i = 1; i < argc; i++) {
-        if (argv[i] != "--ode")
+        if (std::string(argv[i]) != "--ode")
             filename = argv[i];
     }
     sim::Sim simulator;
@@ -48,7 +48,7 @@ int runSim(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
     // Detect running argument
     for (int i = 1; i < argc; i++)
-        if (argv[i] == "--ode")
+        if (std::string(argv[i]) == "--ode")
             return runSim(argc, argv);
     return runCompiler(argc, argv);
 }
