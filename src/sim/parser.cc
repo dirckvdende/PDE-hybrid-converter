@@ -110,7 +110,7 @@ void Parser::parseEmit(const std::string &txt, ODESystem &system) {
     if (b >= txt.size())
         throw std::runtime_error("Invalid emit syntax");
     std::string first = txt.substr(0, a);
-    std::string second = txt.substr(a + 1, b);
+    std::string second = txt.substr(a + 1, b - a - 1);
     std::string third = txt.substr(b + 1);
     if (second != "as")
         throw std::runtime_error("Invalid emit syntax");
