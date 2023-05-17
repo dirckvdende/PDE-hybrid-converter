@@ -8,7 +8,7 @@
 
 using namespace expr;
 
-Parser::Parser(const std::vector<Token> &tokens) : tokens(tokens),
+Parser::Parser() : tokens(lexer.getTokens()),
 tree(ExprNode(NODE_ERR)) { }
 
 Parser::~Parser() { }
@@ -18,6 +18,11 @@ void Parser::run() {
     ExprNode *expr = readAndOr();
     tree = *expr;
     delete expr;
+}
+
+void Parser::setText(const std::string &txt) {
+    lexer.clearText();
+    lexer.append(txt);
 }
 
 const ExprNode &Parser::getTree() const {

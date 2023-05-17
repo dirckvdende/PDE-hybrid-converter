@@ -2,6 +2,7 @@
 #pragma once
 
 #include "expr.h"
+#include "lexer.h"
 #include "token.h"
 #include <vector>
 
@@ -17,9 +18,8 @@ public:
 
     /**
      * Constructor
-     * @param tokens A reference to the input tokens
      */
-    Parser(const std::vector<Token> &tokens);
+    Parser();
 
     /**
      * Destructor
@@ -30,6 +30,12 @@ public:
      * Run the equation parser
      */
     void run();
+
+    /**
+     * Set the input text
+     * @param txt The input text to be set
+     */
+    void setText(const std::string &txt);
 
     /**
      * Get the output parse tree root node
@@ -123,6 +129,8 @@ private:
      */
     ExprNode *readList();
 
+    // Text lexer, which converts text to tokens
+    Lexer lexer;
     // Reference to the input tokens
     const std::vector<Token> &tokens;
     // Output parse tree, last item is the root

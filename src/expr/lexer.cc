@@ -6,7 +6,7 @@
 
 using namespace expr;
 
-Lexer::Lexer(const std::string &txt) : txt(txt) { }
+Lexer::Lexer(std::string txt) : txt(txt) { }
 
 Lexer::~Lexer() { }
 
@@ -22,6 +22,14 @@ void Lexer::run() {
         else
             readSpecialChar();
     }
+}
+
+void Lexer::clearText() {
+    txt = "";
+}
+
+void Lexer::append(const std::string &txt) {
+    this->txt.append(txt);
 }
 
 const std::vector<Token> &Lexer::getTokens() const {
