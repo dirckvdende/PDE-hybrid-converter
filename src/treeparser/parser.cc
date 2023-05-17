@@ -50,10 +50,12 @@ void Parser::setText(std::string txt) {
 
 void Parser::run() {
     prepareConfigOptions();
+    lexer.run();
     root = readRoot();
 }
 
 void Parser::updateSettings(const Settings &sett) {
+    lexer.updateSettings(sett);
     settings = sett;
 }
 
