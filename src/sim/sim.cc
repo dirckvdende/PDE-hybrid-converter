@@ -57,6 +57,7 @@ void Sim::runSystem(const ODESystem &system) {
                 std::to_string(vals[j]));
                 node.replace(search, repl);
             }
+            vals[i] = node.eval();
         }
     }
     // Determine variables that need to be emitted
