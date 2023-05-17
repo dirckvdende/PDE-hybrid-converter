@@ -36,7 +36,7 @@ void ExprGrid::generatePointExpr(size_t index) {
             // Do nothing
             return;
         case GRIDPOINT_DOMAIN:
-            get(index).pointExpr = ExprNode(NODE_SYMB, {}, "outf_" +
+            get(index).pointExpr = expr::ExprNode(expr::NODE_SYMB, {}, "outf_" +
             std::to_string(index));
             return;
         case GRIDPOINT_BORDER:
@@ -49,14 +49,14 @@ void ExprGrid::generateBorderExpr(size_t index) {
     // TODO: implement
 }
 
-const ExprNode &ExprGrid::getPointExpr(std::vector<size_t> pos) const {
+const expr::ExprNode &ExprGrid::getPointExpr(std::vector<size_t> pos) const {
     return get(pos).pointExpr;
 }
 
-ExprNode ExprGrid::getApprox(std::vector<size_t> deriv, std::vector<size_t> pos)
-const {
+expr::ExprNode ExprGrid::getApprox(std::vector<size_t> deriv,
+std::vector<size_t> pos) const {
     // TODO: Implement
-    return ExprNode();
+    return expr::ExprNode();
 }
 
 void ExprGrid::joinGroups() {
