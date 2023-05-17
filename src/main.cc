@@ -25,10 +25,18 @@ int runCompiler(int argc, char *argv[]) {
  * @return An integer status code to be returned by main
  */
 int runSim(int argc, char *argv[]) {
-    (void)argc, (void)argv;
+    std::string filename;
+    for (int i = 1; i < argc; i++) {
+        if (argv[i] != "--ode")
+            filename = argv[i];
+    }
     sim::Sim simulator;
     simulator.setFileOutput(true);
-    std::ifstream file("examples/ode/single.ode");
+    if (filename == "") {
+        std::cerr << "Usage: " << argv[0] << " --ode <filename>" << std::endl;
+        return 1;
+    }
+    std::ifstream file(filename);
     std::stringstream stream;
     stream << file.rdbuf();
     std::string txt = stream.str();
