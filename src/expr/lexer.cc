@@ -87,6 +87,10 @@ void Lexer::readIdent() {
         tokens.back().content.clear();
         tokens.back().type = TOK_OR;
     }
+    if (tokens.back().content == "integ") {
+        tokens.back().content.clear();
+        tokens.back().type = TOK_INTEG;
+    }
 }
 
 void Lexer::readSpecialChar() {
