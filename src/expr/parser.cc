@@ -14,6 +14,7 @@ tree(ExprNode(NODE_ERR)) { }
 Parser::~Parser() { }
 
 void Parser::run() {
+    lexer.run();
     pos = 0;
     ExprNode *expr = readAndOr();
     tree = *expr;
