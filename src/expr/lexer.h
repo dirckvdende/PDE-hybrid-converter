@@ -15,10 +15,9 @@ public:
 
     /**
      * Constructor
-     * @param txt A reference to the input text, should not be modified while
-     * running the lexer
+     * @param txt The input text (optional)
      */
-    Lexer(const std::string &txt);
+    Lexer(std::string txt = "");
 
     /**
      * Destructor
@@ -29,6 +28,17 @@ public:
      * Run the lexer, output tokens are stored
      */
     void run();
+
+    /**
+     * Clear the input text
+     */
+    void clearText();
+
+    /**
+     * Append to the input text
+     * @param txt The text to append
+     */
+    void append(const std::string &txt);
 
     /**
      * Get a reference to the vector of output tokens
@@ -85,7 +95,7 @@ private:
     void readSpecialChar();
 
     // Input text
-    const std::string &txt;
+    std::string txt;
     // Output tokens
     std::vector<Token> tokens;
     // Current position in the input text
