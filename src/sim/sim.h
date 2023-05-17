@@ -68,6 +68,16 @@ private:
      */
     void outputEmit(std::string filename) const;
 
+    /**
+     * Replace all known symbols with values in the given expression
+     * @param node A reference to the expression root node
+     * @param system The ODE system specification
+     * @param vals The values known currently
+     * @param it Current iteration of the simulation
+     */
+    void replaceSymbols(expr::ExprNode &node, const ODESystem &system,
+    const std::vector<double> &vals, size_t it) const;
+
     // Input text
     std::string txt;
     // Parses the input text
