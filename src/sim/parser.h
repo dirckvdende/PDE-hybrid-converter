@@ -36,12 +36,51 @@ public:
      */
     void run();
 
+    /**
+     * Get the list of ODE specifications
+     * @return A constant reference to the produced ODE specifications
+     */
+    const std::vector<ODESystem> &getSpecs() const;
+
 private:
 
     /**
      * Run the tree parser
      */
     void runTreeParser();
+
+    /**
+     * Run expression parser to parse fields produced by runTreeParser()
+     */
+    void runExprParser();
+
+    /**
+     * Parse a variable definition in an ODE specification
+     * @param txt The input text corresponding with the variable definition
+     * @param system The output system to add the variable to
+     */
+    void parseVar(const std::string &txt, ODESystem &system);
+
+    /**
+     * Parse a interval definition in an ODE specification
+     * @param txt The input text corresponding with the interval definition
+     * @param system The output system to add the interval to
+     */
+    void parseInterval(const std::string &txt, ODESystem &system);
+
+    /**
+     * Parse an emit definition in an ODE specification
+     * @param txt The input text corresponding with the emit definition
+     * @param system The output system to add the emit to
+     */
+    void parseEmit(const std::string &txt, ODESystem &system);
+
+    /**
+     * Parse a time definition in an ODE specification
+     * @param txt The input text corresponding with the time definition
+     * @param system The output system to add the time configuration to
+     */
+    void parseTime(const std::string &txt, ODESystem &system);
 
     /**
      * Internal type to store ODE configurations where the values have not yet
@@ -58,6 +97,8 @@ private:
     treeparser::Parser treeParser;
     // List of ODE configurations and configuration values
     std::vector<ODEPreConfig> preConfig;
+    // List of ODE specifications
+    std::vector<ODESystem> specs;
 
 };
 
