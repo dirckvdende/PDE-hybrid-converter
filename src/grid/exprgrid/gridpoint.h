@@ -23,5 +23,5 @@ enum ExprGridPointType {
  */
 struct ExprGridPoint {
     ExprGridPointType type = GRIDPOINT_ERR;
-    ExprNode pointExpr;
+    expr::ExprNode pointExpr;
 };

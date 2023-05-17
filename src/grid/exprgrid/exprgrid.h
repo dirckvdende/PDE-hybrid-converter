@@ -70,7 +70,7 @@ private:
      * @param pos The position of the grid point
      * @return A constant reference to the expression
      */
-    const ExprNode &getPointExpr(std::vector<size_t> pos) const;
+    const expr::ExprNode &getPointExpr(std::vector<size_t> pos) const;
 
     /**
      * Get the approximation of a certain derivative at a certain position
@@ -78,7 +78,8 @@ private:
      * @param pos The position of the approximation (center)
      * @return The expression for the derivative approximation
      */
-    ExprNode getApprox(std::vector<size_t> deriv, std::vector<size_t> pos) const;
+    expr::ExprNode getApprox(std::vector<size_t> deriv, std::vector<size_t> pos)
+    const;
 
     /**
      * Divide the grid up into groups, using the "optimal hyperrectangle"
