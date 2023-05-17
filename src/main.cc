@@ -25,6 +25,7 @@ int runCompiler(int argc, char *argv[]) {
  * @return An integer status code to be returned by main
  */
 int runSim(int argc, char *argv[]) {
+    (void)argc, (void)argv;
     sim::Sim simulator;
     simulator.setFileOutput(true);
     std::ifstream file("examples/ode/single.ode");
