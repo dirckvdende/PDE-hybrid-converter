@@ -45,19 +45,14 @@ void Sim::runSystem(const ODESystem &system) {
         names[system.vars[i]] = i;
     }
     // Determine initial values
-    std::vector<double> vals(system.vals.size());
+    std::vector<double> vals;
     for (size_t i = 0; i < system.vals.size(); i++) {
         if (system.vals[i].type == expr::NODE_INTEG) {
-            vals[i] = system.vals[i][1].eval();
+            vals.push_back(system.vals[i][1].eval());
         } else {
             expr::ExprNode node = system.vals[i];
-            for (size_t j = 0; j < i; j++) {
-                expr::ExprNode search(expr::NODE_SYMB, {}, system.vars[j]);
-                expr::ExprNode repl(expr::NODE_NUM, {},
-                std::to_string(vals[j]));
-                node.replace(search, repl);
-            }
-            vals[i] = node.eval();
+            replaceSymbols(node, system, vals, 0);
+            vals.push_back(node.eval());
         }
     }
     // Determine variables that need to be emitted
@@ -67,7 +62,8 @@ void Sim::runSystem(const ODESystem &system) {
         emitVals[emit.second] = {};
     }
     // Run simulation
-    for (double t = 0; t < system.time; t += stepSize) {
+    size_t it = 0;
+    for (double t = 0; t < system.time; t += stepSize, it++) {
         for (const auto &emit : emits)
             emitVals[emit.second].push_back(vals[emit.first]);
         for (size_t i = 0; i < system.vals.size(); i++) {
@@ -76,17 +72,11 @@ void Sim::runSystem(const ODESystem &system) {
                 node = system.vals[i][0];
             else
                 node = system.vals[i];
-            for (size_t j = 0; j < system.vals.size(); j++) {
-                expr::ExprNode search(expr::NODE_SYMB, {}, system.vars[j]);
-                expr::ExprNode repl(expr::NODE_NUM, {},
-                std::to_string(vals[j]));
-                node.replace(search, repl);
-            }
-            double val = node.eval();
+            replaceSymbols(node, system, vals, it);
             if (system.vals[i].type == expr::NODE_INTEG)
-                vals[i] += stepSize * val;
+                vals[i] += stepSize * node.eval();
             else
-                vals[i] = val;
+                vals[i] = node.eval();
             // Limit range
             vals[i] = std::max(vals[i], system.bounds[i].first);
             vals[i] = std::min(vals[i], system.bounds[i].second);
@@ -105,4 +95,19 @@ void Sim::outputEmit(std::string filename) const {
         file << '\n';
     }
     file.close();
+}
+
+void Sim::replaceSymbols(expr::ExprNode &node, const ODESystem &system,
+const std::vector<double> &vals, size_t it) const {
+    for (size_t i = 0; i < vals.size(); i++) {
+        expr::ExprNode search(expr::NODE_SYMB, {}, system.vars[i]);
+        expr::ExprNode repl(expr::NODE_NUM, {}, std::to_string(vals[i]));
+        node.replace(search, repl);
+    }
+    for (const auto &emit : emitVals) {
+        expr::ExprNode search(expr::NODE_SYMB, {}, emit.first);
+        expr::ExprNode repl(expr::NODE_NUM, {},
+        std::to_string(emit.second[it]));
+        node.replace(search, repl);
+    }
 }
