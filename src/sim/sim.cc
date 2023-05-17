@@ -86,6 +86,9 @@ void Sim::runSystem(const ODESystem &system) {
                 vals[i] += stepSize * val;
             else
                 vals[i] = val;
+            // Limit range
+            vals[i] = std::max(vals[i], system.bounds[i].first);
+            vals[i] = std::min(vals[i], system.bounds[i].second);
         }
     }
 }
