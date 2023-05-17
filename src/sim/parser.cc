@@ -44,7 +44,7 @@ void Parser::runTreeParser() {
             throw std::runtime_error("Missing \"system\" root node");
         preConfig.emplace_back();
         for (treeparser::ParseNode *child : node->children) {
-            if (node->name == "system")
+            if (child->name == "system")
                 throw std::runtime_error("Invalid \"system\" node location");
             preConfig.back().entries.push_back({child->name, child->text});
         }
