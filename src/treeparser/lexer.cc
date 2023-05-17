@@ -6,9 +6,7 @@
 
 using namespace treeparser;
 
-Lexer::Lexer(std::string txt) : txt(txt), curIndex(0) {
-    prepareConfigOptions();
-}
+Lexer::Lexer(std::string txt) : txt(txt), curIndex(0) { }
 
 Lexer::~Lexer() { }
 
@@ -25,6 +23,7 @@ void Lexer::updateSettings(const Settings &sett) {
 }
 
 void Lexer::run() {
+    prepareConfigOptions();
     while (!atEnd()) {
         TokenType specialType;
         if (isWhitespaceChar(cur()))
