@@ -62,7 +62,7 @@ bool Lexer::isIdentChar(char c) {
 
 void Lexer::readNum() {
     bool foundDot = false;
-    tokens.push_back({TOK_NUM});
+    tokens.push_back({TOK_NUM, ""});
     while (('0' <= cur() && cur() <= '9') || cur() == '.') {
         if (cur() == '.' && foundDot)
             return;
@@ -74,7 +74,7 @@ void Lexer::readNum() {
 }
 
 void Lexer::readIdent() {
-    tokens.push_back({cur() == 'd' ? TOK_DERIV : TOK_SYMB});
+    tokens.push_back({cur() == 'd' ? TOK_DERIV : TOK_SYMB, ""});
     while (isIdentChar(cur())) {
         tokens.back().content.push_back(cur());
         next();
@@ -106,5 +106,5 @@ void Lexer::readSpecialChar() {
     next();
     while (typeMap.find(content + cur()) != typeMap.end())
         content.push_back(cur());
-    tokens.push_back({typeMap.at(content)});
+    tokens.push_back({typeMap.at(content), ""});
 }

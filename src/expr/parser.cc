@@ -31,7 +31,7 @@ const ExprNode &Parser::getTree() const {
 }
 
 Token Parser::cur() const {
-    return pos < tokens.size() ? tokens[pos] : Token{TOK_ERR};
+    return pos < tokens.size() ? tokens[pos] : Token{TOK_ERR, ""};
 }
 
 void Parser::next() {
