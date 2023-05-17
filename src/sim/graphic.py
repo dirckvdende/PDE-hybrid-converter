@@ -12,5 +12,6 @@ f = open("./tmp/ode.txt")
 
 for line in f.readlines():
     data = line.strip().split(" ")
-    plt.plot([float(x) for x in data[1:]])
+    plt.plot([float(x) for x in data[1:]], label=data[0])
+plt.legend()
 plt.savefig("tmp/ode.png")
