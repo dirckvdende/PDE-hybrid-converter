@@ -6,7 +6,7 @@
 #include <vector>
 #include <queue>
 
-GridDomain::GridDomain(double scale, const ExprNode &expr, const
+GridDomain::GridDomain(double scale, const expr::ExprNode &expr, const
 std::vector<std::string> &dims) : scale(scale), expr(expr), dims(dims) { }
 
 void GridDomain::findDomain(const std::vector<double> &init) {
@@ -121,10 +121,10 @@ void GridDomain::normalize() {
 bool GridDomain::inDomain(const std::vector<int> &pos) const {
     std::vector<double> realPos;
     convertPos(pos, realPos);
-    ExprNode eq = expr;
+    expr::ExprNode eq = expr;
     for (size_t i = 0; i < realPos.size(); i++) {
-        ExprNode search(NODE_SYMB, {}, dims[i]);
-        ExprNode repl(NODE_NUM, {}, std::to_string(realPos[i]));
+        expr::ExprNode search(expr::NODE_SYMB, {}, dims[i]);
+        expr::ExprNode repl(expr::NODE_NUM, {}, std::to_string(realPos[i]));
         eq.replace(search, repl);
     }
     return eq.eval() != 0.0;

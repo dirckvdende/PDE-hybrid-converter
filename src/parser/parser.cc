@@ -70,16 +70,15 @@ void Parser::parseExpressions() {
     storeCommaList(fieldValues["dimensions"], inputFields.dimensions);
 }
 
-void Parser::storeExpr(const std::string &str, ExprNode &out) {
-    ExprLexer lexer(str);
-    lexer.run();
-    ExprParser parser(lexer.getTokens());
+void Parser::storeExpr(const std::string &str, expr::ExprNode &out) {
+    expr::Parser parser;
+    parser.setText(str);
     parser.run();
     out = parser.getTree();
 }
 
 void Parser::storeNumber(const std::string &str, double &out) {
-    ExprNode expr;
+    expr::ExprNode expr;
     storeExpr(str, expr);
     out = expr.eval();
 }

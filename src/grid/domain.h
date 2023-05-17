@@ -24,7 +24,7 @@ public:
      * @param expr An expression that evaluates to true on the domain
      * @param dims The names of the dimensions, in order
      */
-    GridDomain(double scale, const ExprNode &expr, const
+    GridDomain(double scale, const expr::ExprNode &expr, const
     std::vector<std::string> &dims);
 
     /**
@@ -85,7 +85,7 @@ private:
     // Grid cell size
     const double scale;
     // Expression that evaluates to true on the domain
-    const ExprNode &expr;
+    const expr::ExprNode &expr;
     // The names of the dimensions, in order
     const std::vector<std::string> dims;
     // Initial point inside the domain (used as pivot)

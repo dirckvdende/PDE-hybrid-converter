@@ -12,12 +12,12 @@ struct InputFields {
     std::string str() const;
     size_t iterations;
     double time;
-    ExprNode init;
-    ExprNode boundary;
+    expr::ExprNode init;
+    expr::ExprNode boundary;
     double scale;
     std::vector<double> pivot;
-    ExprNode domain;
-    ExprNode func;
-    ExprNode equation;
+    expr::ExprNode domain;
+    expr::ExprNode func;
+    expr::ExprNode equation;
     std::vector<std::string> dimensions;
 };
