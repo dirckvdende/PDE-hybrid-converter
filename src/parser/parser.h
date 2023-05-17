@@ -62,7 +62,7 @@ private:
      * @param str A reference to the string version of the expression
      * @param out A reference to the field where the expression should be stored
      */
-    void storeExpr(const std::string &str, ExprNode &out);
+    void storeExpr(const std::string &str, expr::ExprNode &out);
 
     /**
      * Parse a specific expression number field

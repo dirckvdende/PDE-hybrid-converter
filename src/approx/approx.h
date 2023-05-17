@@ -26,7 +26,7 @@ public:
      * @param deriv List of derivatives taken
      * @return An expression, that is the approximation
      */
-    ExprNode getApprox(std::string func, const std::vector<size_t> &pos,
+    expr::ExprNode getApprox(std::string func, const std::vector<size_t> &pos,
     const std::vector<std::string> &deriv);
 
 private:

@@ -1,5 +1,7 @@
 
+#include "expr/expr.h"
 #include "fields.h"
+#include <vector>
 #include <string>
 
 std::string InputFields::str() const {
