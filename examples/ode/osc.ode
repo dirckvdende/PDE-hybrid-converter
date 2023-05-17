@@ -1,0 +1,10 @@
+system {
+    var gamma = 0.1;
+    var omega = 1;
+    var x = integ(y, 1);
+    var y = integ(-2 * gamma * y - omega * omega * x, 0);
+    emit x as pos;
+    interval x = [-1.0, 1.0];
+    interval y = [-1.0, 1.0];
+    time 100;
+}
