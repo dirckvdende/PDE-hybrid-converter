@@ -148,31 +148,43 @@ double ExprNode::evalDirect(const std::unordered_map<std::string, double>
         case NODE_NUM:
             return number;
         case NODE_ADD:
-            return operator[](0).eval() + operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x + y;},
+            symbols);
         case NODE_SUB:
-            return operator[](0).eval() - operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x - y;},
+            symbols);
         case NODE_MUL:
-            return operator[](0).eval() * operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x * y;},
+            symbols);
         case NODE_DIV:
-            return operator[](0).eval() / operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x / y;},
+            symbols);
         case NODE_LT:
-            return operator[](0).eval() < operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x < y;},
+            symbols);
         case NODE_LTE:
-            return operator[](0).eval() <= operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x <= y;},
+            symbols);
         case NODE_GT:
-            return operator[](0).eval() > operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x > y;},
+            symbols);
         case NODE_GTE:
-            return operator[](0).eval() >= operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x >= y;},
+            symbols);
         case NODE_EQ:
-            return operator[](0).eval() == operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x == y;},
+            symbols);
         case NODE_NEQ:
-            return operator[](0).eval() != operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x != y;},
+            symbols);
         case NODE_AND:
-            return operator[](0).eval() && operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x && y;},
+            symbols);
         case NODE_OR:
-            return operator[](0).eval() || operator[](1).eval();
+            return evalBinary([](double x, double y) -> double {return x || y;},
+            symbols);
         case NODE_MINUS:
-            return -operator[](0).eval();
+            return -operator[](0).evalDirect(symbols);
         default:
             throw std::runtime_error("Could not evaluate expression");
     }
@@ -188,4 +200,10 @@ std::string ExprNode::binaryStr() const {
     };
     return "(" + children[0]->str() + typeMap.at(type) + children[1]->str() +
     ")";
+}
+
+double ExprNode::evalBinary(double (*op)(double, double), const
+std::unordered_map<std::string, double> &symbols) const {
+    return op(operator[](0).evalDirect(symbols),
+    operator[](1).evalDirect(symbols));
 }
