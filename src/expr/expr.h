@@ -45,6 +45,15 @@ public:
     std::string content = "");
 
     /**
+     * Constructor
+     * @param type The type of the node
+     * @param children Pointers to the children of the parse node
+     * @param number The numeric content of the parse node
+     */
+    ExprNode(NodeType type, const std::vector<ExprNode *> &children,
+    double number);
+
+    /**
      * Copy constructor
      * @param other The expression to copy from
      */
@@ -127,9 +136,9 @@ public:
      * Substitute all occurrences of a symbol with a number. Should be faster
      * than the normal replace() function
      * @param name The name of the symbol to substitute
-     * @param val The value of the number, in string form
+     * @param val The value of the number
      */
-    void replaceSymbol(const std::string &name, const std::string &val);
+    void replaceSymbol(const std::string &name, double val);
 
     /**
      * Evaluate an expression. If there are still derivatives or symbols left,
@@ -145,6 +154,8 @@ public:
     std::vector<ExprNode *> children;
     // Node content (optional)
     std::string content;
+    // Numeric content
+    double number;
 
 private:
 

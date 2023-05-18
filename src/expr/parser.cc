@@ -120,7 +120,7 @@ ExprNode *Parser::readMinus() {
 ExprNode *Parser::readTerm() {
     expect({TOK_NUM, TOK_SYMB, TOK_DERIV, TOK_LBRACE, TOK_INTEG, TOK_LBRACKET});
     if (accept({TOK_NUM})) {
-        ExprNode *node = new ExprNode(NODE_NUM, {}, cur().content);
+        ExprNode *node = new ExprNode(NODE_NUM, {}, std::stod(cur().content));
         next();
         return node;
     } else if (accept({TOK_SYMB})) {

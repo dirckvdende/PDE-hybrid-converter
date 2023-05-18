@@ -12,8 +12,12 @@ ExprNode::ExprNode(NodeType type, const std::vector<ExprNode *> &
 children, std::string content) : type(type), children(children),
 content(content) { }
 
+ExprNode::ExprNode(NodeType type, const std::vector<ExprNode *> &
+children, double number) : type(type), children(children),
+number(number) { }
+
 ExprNode::ExprNode(const ExprNode &other) : type(other.type),
-content(other.content) {
+content(other.content), number(other.number) {
     for (ExprNode *child : other.children)
         children.push_back(new ExprNode(*child));
 }
@@ -24,7 +28,11 @@ ExprNode::~ExprNode() {
 }
 
 bool ExprNode::operator==(const ExprNode &other) const {
-    if (type != other.type || content != other.content)
+    if (type != other.type)
+        return false;
+    if (type == NODE_NUM && number != other.number)
+        return false;
+    if (type != NODE_NUM && content != other.content)
         return false;
     if (other.children.size() != children.size())
         return false;
@@ -49,6 +57,7 @@ ExprNode &ExprNode::operator=(const ExprNode &other) {
         children[i] = new ExprNode(*other.children[i]);
     type = other.type;
     content = other.content;
+    number = other.number;
     return *this;
 }
 
@@ -71,8 +80,9 @@ std::string ExprNode::str() const {
         case NODE_ERR:
             return "[ERR]";
         case NODE_SYMB:
-        case NODE_NUM:
             return content;
+        case NODE_NUM:
+            return std::to_string(number);
         case NODE_DERIV:
             return "d[" + content.substr(0, content.find(';')) + "](" +
             content.substr(content.find(';') + 1) + ")";
@@ -113,10 +123,10 @@ void ExprNode::replace(const ExprNode &search, const ExprNode &repl) {
         *node = repl;
 }
 
-void ExprNode::replaceSymbol(const std::string &name, const std::string &val) {
+void ExprNode::replaceSymbol(const std::string &name, double val) {
     if (type == NODE_SYMB && content == name) {
         type = NODE_NUM;
-        content = val;
+        number = val;
         return;
     }
     for (ExprNode *child : children)
@@ -126,7 +136,7 @@ void ExprNode::replaceSymbol(const std::string &name, const std::string &val) {
 double ExprNode::eval() const {
     switch (type) {
         case NODE_NUM:
-            return std::stod(content);
+            return number;
         case NODE_ADD:
             return operator[](0).eval() + operator[](1).eval();
         case NODE_SUB:
