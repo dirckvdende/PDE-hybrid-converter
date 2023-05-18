@@ -1,5 +1,5 @@
 
-#include "debug.h"
+#include "dbg.h"
 #include <ctime>
 #include <iomanip>
 #include <iostream>

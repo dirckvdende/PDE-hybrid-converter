@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "sim.h"
 #include <fstream>
 #include <string>
@@ -17,11 +18,16 @@ void Sim::setText(const std::string &txt) {
 }
 
 void Sim::run() {
+    debugLog("Parsing input...");
     runParser();
-    for (const ODESystem &system : specs)
+    for (const ODESystem &system : specs) {
+        debugLog("Running system...");
         runSystem(system);
-    if (fileOutput)
+    }
+    if (fileOutput) {
+        debugLog("Outputting to file...");
         outputEmit("tmp/ode.txt");
+    }
 }
 
 void Sim::setFileOutput(bool val) {
@@ -82,6 +88,7 @@ void Sim::runSystem(const ODESystem &system) {
             vals[i] = std::min(vals[i], system.bounds[i].second);
         }
     }
+    debugLog("Total number of iterations: " + std::to_string(it));
 }
 
 void Sim::outputEmit(std::string filename) const {

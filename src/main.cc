@@ -1,6 +1,6 @@
 
 #include "compiler/compiler.h"
-#include "debug/debug.h"
+#include "dbg/dbg.h"
 #include "sim/sim.h"
 #include <fstream>
 #include <iostream>
