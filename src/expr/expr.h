@@ -176,6 +176,15 @@ private:
      */
     std::string binaryStr() const;
 
+    /**
+     * Helper function to evaluate a binary node
+     * @param op The evaluation function
+     * @param symbols A map with symbol replacements
+     * @return The evaluated value as a double
+     */
+    double evalBinary(double (*op)(double, double),
+    const std::unordered_map<std::string, double> &symbols) const;
+
 };
 
 }
