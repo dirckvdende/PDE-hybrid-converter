@@ -84,7 +84,7 @@ void Sim::runSystem(const ODESystem &system) {
     for (double t = 0; t < system.time; t += stepSize, it++) {
         // Read history values
         for (size_t i = 0; i < varStart; i++)
-            vals[i] = history[i].back();
+            vals[i] = history[i][it];
         for (size_t i = varStart; i < names.size(); i++) {
             const std::string &name = system.vars[i - varStart];
             if (equations[i - varStart].type == expr::NODE_INTEG)
