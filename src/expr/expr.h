@@ -124,6 +124,14 @@ public:
     void replace(const ExprNode &search, const ExprNode &repl);
 
     /**
+     * Substitute all occurrences of a symbol with a number. Should be faster
+     * than the normal replace() function
+     * @param name The name of the symbol to substitute
+     * @param val The value of the number, in string form
+     */
+    void replaceSymbol(const std::string &name, const std::string &val);
+
+    /**
      * Evaluate an expression. If there are still derivatives or symbols left,
      * an error is thrown
      * @return The evaluated value as a double. Other types are implicitly

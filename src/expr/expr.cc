@@ -39,13 +39,13 @@ bool ExprNode::operator!=(const ExprNode &other) const {
 }
 
 ExprNode &ExprNode::operator=(const ExprNode &other) {
-    for (ExprNode *child : children)
-        delete child;
-    children.clear();
+    for (size_t i = other.children.size(); i < children.size(); i++)
+        delete children[i];
+    children.resize(other.children.size());
+    for (size_t i = 0; i < children.size(); i++)
+        *children[i] = *other.children[i];
     type = other.type;
     content = other.content;
-    for (ExprNode *child : other.children)
-        children.push_back(new ExprNode(*child));
     return *this;
 }
 
@@ -108,6 +108,16 @@ void ExprNode::replace(const ExprNode &search, const ExprNode &repl) {
     find(search, occ);
     for (ExprNode *node : occ)
         *node = repl;
+}
+
+void ExprNode::replaceSymbol(const std::string &name, const std::string &val) {
+    if (type == NODE_SYMB && content == name) {
+        type = NODE_NUM;
+        content = val;
+        return;
+    }
+    for (ExprNode *child : children)
+        child->replaceSymbol(name, val);
 }
 
 double ExprNode::eval() const {
