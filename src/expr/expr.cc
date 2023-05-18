@@ -17,7 +17,7 @@ children, double number) : type(type), children(children),
 number(number) { }
 
 ExprNode::ExprNode(const ExprNode &other) : type(other.type),
-content(other.content), number(other.number) {
+content(other.content), number(other.number), markerIndex(other.markerIndex) {
     for (ExprNode *child : other.children)
         children.push_back(new ExprNode(*child));
 }
@@ -30,10 +30,16 @@ ExprNode::~ExprNode() {
 bool ExprNode::operator==(const ExprNode &other) const {
     if (type != other.type)
         return false;
-    if (type == NODE_NUM && number != other.number)
-        return false;
-    if (type != NODE_NUM && content != other.content)
-        return false;
+    if (type == NODE_NUM) {
+        if (number != other.number)
+            return false;
+    } else if (type == NODE_MARKER) {
+        if (markerIndex != other.markerIndex)
+            return false;
+    } else {
+        if (content != other.content)
+            return false;
+    }
     if (other.children.size() != children.size())
         return false;
     for (size_t i = 0; i < children.size(); i++)
@@ -58,6 +64,7 @@ ExprNode &ExprNode::operator=(const ExprNode &other) {
     type = other.type;
     content = other.content;
     number = other.number;
+    markerIndex = other.markerIndex;
     return *this;
 }
 
@@ -78,6 +85,7 @@ size_t ExprNode::size() const {
 std::string ExprNode::str() const {
     switch (type) {
         case NODE_ERR:
+        case NODE_MARKER:
             return "[ERR]";
         case NODE_SYMB:
             return content;
@@ -123,68 +131,68 @@ void ExprNode::replace(const ExprNode &search, const ExprNode &repl) {
         *node = repl;
 }
 
-void ExprNode::replaceSymbol(const std::string &name, double val) {
-    if (type == NODE_SYMB && content == name) {
-        type = NODE_NUM;
-        number = val;
+void ExprNode::replaceSymbols(const std::unordered_map<std::string, size_t>
+&symbols) {
+    if (type == NODE_SYMB && symbols.find(content) != symbols.end()) {
+        type = NODE_MARKER;
+        markerIndex = symbols.at(content);
         return;
     }
     for (ExprNode *child : children)
-        child->replaceSymbol(name, val);
+        child->replaceSymbols(symbols);
 }
 
 double ExprNode::eval() const {
     return evalDirect({});
 }
 
-double ExprNode::evalDirect(const std::unordered_map<std::string, double>
-&symbols) const {
+double ExprNode::evalDirect(const std::vector<double> &vals) const {
     switch (type) {
-        case NODE_SYMB:
-            if (symbols.find(content) == symbols.end())
+        case NODE_MARKER:
+            if (markerIndex >= vals.size())
                 throw std::runtime_error("Could not evaluate expression, "
-                "unknown symbol value");
-            return symbols.at(content);
+                "undefined marker value");
+            return vals[markerIndex];
         case NODE_NUM:
             return number;
         case NODE_ADD:
             return evalBinary([](double x, double y) -> double {return x + y;},
-            symbols);
+            vals);
         case NODE_SUB:
             return evalBinary([](double x, double y) -> double {return x - y;},
-            symbols);
+            vals);
         case NODE_MUL:
             return evalBinary([](double x, double y) -> double {return x * y;},
-            symbols);
+            vals);
         case NODE_DIV:
             return evalBinary([](double x, double y) -> double {return x / y;},
-            symbols);
+            vals);
         case NODE_LT:
             return evalBinary([](double x, double y) -> double {return x < y;},
-            symbols);
+            vals);
         case NODE_LTE:
             return evalBinary([](double x, double y) -> double {return x <= y;},
-            symbols);
+            vals);
         case NODE_GT:
             return evalBinary([](double x, double y) -> double {return x > y;},
-            symbols);
+            vals);
         case NODE_GTE:
             return evalBinary([](double x, double y) -> double {return x >= y;},
-            symbols);
+            vals);
         case NODE_EQ:
             return evalBinary([](double x, double y) -> double {return x == y;},
-            symbols);
+            vals);
         case NODE_NEQ:
             return evalBinary([](double x, double y) -> double {return x != y;},
-            symbols);
+            vals);
         case NODE_AND:
             return evalBinary([](double x, double y) -> double {return x && y;},
-            symbols);
+            vals);
         case NODE_OR:
             return evalBinary([](double x, double y) -> double {return x || y;},
-            symbols);
+            vals);
         case NODE_MINUS:
-            return -operator[](0).evalDirect(symbols);
+            return -operator[](0).evalDirect(vals);
         default:
             throw std::runtime_error("Could not evaluate expression");
     }
@@ -203,7 +211,6 @@ std::string ExprNode::binaryStr() const {
 }
 
 double ExprNode::evalBinary(double (*op)(double, double), const
-std::unordered_map<std::string, double> &symbols) const {
-    return op(operator[](0).evalDirect(symbols),
-    operator[](1).evalDirect(symbols));
+std::vector<double> &vals) const {
+    return op(operator[](0).evalDirect(vals), operator[](1).evalDirect(vals));
 }
