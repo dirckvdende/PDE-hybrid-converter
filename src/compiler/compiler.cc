@@ -1,5 +1,6 @@
 
 #include "compiler.h"
+#include "debug/debug.h"
 #include "grid/domain.h"
 #include "parser/parser.h"
 #include <ctime>
@@ -52,22 +53,4 @@ void Compiler::findDomain() {
     // TODO: Implement border range detection
     domain->findBorder({1, 1});
     debugLog(domain->str());
-}
-
-void Compiler::debugLog(std::string txt) const {
-    if (!args.getDebugMode())
-        return;
-    auto showTime = []() -> void {
-        time_t t = std::time(nullptr);
-        tm *tm = std::localtime(&t);
-        std::cout << "\033[90m[" << std::put_time(tm, "%H:%M:%S") <<
-        "]\033[0m ";
-    };
-    showTime();
-    for (const char &c : txt) {
-        std::cout << c;
-        if (c == '\n')
-            showTime();
-    }
-    std::cout << std::endl;
 }
