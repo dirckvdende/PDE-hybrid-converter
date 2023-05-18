@@ -77,15 +77,10 @@ void Sim::runSystem(const ODESystem &system) {
             vals[emit.first] = emit.second[it];
         for (size_t i = 0; i < system.vars.size(); i++) {
             const std::string &name = system.vars[i];
-            expr::ExprNode node;
             if (system.vals[i].type == expr::NODE_INTEG)
-                node = system.vals[i][0];
+                vals[name] += stepSize * system.vals[i][0].evalDirect(vals);
             else
-                node = system.vals[i];
-            if (system.vals[i].type == expr::NODE_INTEG)
-                vals[name] += stepSize * node.evalDirect(vals);
-            else
-                vals[name] = node.evalDirect(vals);
+                vals[name] = system.vals[i].evalDirect(vals);
             // Limit range
             vals[name] = std::max(vals[name], system.bounds[i].first);
             vals[name] = std::min(vals[name], system.bounds[i].second);
