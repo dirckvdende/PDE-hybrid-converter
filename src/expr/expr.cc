@@ -85,8 +85,9 @@ size_t ExprNode::size() const {
 std::string ExprNode::str() const {
     switch (type) {
         case NODE_ERR:
-        case NODE_MARKER:
             return "[ERR]";
+        case NODE_MARKER:
+            return "{" + std::to_string(markerIndex) + "}";
         case NODE_SYMB:
             return content;
         case NODE_NUM:
