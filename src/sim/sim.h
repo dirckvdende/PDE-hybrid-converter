@@ -65,8 +65,10 @@ private:
     /**
      * Output the emit values to a file
      * @param filename The name of the file to output to
+     * @param resolution The (approximate) number of data points to output per
+     * emit variable
      */
-    void outputEmit(std::string filename) const;
+    void outputEmit(std::string filename, size_t resolution) const;
 
     // Input text
     std::string txt;
