@@ -21,6 +21,7 @@ enum NodeType {
     NODE_AND, NODE_OR,
     NODE_MINUS,
     NODE_INTEG, NODE_LIST,
+    NODE_MARKER,
 };
 
 /**
@@ -134,12 +135,10 @@ public:
     void replace(const ExprNode &search, const ExprNode &repl);
 
     /**
-     * Substitute all occurrences of a symbol with a number. Should be faster
-     * than the normal replace() function
-     * @param name The name of the symbol to substitute
-     * @param val The value of the number
+     * Replace symbols with markers
+     * @param symbols A map from symbol names to indices
      */
-    void replaceSymbol(const std::string &name, double val);
+    void replaceSymbols(const std::unordered_map<std::string, size_t> &symbols);
 
     /**
      * Evaluate an expression. If there are still derivatives or symbols left,
@@ -150,14 +149,13 @@ public:
     double eval() const;
 
     /**
-     * Evaluate an expression and simultaniously replace symbols with their
+     * Evaluate an expression and simultaniously replace markers with their
      * corresponding values
-     * @param symbols A map with symbol replacements
+     * @param vals A vector giving the values by index
      * @return The evaluated value as a double. Other types are implicitly
      * coverted to double
      */
-    double evalDirect(const std::unordered_map<std::string, double> &symbols)
-    const;
+    double evalDirect(const std::vector<double> &vals) const;
 
     // The node type
     NodeType type;
@@ -167,6 +165,8 @@ public:
     std::string content;
     // Numeric content
     double number;
+    // Marker reference index
+    size_t markerIndex;
 
 private:
 
@@ -179,11 +179,11 @@ private:
     /**
      * Helper function to evaluate a binary node
      * @param op The evaluation function
-     * @param symbols A map with symbol replacements
+     * @param vals The values to replace markers with
      * @return The evaluated value as a double
      */
-    double evalBinary(double (*op)(double, double),
-    const std::unordered_map<std::string, double> &symbols) const;
+    double evalBinary(double (*op)(double, double), const std::vector<double>
+    &vals) const;
 
 };
 

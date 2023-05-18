@@ -1,5 +1,6 @@
 
 #include "dbg/dbg.h"
+#include "expr/expr.h"
 #include "sim.h"
 #include <fstream>
 #include <string>
@@ -42,50 +43,64 @@ void Sim::runParser() {
     parser.run();
 }
 
-#include <iostream>
 void Sim::runSystem(const ODESystem &system) {
-    // Map from variables to index in the ODE system vars list
-    std::unordered_map<std::string, size_t> names;
-    for (size_t i = 0; i < system.vars.size(); i++) {
-        if (names.find(system.vars[i]) != names.end())
-            throw std::runtime_error("Duplicate variable name in system");
-        names[system.vars[i]] = i;
+    // Make a copy of the equations
+    std::vector<expr::ExprNode> equations;
+    for (size_t i = 0; i < system.vals.size(); i++)
+        equations.push_back(system.vals[i]);
+    // Keep track of names of variables and emit history
+    std::vector<std::string> names;
+    std::unordered_map<std::string, size_t> nameMap;
+    std::vector<std::vector<double>> history;
+    for (const auto &emit : emitVals) {
+        if (nameMap.find(emit.first) == nameMap.end()) {
+            nameMap.emplace(emit.first, names.size());
+            names.push_back(emit.first);
+            history.push_back(emit.second);
+        }
     }
-    // Determine variables that need to be emitted
-    for (const auto &emit : system.emit)
-        emitVals[emit.second] = {};
-    // Keep track of values of variables
-    std::unordered_map<std::string, double> vals;
-    for (const auto &emit : emitVals)
-        if (!emit.second.empty())
-            vals[emit.first] = emit.second.front();
+    size_t varStart = names.size();
+    for (size_t i = 0; i < system.vars.size(); i++) {
+        if (nameMap.find(system.vars[i]) != nameMap.end())
+            std::runtime_error("Duplicate variable in system");
+        nameMap.emplace(system.vars[i], names.size());
+        names.push_back(system.vars[i]);
+    }
+    for (expr::ExprNode &eq : equations)
+        eq.replaceSymbols(nameMap);
     // Determine initial values
-    for (size_t i = 0; i < system.vals.size(); i++) {
-        if (system.vals[i].type == expr::NODE_INTEG)
-            vals[system.vars[i]] = system.vals[i][1].eval();
+    std::vector<double> vals;
+    for (size_t i = 0; i < varStart; i++)
+        vals.push_back(history[i].front());
+    for (size_t i = varStart; i < names.size(); i++) {
+        if (equations[i - varStart].type == expr::NODE_INTEG)
+            vals.push_back(equations[i - varStart][1].eval());
         else
-            vals[system.vars[i]] = system.vals[i].evalDirect(vals);
+            vals.push_back(equations[i - varStart].evalDirect(vals));
+        history.push_back({vals[i]});
     }
     // Run simulation
     size_t it = 0;
     for (double t = 0; t < system.time; t += stepSize, it++) {
-        // Output emit vals
-        for (const auto &emit : system.emit)
-            emitVals[emit.second].push_back(vals[emit.first]);
-        // Read emit vals
-        for (const auto &emit : emitVals)
-            vals[emit.first] = emit.second[it];
-        for (size_t i = 0; i < system.vars.size(); i++) {
-            const std::string &name = system.vars[i];
-            if (system.vals[i].type == expr::NODE_INTEG)
-                vals[name] += stepSize * system.vals[i][0].evalDirect(vals);
+        // Read history values
+        for (size_t i = 0; i < varStart; i++)
+            vals[i] = history[i].back();
+        for (size_t i = varStart; i < names.size(); i++) {
+            const std::string &name = system.vars[i - varStart];
+            if (equations[i - varStart].type == expr::NODE_INTEG)
+                vals[i] += stepSize * equations[i - varStart][0].evalDirect(
+                vals);
             else
-                vals[name] = system.vals[i].evalDirect(vals);
+                vals[i] = equations[i - varStart].evalDirect(vals);
             // Limit range
-            vals[name] = std::max(vals[name], system.bounds[i].first);
-            vals[name] = std::min(vals[name], system.bounds[i].second);
+            vals[i] = std::max(vals[i], system.bounds[i - varStart].first);
+            vals[i] = std::min(vals[i], system.bounds[i - varStart].second);
+            history[i].push_back(vals[i]);
         }
     }
+    // Output emit values
+    for (const auto &emit : system.emit)
+        emitVals[emit.second] = history[nameMap[emit.first]];
     debugLog("Total number of iterations: " + std::to_string(it));
 }
 
