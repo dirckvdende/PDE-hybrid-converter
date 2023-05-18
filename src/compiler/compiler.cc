@@ -1,6 +1,6 @@
 
 #include "compiler.h"
-#include "debug/debug.h"
+#include "dbg/dbg.h"
 #include "grid/domain.h"
 #include "parser/parser.h"
 #include <ctime>
