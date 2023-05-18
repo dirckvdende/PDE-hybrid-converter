@@ -2,12 +2,12 @@ system {
     var x = integ(x, 1.0);
     emit x as x;
     interval x = [0, 10];
-    time 10000;
+    time 10;
 }
 
 system {
     var y = x + 1;
     emit y as y;
     interval y = [1, 11];
-    time 10000;
+    time 10;
 }
