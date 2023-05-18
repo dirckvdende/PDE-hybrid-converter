@@ -27,7 +27,7 @@ void Sim::run() {
     }
     if (fileOutput) {
         debugLog("Outputting to file...");
-        outputEmit("tmp/ode.txt");
+        outputEmit("tmp/ode.txt", 1000);
     }
 }
 
@@ -86,7 +86,6 @@ void Sim::runSystem(const ODESystem &system) {
         for (size_t i = 0; i < varStart; i++)
             vals[i] = history[i][it];
         for (size_t i = varStart; i < names.size(); i++) {
-            const std::string &name = system.vars[i - varStart];
             if (equations[i - varStart].type == expr::NODE_INTEG)
                 vals[i] += stepSize * equations[i - varStart][0].evalDirect(
                 vals);
@@ -104,14 +103,15 @@ void Sim::runSystem(const ODESystem &system) {
     debugLog("Total number of iterations: " + std::to_string(it));
 }
 
-void Sim::outputEmit(std::string filename) const {
+void Sim::outputEmit(std::string filename, size_t resolution) const {
     std::ofstream file(filename);
     if (!file.is_open())
         throw std::runtime_error("Could not open output file");
     for (const auto &emit : emitVals) {
         file << emit.first;
-        for (const double &v : emit.second)
-            file << ' ' << v;
+        size_t total = emit.second.size();
+        for (size_t i = 0; i < total; i += total / resolution)
+            file << ' ' << emit.second[i];
         file << '\n';
     }
     file.close();
