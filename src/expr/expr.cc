@@ -41,8 +41,13 @@ bool ExprNode::operator!=(const ExprNode &other) const {
 ExprNode &ExprNode::operator=(const ExprNode &other) {
     for (size_t i = other.children.size(); i < children.size(); i++)
         delete children[i];
-    children.resize(other.children.size());
-    for (size_t i = 0; i < children.size(); i++)
+    if (children.size() < other.children.size()) {
+        while (children.size() < other.children.size())
+            children.push_back(new ExprNode());
+    } else {
+        children.resize(other.children.size());
+    }
+    for (size_t i = 0; i < other.children.size(); i++)
         *children[i] = *other.children[i];
     type = other.type;
     content = other.content;
