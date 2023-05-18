@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "expr/expr.h"
 #include "expr/parser.h"
 #include "parser.h"
@@ -18,7 +19,9 @@ void Parser::setText(const std::string &txt) {
 }
 
 void Parser::run() {
+    debugLog("Running tree parser...");
     runTreeParser();
+    debugLog("Running expression parser...");
     runExprParser();
 }
 
