@@ -106,12 +106,8 @@ void Sim::outputEmit(std::string filename) const {
 
 void Sim::replaceSymbols(expr::ExprNode &node, const ODESystem &system,
 const std::vector<double> &vals, size_t it) const {
-    for (size_t i = 0; i < vals.size(); i++) {
-        std::string val = std::to_string(vals[i]);
-        node.replaceSymbol(system.vars[i], val);
-    }
-    for (const auto &emit : emitVals) {
-        std::string val = std::to_string(emit.second[it]);
-        node.replaceSymbol(emit.first, val);
-    }
+    for (size_t i = 0; i < vals.size(); i++)
+        node.replaceSymbol(system.vars[i], vals[i]);
+    for (const auto &emit : emitVals)
+        node.replaceSymbol(emit.first, emit.second[it]);
 }
