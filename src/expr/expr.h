@@ -144,9 +144,19 @@ public:
      * Evaluate an expression. If there are still derivatives or symbols left,
      * an error is thrown
      * @return The evaluated value as a double. Other types are implicitly
-     * coverted to boolean
+     * coverted to double
      */
     double eval() const;
+
+    /**
+     * Evaluate an expression and simultaniously replace symbols with their
+     * corresponding values
+     * @param symbols A map with symbol replacements
+     * @return The evaluated value as a double. Other types are implicitly
+     * coverted to double
+     */
+    double evalDirect(const std::unordered_map<std::string, double> &symbols)
+    const;
 
     // The node type
     NodeType type;

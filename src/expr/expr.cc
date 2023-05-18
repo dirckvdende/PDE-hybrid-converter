@@ -134,7 +134,16 @@ void ExprNode::replaceSymbol(const std::string &name, double val) {
 }
 
 double ExprNode::eval() const {
+    return evalDirect({});
+}
+
+double ExprNode::evalDirect(const std::unordered_map<std::string, double>
+&symbols) const {
     switch (type) {
+        case NODE_SYMB:
+            if (symbols.find(content) == symbols.end())
+                throw std::runtime_error("Could not evaluate expression");
+            return symbols.at(content);
         case NODE_NUM:
             return number;
         case NODE_ADD:
