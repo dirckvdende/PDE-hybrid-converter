@@ -32,16 +32,15 @@ void Parser::runTreeParser() {
         {
             { "pde", treeparser::OPT_TREE },
             { "dims", treeparser::OPT_TEXT },
-            { "iterations", treeparser::OPT_TEXT },
-            { "time", treeparser::OPT_TEXT },
-            { "init", treeparser::OPT_TEXT },
-            { "scale", treeparser::OPT_TEXT },
-            { "pivot", treeparser::OPT_TEXT },
             { "domain", treeparser::OPT_TEXT },
-            { "vars", treeparser::OPT_TEXT },
-            { "vals", treeparser::OPT_TEXT },
+            { "pivot", treeparser::OPT_TEXT },
+            { "scale", treeparser::OPT_TEXT },
+            { "equation", treeparser::OPT_TEXT },
+            { "init", treeparser::OPT_TEXT },
             { "boundary", treeparser::OPT_TEXT },
-            { "bounds", treeparser::OPT_TEXT },
+            { "interval", treeparser::OPT_TEXT },
+            { "time", treeparser::OPT_TEXT },
+            { "iterations", treeparser::OPT_TEXT },
         }
     };
     treeParser.updateSettings(settings);
