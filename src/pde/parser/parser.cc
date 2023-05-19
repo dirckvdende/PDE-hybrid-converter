@@ -65,8 +65,18 @@ void Parser::runTreeParser() {
 void Parser::runExprParser() {
     checkRequiredFields();
     // TODO: implement
+    parseDims(preConfig.at("dims").front());
+    system.domain = parseExpr(preConfig.at("domain").front());
+    system.pivot = parseNumList(preConfig.at("pivot").front());
+    system.scale = parseNum(preConfig["scale"].front());
     for (const std::string &entry : preConfig.at("equation"))
         parseEquation(entry);
+    for (const std::string &entry : preConfig.at("init"))
+        parseAssignmentExpr(entry, system.init);
+    for (const std::string &entry : preConfig.at("boundary"))
+        parseAssignmentExpr(entry, system.boundary);
+    for (const std::string &entry : preConfig.at("interval"))
+        parseInterval(entry);
     system.time = parseNum(preConfig["time"].front());
     system.iterations = size_t(0.5 + parseNum(preConfig["iterations"].front()));
 }
@@ -108,10 +118,7 @@ double Parser::parseNum(const std::string &txt) const {
 }
 
 void Parser::parseEquation(const std::string &txt) {
-    expr::Parser parser;
-    parser.setText(txt);
-    parser.run();
-    const expr::ExprNode &root = parser.getTree();
+    expr::ExprNode root = parseExpr(txt);
     auto incorrect = []() -> void {
         throw std::runtime_error("Incorrect equation format");
     };
@@ -131,4 +138,71 @@ void Parser::parseEquation(const std::string &txt) {
         throw std::runtime_error("Duplicate variable in equation");
     system.vars.push_back(var);
     system.vals.push_back(root[1]);
+    system.init.emplace_back();
+    system.boundary.emplace_back();
+    system.bounds.push_back({-1.0, 1.0});
+}
+
+void Parser::parseAssignmentExpr(const std::string &txt,
+std::vector<expr::ExprNode> &entry) {
+    expr::ExprNode root = parseExpr(txt);
+    auto incorrect = []() -> void {
+        throw std::runtime_error("Incorrect equation format");
+    };
+    if (root.type != expr::NODE_EQ)
+        incorrect();
+    if (root[0].type != expr::NODE_SYMB)
+        incorrect();
+    std::string var = root[0].content;
+    size_t loc = varIndex(var);
+    if (loc == SIZE_MAX)
+        std::runtime_error("Undefined variable \"" + var + "\"");
+    entry[loc] = root[1];
+}
+
+void Parser::parseInterval(const std::string &txt) {
+    expr::ExprNode root = parseExpr(txt);
+    if (root.type != expr::NODE_EQ || root[0].type != expr::NODE_SYMB ||
+    root[1].type != expr::NODE_LIST || root[1].size() != 2)
+        throw std::runtime_error("Incorrect interval format");
+    std::string var = root[0].content;
+    size_t loc = varIndex(var);
+    if (loc == SIZE_MAX)
+        std::runtime_error("Undefined variable \"" + var + "\"");
+    system.bounds[loc] = {root[1][0].eval(), root[1][1].eval()};
+}
+
+size_t Parser::varIndex(const std::string &var) const {
+    for (size_t i = 0; i < system.vars.size(); i++)
+        if (system.vars[i] == var)
+            return i;
+    return SIZE_MAX;
+}
+
+void Parser::parseDims(const std::string &txt) {
+    expr::ExprNode root = parseExpr(txt);
+    if (root.type != expr::NODE_LIST)
+        throw std::runtime_error("Incorrect dims format");
+    for (size_t i = 0; i < root.size(); i++) {
+        if (root[i].type != expr::NODE_SYMB)
+            throw std::runtime_error("Incorrect dims format");
+        system.dims.push_back(root[i].content);
+    }
+}
+
+expr::ExprNode Parser::parseExpr(const std::string &txt) const {
+    expr::Parser parser;
+    parser.setText(txt);
+    parser.run();
+    return parser.getTree();
+}
+
+std::vector<double> Parser::parseNumList(const std::string &txt) const {
+    expr::ExprNode root = parseExpr(txt);
+    if (root.type != expr::NODE_LIST)
+        throw std::runtime_error("Incorrect number list format");
+    std::vector<double> out(root.size());
+    for (size_t i = 0; i < root.size(); i++)
+        out[i] = root[i].eval();
+    return out;
 }
