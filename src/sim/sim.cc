@@ -19,14 +19,14 @@ void Sim::setText(const std::string &txt) {
 }
 
 void Sim::run() {
-    debugLog("Parsing input...");
+    dbg::log("Parsing input...");
     runParser();
     for (const ODESystem &system : specs) {
-        debugLog("Running system...");
+        dbg::log("Running system...");
         runSystem(system);
     }
     if (fileOutput) {
-        debugLog("Outputting to file...");
+        dbg::log("Outputting to file...");
         outputEmit("tmp/ode.txt", 1000);
     }
 }
@@ -100,7 +100,7 @@ void Sim::runSystem(const ODESystem &system) {
     // Output emit values
     for (const auto &emit : system.emit)
         emitVals[emit.second] = history[nameMap[emit.first]];
-    debugLog("Total number of iterations: " + std::to_string(it));
+    dbg::log("Total number of iterations: " + std::to_string(it));
 }
 
 void Sim::outputEmit(std::string filename, size_t resolution) const {
