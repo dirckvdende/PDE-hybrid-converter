@@ -65,6 +65,7 @@ void Parser::runExprParser() {
 }
 
 void Parser::checkRequiredFields() const {
+    // Check all required fields
     static const std::vector<std::string> required = {
         "dims", "domain", "pivot", "scale", "equation", "init", "boundary",
         "interval", "time", "iterations"
@@ -72,6 +73,23 @@ void Parser::checkRequiredFields() const {
     for (const std::string &req : required)
         if (preConfig.find(req) == preConfig.end())
             throw std::runtime_error("Missing input field \"" + req + "\"");
+    // Some inputs need to have a single input field
+    static const std::vector<std::string> singles = {
+        "dims", "domain", "pivot", "scale", "time", "iterations"
+    };
+    for (const std::string &single : singles)
+        if (preConfig.at(single).size() != 1)
+            throw std::runtime_error("Too many inputs given for \"" + single +
+            "\"");
+    // Number of equations, inits, boundaries and interval should be equal
+    static const std::vector<std::string> eqs = {
+        "equation", "init", "boundary", "interval"
+    };
+    size_t sz = preConfig.at(eqs.front()).size();
+    for (const std::string &eq : eqs)
+        if (preConfig.at(eq).size() != sz)
+            throw std::runtime_error("Invalid number of \"" + eq + "\" entries "
+            "given, should be " + std::to_string(sz));
 }
 
 double Parser::parseNum(const std::string &txt) const {
