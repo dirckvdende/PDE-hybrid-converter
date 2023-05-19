@@ -15,7 +15,13 @@ std::string PDESystem::str() const {
     out += "]\n";
     out += "iterations  ->   " + std::to_string(iterations) + "\n";
     out += "time        ->   " + std::to_string(time) + "\n";
-    out += "init        ->   " + init.str() + "\n";
+    out += "init        ->   [";
+    for (size_t i = 0; i < init.size(); i++) {
+        if (i != 0)
+            out += ", ";
+        out += init[i].str();
+    }
+    out += "]\n";
     out += "scale       ->   " + std::to_string(scale) + "\n";
     out += "pivot       ->   [";
     for (size_t i = 0; i < pivot.size(); i++) {

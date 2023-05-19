@@ -25,7 +25,7 @@ struct PDESystem {
     // Time to run the simulation for
     double time;
     // Initial values at t = 0
-    expr::ExprNode init;
+    std::vector<expr::ExprNode> init;
     // The size of each grid cell in the spatial dimensions
     double scale;
     // Pivot point, which should be in the domain
