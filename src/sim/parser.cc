@@ -19,9 +19,9 @@ void Parser::setText(const std::string &txt) {
 }
 
 void Parser::run() {
-    debugLog("Running tree parser...");
+    dbg::log("Running tree parser...");
     runTreeParser();
-    debugLog("Running expression parser...");
+    dbg::log("Running expression parser...");
     runExprParser();
 }
 

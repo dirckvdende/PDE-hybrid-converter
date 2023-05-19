@@ -16,13 +16,13 @@ Compiler::Compiler(int argc, char *argv[]) : args(argc, argv), domain(nullptr)
 Compiler::~Compiler() { }
 
 void Compiler::run() {
-    debugLog("\nReading file contents...\n");
+    dbg::log("\nReading file contents...\n");
     readInputFile();
-    debugLog("\nParsing input...\n");
+    dbg::log("\nParsing input...\n");
     runParser();
-    debugLog("\nDetermining domain...\n");
+    dbg::log("\nDetermining domain...\n");
     findDomain();
-    debugLog("");
+    dbg::log("");
 }
 
 void Compiler::readInputFile() {
@@ -40,9 +40,9 @@ void Compiler::runParser() {
     parser.run();
     for (const std::pair<std::string, std::string> &field :
     parser.getFieldValues())
-        debugLog("Read field: " + field.first + " -> " + field.second);
-    debugLog("");
-    debugLog(parser.getInputFields().str());
+        dbg::log("Read field: " + field.first + " -> " + field.second);
+    dbg::log("");
+    dbg::log(parser.getInputFields().str());
     inputFields = parser.getInputFields();
 }
 
@@ -52,5 +52,5 @@ void Compiler::findDomain() {
     domain->findDomain(inputFields.pivot);
     // TODO: Implement border range detection
     domain->findBorder({1, 1});
-    debugLog(domain->str());
+    dbg::log(domain->str());
 }

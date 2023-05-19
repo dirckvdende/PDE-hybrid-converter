@@ -5,9 +5,11 @@
 #include <iostream>
 #include <string>
 
-bool DEBUG_ENABLED = false;
+using namespace dbg;
 
-void debugLog(const std::string &txt) {
+bool dbg::DEBUG_ENABLED = false;
+
+void dbg::log(const std::string &txt) {
     if (!DEBUG_ENABLED)
         return;
     auto showTime = []() -> void {
