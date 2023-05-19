@@ -1,5 +1,5 @@
 
-#include "compiler/compiler.h"
+// #include "compiler/compiler.h"
 #include "dbg/dbg.h"
 #include "sim/sim.h"
 #include <fstream>
@@ -13,11 +13,11 @@
  * @param argv Command line arguments
  * @return An integer status code to be returned by main
  */
-int runCompiler(int argc, char *argv[]) {
-    Compiler compiler(argc, argv);
-    compiler.run();
-    return 0;
-}
+// int runCompiler(int argc, char *argv[]) {
+//     Compiler compiler(argc, argv);
+//     compiler.run();
+//     return 0;
+// }
 
 /**
  * Run the ODE simulator
@@ -63,5 +63,6 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++)
         if (std::string(argv[i]) == "--ode")
             return runSim(argc, argv);
-    return runCompiler(argc, argv);
+    return 1;
+    // return runCompiler(argc, argv);
 }
