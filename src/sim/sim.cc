@@ -2,6 +2,7 @@
 #include "dbg/dbg.h"
 #include "expr/expr.h"
 #include "sim.h"
+#include <chrono>
 #include <fstream>
 #include <string>
 #include <unordered_map>
@@ -48,6 +49,7 @@ void Sim::runParser() {
 }
 
 void Sim::runSystem(const ODESystem &system) {
+    auto tStart = std::chrono::high_resolution_clock::now();
     // Make a copy of the equations
     std::vector<expr::ExprNode> equations;
     for (size_t i = 0; i < system.vals.size(); i++)
@@ -104,7 +106,12 @@ void Sim::runSystem(const ODESystem &system) {
     // Output emit values
     for (const auto &emit : system.emit)
         emitVals[emit.second] = history[nameMap[emit.first]];
+    auto tEnd = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(tEnd -
+    tStart);
     dbg::log("Total number of iterations: " + std::to_string(it));
+    dbg::log("Iterations per second: " + std::to_string(double(it) /
+    duration.count() * 1000000));
 }
 
 void Sim::outputEmit(std::string filename, size_t resolution) const {
