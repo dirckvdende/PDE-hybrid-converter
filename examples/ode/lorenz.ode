@@ -4,13 +4,13 @@ system {
     var sigma = 10;
     var beta = 8 / 3;
     var x = integ(sigma * (y - x), 0);
-    var y = integ(x * (rho  - z) - y, 2);
+    var y = integ(x * (rho - z) - y, 2);
     var z = integ(x * y - beta * z, 20);
     emit x as x;
     emit y as y;
     emit z as z;
-    interval x = [-100, 100];
-    interval y = [-100, 100];
-    interval z = [-100, 100];
+    interval x = [-1000, 1000];
+    interval y = [-1000, 1000];
+    interval z = [-1000, 1000];
     time 35;
 }
