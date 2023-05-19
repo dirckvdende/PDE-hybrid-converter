@@ -1,5 +1,5 @@
 
-// #include "compiler/compiler.h"
+#include "pde/parser/parser.h"
 #include "dbg/dbg.h"
 #include "sim/sim.h"
 #include <fstream>
@@ -13,11 +13,26 @@
  * @param argv Command line arguments
  * @return An integer status code to be returned by main
  */
-// int runCompiler(int argc, char *argv[]) {
-//     Compiler compiler(argc, argv);
-//     compiler.run();
-//     return 0;
-// }
+int runCompiler(int argc, char *argv[]) {
+    std::string filename;
+    pde::parser::Parser parser;
+    for (int i = 1; i < argc; i++) {
+        std::string arg = argv[i];
+        if (arg.size() >= 1 && arg.front() != '-')
+            filename = argv[i];
+    }
+    if (filename == "") {
+        std::cerr << "Usage: " << argv[0] << " <filename>" << std::endl;
+        return 1;
+    }
+    std::ifstream file(filename);
+    std::stringstream stream;
+    stream << file.rdbuf();
+    std::string txt = stream.str();
+    parser.setText(txt);
+    parser.run();
+    return 0;
+}
 
 /**
  * Run the ODE simulator
@@ -66,6 +81,5 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++)
         if (std::string(argv[i]) == "--ode")
             return runSim(argc, argv);
-    return 1;
-    // return runCompiler(argc, argv);
+    return runCompiler(argc, argv);
 }
