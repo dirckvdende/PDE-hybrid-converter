@@ -57,7 +57,8 @@ private:
 
     /**
      * Check if all required fields are given in the preConfig. Throws an error
-     * if this is not the case
+     * if this is not the case. Also checks if configurations have the correct
+     * lengths
      */
     void checkRequiredFields() const;
 
