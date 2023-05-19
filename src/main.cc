@@ -28,7 +28,7 @@ int runCompiler(int argc, char *argv[]) {
 int runSim(int argc, char *argv[]) {
     std::string filename;
     for (int i = 1; i < argc; i++) {
-        if (std::string(argv[i]) != "--ode")
+        if (argv[i][0] != '-')
             filename = argv[i];
     }
     sim::Sim simulator;
