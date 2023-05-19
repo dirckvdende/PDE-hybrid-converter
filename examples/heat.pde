@@ -5,7 +5,6 @@ pde heat {
     pivot [0, 0];
     scale 0.1;
 
-    vars u;
     equation dt(u) = dx(dx(u)) + dy(dy(u));
     init u = x * x + y * y;
     boundary u = 1;
