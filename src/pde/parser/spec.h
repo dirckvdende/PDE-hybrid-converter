@@ -7,6 +7,9 @@
 
 namespace pde::parser {
 
+/**
+ * Specification of a system of PDEs
+ */
 struct PDESystem {
 
     /**
