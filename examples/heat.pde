@@ -1,5 +1,5 @@
 
-pde heat {
+pde {
     dims [x, y];
     domain x * x + y * y < 1;
     pivot [0, 0];
