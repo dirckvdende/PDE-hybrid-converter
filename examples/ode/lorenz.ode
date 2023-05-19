@@ -9,8 +9,11 @@ system {
     emit x as x;
     emit y as y;
     emit z as z;
-    interval x = [-1000, 1000];
-    interval y = [-1000, 1000];
-    interval z = [-1000, 1000];
+    interval rho = [28, 28];
+    interval sigma = [10, 10];
+    interval beta = [8 / 3, 8 / 3];
+    interval x = [-40, 40];
+    interval y = [-40, 40];
+    interval z = [-40, 40];
     time 35;
 }
