@@ -75,6 +75,49 @@ private:
      */
     void parseEquation(const std::string &txt);
 
+    /**
+     * Parse an assignment expression
+     * @param txt The text to parse
+     * @param entry The entry in the PDE system to add the expression to
+     */
+    void parseAssignmentExpr(const std::string &txt, std::vector<expr::ExprNode>
+    &entry);
+
+    /**
+     * Parse an interval configuration setting. The result is output to the PDE
+     * system
+     * @param txt The text to parse
+     */
+    void parseInterval(const std::string &txt);
+
+    /**
+     * Parse dimensions configuration settings. The result is output to the PDE
+     * system
+     * @param txt The text to parse
+     */
+    void parseDims(const std::string &txt);
+
+    /**
+     * Parse a single expression
+     * @param txt The text to parse
+     * @return The parsed expression node
+     */
+    expr::ExprNode parseExpr(const std::string &txt) const;
+
+    /**
+     * Parse a number list
+     * @param txt The text to parse
+     * @return A list of doubles, which is the parsed version of the text
+     */
+    std::vector<double> parseNumList(const std::string &txt) const;
+
+    /**
+     * Locate the index of a variable with the given name
+     * @param var The name of the variable
+     * @return The index of the variable, or SIZE_MAX if not found
+     */
+    size_t varIndex(const std::string &var) const;
+
     // Input text to be parsed
     std::string txt;
     // Tree parser to convert raw text to text field list
