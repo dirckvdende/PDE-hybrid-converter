@@ -33,6 +33,12 @@ public:
     void setText(const std::string &txt);
 
     /**
+     * Set the step size of the simulation
+     * @param val The new value for the step size
+     */
+    void setStepSize(double val);
+
+    /**
      * Run the simulator
      */
     void run();

@@ -27,11 +27,14 @@
  */
 int runSim(int argc, char *argv[]) {
     std::string filename;
-    for (int i = 1; i < argc; i++) {
-        if (argv[i][0] != '-')
-            filename = argv[i];
-    }
     sim::Sim simulator;
+    for (int i = 1; i < argc; i++) {
+        std::string arg = argv[i];
+        if (arg.size() >= 1 && arg.front() != '-')
+            filename = argv[i];
+        if (arg.substr(0, 2) == "-s")
+            simulator.setStepSize(std::stod(arg.substr(2)));
+    }
     simulator.setFileOutput(true);
     if (filename == "") {
         std::cerr << "Usage: " << argv[0] << " --ode <filename>" << std::endl;

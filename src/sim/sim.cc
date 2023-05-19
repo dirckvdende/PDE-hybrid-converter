@@ -9,13 +9,17 @@
 
 using namespace sim;
 
-Sim::Sim() : specs(parser.getSpecs()), fileOutput(false), stepSize(1e-2) { }
+Sim::Sim() : specs(parser.getSpecs()), fileOutput(false), stepSize(1e-3) { }
 
 Sim::~Sim() { }
 
 void Sim::setText(const std::string &txt) {
     this->txt = txt;
     parser.setText(txt);
+}
+
+void Sim::setStepSize(double val) {
+    stepSize = val;
 }
 
 void Sim::run() {
