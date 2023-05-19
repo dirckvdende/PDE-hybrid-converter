@@ -3,6 +3,7 @@
 #include "expr/expr.h"
 #include "expr/parser.h"
 #include "parser.h"
+#include <algorithm>
 #include <stdexcept>
 
 using namespace pde::parser;
@@ -20,6 +21,8 @@ void Parser::run() {
     runTreeParser();
     dbg::log("Running expression parser...");
     runExprParser();
+    dbg::log("Done parsing expressions:");
+    dbg::log(system.str());
 }
 
 const PDESystem &Parser::getSpecs() const {
@@ -62,6 +65,10 @@ void Parser::runTreeParser() {
 void Parser::runExprParser() {
     checkRequiredFields();
     // TODO: implement
+    for (const std::string &entry : preConfig.at("equation"))
+        parseEquation(entry);
+    system.time = parseNum(preConfig["time"].front());
+    system.iterations = size_t(0.5 + parseNum(preConfig["iterations"].front()));
 }
 
 void Parser::checkRequiredFields() const {
@@ -98,4 +105,30 @@ double Parser::parseNum(const std::string &txt) const {
     parser.run();
     const expr::ExprNode &root = parser.getTree();
     return root.eval();
+}
+
+void Parser::parseEquation(const std::string &txt) {
+    expr::Parser parser;
+    parser.setText(txt);
+    parser.run();
+    const expr::ExprNode &root = parser.getTree();
+    auto incorrect = []() -> void {
+        throw std::runtime_error("Incorrect equation format");
+    };
+    if (root.type != expr::NODE_EQ)
+        incorrect();
+    if (root[0].type != expr::NODE_DERIV)
+        incorrect();
+    size_t semicol = root[0].content.find(';');
+    if (semicol == std::string::npos)
+        throw std::runtime_error("Internal error processing derivative");
+    std::string deriv = root[0].content.substr(0, semicol);
+    if (deriv != "dt")
+        incorrect();
+    std::string var = root[0].content.substr(semicol + 1);
+    if (std::find(system.vars.begin(), system.vars.end(), var) !=
+    system.vars.end())
+        throw std::runtime_error("Duplicate variable in equation");
+    system.vars.push_back(var);
+    system.vals.push_back(root[1]);
 }
