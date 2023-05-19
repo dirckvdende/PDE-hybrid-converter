@@ -130,7 +130,7 @@ void Parser::parseEquation(const std::string &txt) {
     if (semicol == std::string::npos)
         throw std::runtime_error("Internal error processing derivative");
     std::string deriv = root[0].content.substr(0, semicol);
-    if (deriv != "dt")
+    if (deriv != "t")
         incorrect();
     std::string var = root[0].content.substr(semicol + 1);
     if (std::find(system.vars.begin(), system.vars.end(), var) !=
