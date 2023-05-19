@@ -59,5 +59,6 @@ std::string PDESystem::str() const {
         out += "[" + std::to_string(bounds[i].first) + ", " +
         std::to_string(bounds[i].second) + "]";
     }
+    out += "]";
     return out;
 }
