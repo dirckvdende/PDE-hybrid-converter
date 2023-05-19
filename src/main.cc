@@ -26,7 +26,7 @@ int runCompiler(int argc, char *argv[]) {
  * @return An integer status code to be returned by main
  */
 int runSim(int argc, char *argv[]) {
-    DEBUG_ENABLED = true;
+    dbg::DEBUG_ENABLED = true;
     std::string filename;
     for (int i = 1; i < argc; i++) {
         if (std::string(argv[i]) != "--ode")
