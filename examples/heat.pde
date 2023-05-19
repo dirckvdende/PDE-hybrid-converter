@@ -1,13 +1,16 @@
 
 pde heat {
-    dimensions x, y;
-    equation dt(u) = dx(dx(u)) + dy(dy(u));
-    func u;
+    dims [x, y];
     domain x * x + y * y < 1;
-    pivot 0, 0;
+    pivot [0, 0];
     scale 0.1;
-    boundary 1;
-    init x * x + y * y;
+
+    vars u;
+    equation dt(u) = dx(dx(u)) + dy(dy(u));
+    init u = x * x + y * y;
+    boundary u = 1;
+    interval u = [0, 1];
+
     time 10;
     iterations 20;
 }
