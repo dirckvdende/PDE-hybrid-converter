@@ -4,6 +4,7 @@
 #include "spec.h"
 #include "treeparser/parser.h"
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace pde::parser {
@@ -55,6 +56,12 @@ private:
     void runExprParser();
 
     /**
+     * Check if all required fields are given in the preConfig. Throws an error
+     * if this is not the case
+     */
+    void checkRequiredFields() const;
+
+    /**
      * Parse a single number from a string
      * @param txt The text to parse
      * @return The parsed number as a double
@@ -65,8 +72,8 @@ private:
     std::string txt;
     // Tree parser to convert raw text to text field list
     treeparser::Parser treeParser;
-    // PDE specification as a vector of pairs: contain name and value of setting
-    std::vector<std::pair<std::string, std::string>> preConfig;
+    // PDE specification as a map: maps a name to a vector of values
+    std::unordered_map<std::string, std::vector<std::string>> preConfig;
     // Output specification fields
     PDESystem system;
 

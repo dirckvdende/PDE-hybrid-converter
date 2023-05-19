@@ -53,12 +53,25 @@ void Parser::runTreeParser() {
     for (treeparser::ParseNode *child : root->children) {
         if (child->name == "pde")
             throw std::runtime_error("Invalid \"pde\" node location");
-        preConfig.push_back({child->name, child->text});
+        if (preConfig.find(child->name) == preConfig.end())
+            preConfig.emplace(child->name, std::vector<std::string>{});
+        preConfig[child->name].push_back(child->text);
     }
 }
 
 void Parser::runExprParser() {
+    checkRequiredFields();
     // TODO: implement
+}
+
+void Parser::checkRequiredFields() const {
+    static const std::vector<std::string> required = {
+        "dims", "domain", "pivot", "scale", "equation", "init", "boundary",
+        "interval", "time", "iterations"
+    };
+    for (const std::string &req : required)
+        if (preConfig.find(req) == preConfig.end())
+            throw std::runtime_error("Missing input field \"" + req + "\"");
 }
 
 double Parser::parseNum(const std::string &txt) const {
