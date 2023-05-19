@@ -85,7 +85,8 @@ bool Parser::accept(TokenType type) const {
 
 void Parser::expect(TokenType type) {
     if (!accept(type))
-        error("Unexpected token");
+        error("Unexpected token of type (" + std::to_string(cur().type) +
+        ") with content \"" + cur().content + "\"");
 }
 
 void Parser::error(std::string content) {
