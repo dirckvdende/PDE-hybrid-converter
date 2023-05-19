@@ -1,0 +1,7 @@
+
+system {
+    var x = integ(5 * x - 3, 1);
+    emit x as x;
+    interval x = [-5, 5];
+    time 1;
+}
