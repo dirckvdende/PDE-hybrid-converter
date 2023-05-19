@@ -26,7 +26,6 @@ int runCompiler(int argc, char *argv[]) {
  * @return An integer status code to be returned by main
  */
 int runSim(int argc, char *argv[]) {
-    dbg::DEBUG_ENABLED = true;
     std::string filename;
     for (int i = 1; i < argc; i++) {
         if (std::string(argv[i]) != "--ode")
@@ -47,7 +46,19 @@ int runSim(int argc, char *argv[]) {
     return 0;
 }
 
+/**
+ * Check if debug mode argument is given and configure accordingly
+ * @param argc Number of command line arguments
+ * @param argv Command line arguments
+ */
+void detectDebugMode(int argc, char *argv[]) {
+    for (int i = 1; i < argc; i++)
+        if (std::string(argv[i]) == "-d" || std::string(argv[i]) == "--debug")
+            dbg::DEBUG_ENABLED = true;
+}
+
 int main(int argc, char *argv[]) {
+    detectDebugMode(argc, argv);
     // Detect running argument
     for (int i = 1; i < argc; i++)
         if (std::string(argv[i]) == "--ode")
