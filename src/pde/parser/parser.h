@@ -69,6 +69,12 @@ private:
      */
     double parseNum(const std::string &txt) const;
 
+    /**
+     * Parse an equation, the result will be output to the PDE system
+     * @param txt The text to parse
+     */
+    void parseEquation(const std::string &txt);
+
     // Input text to be parsed
     std::string txt;
     // Tree parser to convert raw text to text field list
