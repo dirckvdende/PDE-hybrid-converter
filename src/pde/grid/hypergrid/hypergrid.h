@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace pde::grid {
+namespace pde::grid::hypergrid {
 
 /**
  * Basic object to represent an n-dimensional grid of data

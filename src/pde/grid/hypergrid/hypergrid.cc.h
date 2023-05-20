@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <numeric>
 
-namespace pde::grid {
+namespace pde::grid::hypergrid {
 
 template<class T>
 HyperGrid<T>::HyperGrid(std::vector<size_t> dims) : dims(dims),
