@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+namespace pde::grid {
+
 /**
  * Convert a grid position to a string
  * @param pos The grid position as a vector
@@ -33,3 +35,5 @@ struct VectorHash {
         return cur;
     }
 };
+
+}

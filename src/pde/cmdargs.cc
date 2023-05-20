@@ -2,6 +2,8 @@
 #include "cmdargs.h"
 #include <iostream>
 
+using namespace pde;
+
 CmdArgs::CmdArgs(int argc, char *argv[]) : debugMode(false) {
     for (int i = 0; i < argc; i++)
         args.push_back(argv[i]);

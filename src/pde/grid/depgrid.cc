@@ -5,6 +5,8 @@
 #include <sstream>
 #include <stdexcept>
 
+using namespace pde::grid;
+
 DependGrid::DependGrid(std::vector<size_t> dims, size_t maxSize,
 std::vector<size_t> range) : GroupGrid(dims, maxSize), depends(dims), range(range) {
     if (range.empty())

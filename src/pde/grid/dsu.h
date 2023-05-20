@@ -1,8 +1,9 @@
 
-#ifndef DSU_H
-#define DSU_H
+#pragma once
 
 #include <vector>
+
+namespace pde::grid {
 
 /**
  * Implementation of a DSU of a set of integers 0..n-1
@@ -53,4 +54,4 @@ private:
 
 };
 
-#endif
+}

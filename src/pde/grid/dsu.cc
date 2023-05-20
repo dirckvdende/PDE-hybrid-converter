@@ -1,6 +1,8 @@
 
 #include "dsu.h"
 
+using namespace pde::grid;
+
 DisjointUnion::DisjointUnion(size_t n) : parent(n), sizes(n, 1) {
     for (size_t i = 0; i < n; i++)
         parent[i] = i;

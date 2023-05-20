@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+namespace pde {
+
 /**
  * Class used to read and parse command line arguments
  */
@@ -70,3 +72,5 @@ private:
     std::string filename;
 
 };
+
+}

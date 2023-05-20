@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <vector>
 
+using namespace pde::grid;
+
 ExprGrid::ExprGrid(std::vector<size_t> dims, size_t maxSize) :
 HyperGrid<ExprGridPoint>(dims), dependGrid(dims, maxSize) { }
 

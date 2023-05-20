@@ -3,6 +3,8 @@
 
 #include "expr/expr.h"
 
+namespace pde::grid {
+
 /**
  * Expression grid point domain inclusion type
  */
@@ -25,3 +27,5 @@ struct ExprGridPoint {
     ExprGridPointType type = GRIDPOINT_ERR;
     expr::ExprNode pointExpr;
 };
+
+}

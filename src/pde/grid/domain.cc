@@ -6,6 +6,8 @@
 #include <vector>
 #include <queue>
 
+using namespace pde::grid;
+
 GridDomain::GridDomain(double scale, const expr::ExprNode &expr, const
 std::vector<std::string> &dims) : scale(scale), expr(expr), dims(dims) { }
 

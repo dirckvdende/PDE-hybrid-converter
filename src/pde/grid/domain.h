@@ -7,6 +7,8 @@
 #include <vector>
 #include <unordered_set>
 
+namespace pde::grid {
+
 /**
  * Object used to determine the cells of a grid that make up a given domain, and
  * auxilliary cells that need to be considered
@@ -97,3 +99,5 @@ private:
     std::unordered_set<std::vector<int>, VectorHash> borderCells;
 
 };
+
+}

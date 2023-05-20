@@ -3,6 +3,8 @@
 #include <ostream>
 #include <vector>
 
+using namespace pde::grid;
+
 GroupGrid::GroupGrid(std::vector<size_t> dims, size_t maxSize) :
 HyperGrid(dims), dsu(size()), maxSize(maxSize) { }
 
