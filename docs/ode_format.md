@@ -60,4 +60,4 @@ system {
     time 10;
 }
 ```
-If the `emit` setting is not used, then the values that a variable admits during the simulation will be lost of the single system is simulated.
+If the `emit` setting is not used, then the values that a variable admits during the simulation will be lost after the single system is simulated.
