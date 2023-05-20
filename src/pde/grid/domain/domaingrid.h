@@ -46,6 +46,22 @@ public:
      */
     void setScale(double val);
 
+    /**
+     * Convert grid cell coordinates to real coordinates, using the scale and
+     * pivot stored
+     * @param coords The grid cell coordinates as a list of integers
+     * @return The real coordinates as a list of doubles
+     */
+    std::vector<double> toRealCoords(const std::vector<size_t> &coords) const;
+
+    /**
+     * Convert real coordinates to the closest grid cell coodinates, using the
+     * scale and pivot stored
+     * @param coords The real coordinates as a list of doubles
+     * @return The approximate grid cell coordinates as a list of integers
+     */
+    std::vector<size_t> toGridCoords(const std::vector<double> &coords) const;
+
 private:
 
     // Domain pivot (default (0, 0, ...))
