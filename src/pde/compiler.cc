@@ -10,6 +10,8 @@
 #include <sstream>
 #include <stdexcept>
 
+using namespace pde;
+
 Compiler::Compiler(int argc, char *argv[]) : args(argc, argv), domain(nullptr)
 { }
 
@@ -36,18 +38,13 @@ void Compiler::readInputFile() {
 }
 
 void Compiler::runParser() {
-    Parser parser(fileContents);
+    parser::Parser parser;
+    parser.setText(fileContents);
     parser.run();
-    for (const std::pair<std::string, std::string> &field :
-    parser.getFieldValues())
-        dbg::log("Read field: " + field.first + " -> " + field.second);
-    dbg::log("");
-    dbg::log(parser.getInputFields().str());
-    inputFields = parser.getInputFields();
 }
 
 void Compiler::findDomain() {
-    domain = new GridDomain(inputFields.scale, inputFields.domain,
+    domain = new grid::GridDomain(inputFields.scale, inputFields.domain,
     inputFields.dimensions);
     domain->findDomain(inputFields.pivot);
     // TODO: Implement border range detection

@@ -1,10 +1,11 @@
 
-#ifndef DEPGRID_H
-#define DEPGRID_H
+#pragma once
 
 #include "groupgrid.h"
 #include "hypergrid.h"
 #include <string>
+
+namespace pde::grid {
 
 /**
  * Object that can calculate which grid cells depend on ones from other groups
@@ -81,4 +82,4 @@ private:
 
 };
 
-#endif
+}

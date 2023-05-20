@@ -8,6 +8,8 @@
 #include <string>
 #include <unordered_map>
 
+namespace pde {
+
 /**
  * Main compiler component
  */
@@ -55,8 +57,10 @@ private:
     // Input file contents
     std::string fileContents;
     // Domain object, which is null at initialization
-    GridDomain *domain;
+    grid::GridDomain *domain;
     // Input fields as determined by the parser
     InputFields inputFields;
 
 };
+
+}

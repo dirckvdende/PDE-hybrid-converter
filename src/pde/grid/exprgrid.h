@@ -3,9 +3,11 @@
 
 #include "expr/expr.h"
 #include "gridpoint.h"
-#include "grid/depgrid.h"
-#include "grid/hypergrid.h"
+#include "depgrid.h"
+#include "hypergrid.h"
 #include <vector>
+
+namespace pde::grid {
 
 /**
  * A grid that stores expressions
@@ -92,3 +94,5 @@ private:
     DependGrid dependGrid;
 
 };
+
+}
