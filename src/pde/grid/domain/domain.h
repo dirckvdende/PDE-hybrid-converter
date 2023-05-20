@@ -7,7 +7,7 @@
 #include <vector>
 #include <unordered_set>
 
-namespace pde::grid {
+namespace pde::grid::domain {
 
 /**
  * Object used to determine the cells of a grid that make up a given domain, and
