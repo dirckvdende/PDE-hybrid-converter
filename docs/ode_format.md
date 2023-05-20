@@ -7,8 +7,10 @@ An ODE specification file can contain one or more systems of ODEs. Variables can
 
 Suppose we want to encode the following ODE:
 $$
-\dot x = y, \qquad x(0) = 1, \\
-\dot y = -x, \qquad y(0) = 0.
+\begin{align*}
+    \dot x &= y, \qquad x(0) = 1, \\
+    \dot y &= -x, \qquad y(0) = 0.
+\end{align*}
 $$
 We use the variables `x` and `y` and define these using `integ` expressions. To store the values that `x` and `y` admit during the simulation, we use the `emit` keyword. Also, the interval at which `x` and `y` are defined has to be specified. If the solution of the ODE moves out of these intervals, the behaviour is undefined. For this ODE we already know the solutions will never exceed the interval $[-1, 1]$. Lastly we set the time interval of the simulation to $[0, 20]$. The result is the following:
 ```
