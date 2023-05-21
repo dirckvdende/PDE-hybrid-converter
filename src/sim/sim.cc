@@ -24,6 +24,7 @@ void Sim::setStepSize(double val) {
 }
 
 void Sim::run() {
+    resetStats();
     dbg::log("Parsing input...");
     auto tStart = std::chrono::high_resolution_clock::now();
     runParser();
@@ -144,14 +145,18 @@ void Sim::resetStats() {
     stats.iterations = 0;
     stats.systemCount = 0;
     stats.emitCount = 0;
+    stats.parseTime = 0.0;
+    stats.iterationTime = 0.0;
+    stats.systemTime = 0.0;
+    stats.fileTime = 0.0;
 }
 
 void Sim::logStats() const {
-    dbg::log("Iterations: " + std::to_string(stats.iterations));
-    dbg::log("Systems:    " + std::to_string(stats.systemCount));
-    dbg::log("Emits:      " + std::to_string(stats.emitCount));
-    dbg::log("\nParse time: " + std::to_string(stats.parseTime));
-    dbg::log("Iteration time: " + std::to_string(stats.iterationTime));
-    dbg::log("System time: " + std::to_string(stats.systemTime));
-    dbg::log("File output time: " + std::to_string(stats.fileTime));
+    dbg::log("\nIterations:       " + std::to_string(stats.iterations));
+    dbg::log("Systems:          " + std::to_string(stats.systemCount));
+    dbg::log("Emits:            " + std::to_string(stats.emitCount));
+    dbg::log("\nParse time:       " + std::to_string(stats.parseTime) + " s");
+    dbg::log("Iteration time:   " + std::to_string(stats.iterationTime) + " s");
+    dbg::log("System time:      " + std::to_string(stats.systemTime) + " s");
+    dbg::log("File output time: " + std::to_string(stats.fileTime) + " s\n");
 }
