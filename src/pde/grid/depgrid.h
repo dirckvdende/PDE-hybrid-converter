@@ -2,7 +2,7 @@
 #pragma once
 
 #include "groupgrid.h"
-#include "hypergrid.h"
+#include "hypergrid/hypergrid.h"
 #include <string>
 
 namespace pde::grid {
@@ -75,7 +75,7 @@ private:
 
     // Grid to store result from calc() function, where the entry corresponds to
     // the iteration at which it was marked, or 0 if it hasn't been marked
-    HyperGrid<size_t> depends;
+    hypergrid::HyperGrid<size_t> depends;
 
     // The range per dimension that dependencies span
     std::vector<size_t> range;

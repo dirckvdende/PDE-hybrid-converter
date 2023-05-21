@@ -1,7 +1,7 @@
 
 #include "compiler.h"
 #include "dbg/dbg.h"
-#include "grid/domain.h"
+#include "grid/domain/domain.h"
 #include "parser/parser.h"
 #include <ctime>
 #include <fstream>
@@ -44,8 +44,8 @@ void Compiler::runParser() {
 }
 
 void Compiler::findDomain() {
-    domain = new grid::GridDomain(inputFields.scale, inputFields.domain,
-    inputFields.dimensions);
+    domain = new grid::domain::GridDomain(inputFields.scale, inputFields.domain,
+    inputFields.dims);
     domain->findDomain(inputFields.pivot);
     // TODO: Implement border range detection
     domain->findBorder({1, 1});

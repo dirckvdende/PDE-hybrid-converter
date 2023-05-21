@@ -2,7 +2,7 @@
 #pragma once
 
 #include "dsu.h"
-#include "hypergrid.h"
+#include "hypergrid/hypergrid.h"
 #include <ostream>
 #include <variant>
 #include <vector>
@@ -13,7 +13,7 @@ namespace pde::grid {
  * A grid that keeps track of the groups of grid cells
  * At first all grid cells are part of a separate group
  */
-class GroupGrid : public HyperGrid<std::monostate> {
+class GroupGrid : public hypergrid::HyperGrid<std::monostate> {
 
 public:
 

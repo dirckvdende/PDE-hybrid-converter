@@ -3,8 +3,8 @@
 
 #include "cmdargs.h"
 #include "expr/expr.h"
-#include "grid/domain.h"
-#include "parser/fields.h"
+#include "grid/domain/domain.h"
+#include "parser/spec.h"
 #include <string>
 #include <unordered_map>
 
@@ -57,9 +57,9 @@ private:
     // Input file contents
     std::string fileContents;
     // Domain object, which is null at initialization
-    grid::GridDomain *domain;
+    grid::domain::GridDomain *domain;
     // Input fields as determined by the parser
-    InputFields inputFields;
+    parser::PDESystem inputFields;
 
 };
 
