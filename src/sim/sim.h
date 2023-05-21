@@ -76,6 +76,16 @@ private:
      */
     void outputEmit(std::string filename, size_t resolution) const;
 
+    /**
+     * Reset simulation statistics
+     */
+    void resetStats();
+
+    /**
+     * Ouput statistics to debug
+     */
+    void logStats() const;
+
     // Input text
     std::string txt;
     // Parses the input text
@@ -88,6 +98,16 @@ private:
     double stepSize;
     // "Emit" values stored after simulating the ODEs
     std::unordered_map<std::string, std::vector<double>> emitVals;
+    // Simulation statistics
+    struct {
+        size_t iterations;
+        size_t systemCount;
+        size_t emitCount;
+        double parseTime;
+        double iterationTime;
+        double systemTime;
+        double fileTime;
+    } stats;
 
 };
 

@@ -25,15 +25,26 @@ void Sim::setStepSize(double val) {
 
 void Sim::run() {
     dbg::log("Parsing input...");
+    auto tStart = std::chrono::high_resolution_clock::now();
     runParser();
+    auto tRunStart = std::chrono::high_resolution_clock::now();
+    stats.parseTime = std::chrono::duration_cast<std::chrono::microseconds>(
+    tRunStart - tStart).count() / 1000000.0;
     for (const ODESystem &system : specs) {
         dbg::log("Running system...");
         runSystem(system);
     }
+    auto tFileStart = std::chrono::high_resolution_clock::now();
+    stats.systemTime = std::chrono::duration_cast<std::chrono::microseconds>(
+    tFileStart - tRunStart).count() / 1000000.0;
     if (fileOutput) {
         dbg::log("Outputting to file...");
         outputEmit("tmp/ode.txt", 1000);
     }
+    auto tEnd = std::chrono::high_resolution_clock::now();
+    stats.fileTime = std::chrono::duration_cast<std::chrono::microseconds>(
+    tEnd - tFileStart).count() / 1000000.0;
+    logStats();
 }
 
 void Sim::setFileOutput(bool val) {
@@ -49,7 +60,6 @@ void Sim::runParser() {
 }
 
 void Sim::runSystem(const ODESystem &system) {
-    auto tStart = std::chrono::high_resolution_clock::now();
     // Make a copy of the equations
     std::vector<expr::ExprNode> equations;
     for (size_t i = 0; i < system.vals.size(); i++)
@@ -86,6 +96,7 @@ void Sim::runSystem(const ODESystem &system) {
         history.push_back({vals[i]});
     }
     // Run simulation
+    auto tStart = std::chrono::high_resolution_clock::now();
     size_t it = 0;
     for (double t = 0; t < system.time; t += stepSize, it++) {
         // Read history values
@@ -109,9 +120,10 @@ void Sim::runSystem(const ODESystem &system) {
     auto tEnd = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(tEnd -
     tStart);
-    dbg::log("Total number of iterations: " + std::to_string(it));
-    dbg::log("Iterations per second: " + std::to_string(double(it) /
-    duration.count() * 1000000));
+    stats.iterations += it;
+    stats.systemCount++;
+    stats.emitCount += system.emit.size();
+    stats.iterationTime += double(duration.count()) / 1000000.0;
 }
 
 void Sim::outputEmit(std::string filename, size_t resolution) const {
@@ -126,4 +138,20 @@ void Sim::outputEmit(std::string filename, size_t resolution) const {
         file << '\n';
     }
     file.close();
+}
+
+void Sim::resetStats() {
+    stats.iterations = 0;
+    stats.systemCount = 0;
+    stats.emitCount = 0;
+}
+
+void Sim::logStats() const {
+    dbg::log("Iterations: " + std::to_string(stats.iterations));
+    dbg::log("Systems:    " + std::to_string(stats.systemCount));
+    dbg::log("Emits:      " + std::to_string(stats.emitCount));
+    dbg::log("\nParse time: " + std::to_string(stats.parseTime));
+    dbg::log("Iteration time: " + std::to_string(stats.iterationTime));
+    dbg::log("System time: " + std::to_string(stats.systemTime));
+    dbg::log("File output time: " + std::to_string(stats.fileTime));
 }
