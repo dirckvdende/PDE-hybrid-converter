@@ -4,7 +4,7 @@
 #include "expr/expr.h"
 #include "gridpoint.h"
 #include "depgrid.h"
-#include "hypergrid.h"
+#include "hypergrid/hypergrid.h"
 #include <vector>
 
 namespace pde::grid {
@@ -12,7 +12,7 @@ namespace pde::grid {
 /**
  * A grid that stores expressions
  */
-class ExprGrid : public HyperGrid<ExprGridPoint> {
+class ExprGrid : public hypergrid::HyperGrid<ExprGridPoint> {
 
 public:
 
