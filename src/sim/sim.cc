@@ -131,20 +131,18 @@ void Sim::outputEmit(std::string filename, size_t resolution) const {
     std::ofstream file(filename);
     if (!file.is_open())
         throw std::runtime_error("Could not open output file");
-    bool first = true;
+    file << "__time__";
     for (const auto &emit : emitVals) {
-        if (!first)
-            file << ',';
-        first = false;
+        file << ',';
         file << emit.first;
     }
-    // Gather data
+    // Gather data (includes time)
     std::vector<std::vector<double>> data;
     for (const auto &emit : emitVals) {
         size_t total = emit.second.size();
         for (size_t i = 0, it = 0; i < total; i += total / resolution, it++) {
             while (data.size() <= it)
-                data.emplace_back();
+                data.push_back({stepSize * i});
             data[it].push_back(emit.second[i]);
         }
     }

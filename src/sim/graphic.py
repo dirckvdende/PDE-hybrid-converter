@@ -35,7 +35,7 @@ for line in f.readlines():
 data.sort(key=(lambda row : row[0]))
 
 for row in data:
-    if row[0] in varNames or len(varNames) == 0:
+    if (row[0] in varNames or len(varNames) == 0) and row[0] != "__time__":
         plt.plot([float(x) for x in row[1:]], label=row[0])
 
 plt.legend()
