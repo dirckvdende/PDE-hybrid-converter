@@ -33,7 +33,8 @@ for line in f.readlines():
             data[i].append(entries[i])
 
 for row in data:
-    plt.plot([float(x) for x in row[1:]], label=row[0])
+    if row[0] in varNames or len(varNames) == 0:
+        plt.plot([float(x) for x in row[1:]], label=row[0])
 
 plt.legend()
 plt.savefig("tmp/ode.png")
