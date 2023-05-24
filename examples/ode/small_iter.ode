@@ -1,0 +1,60 @@
+
+system {
+    var x = integ(-y, 0);
+    var y = integ(x, 1);
+    emit x as xreal;
+    emit y as yreal;
+    interval x = [-1, 1];
+    interval y = [-1, 1];
+    time 5;
+}
+
+system {
+    var x = 0;
+    var y = 1;
+    emit x as x0;
+    emit y as y0;
+    interval x = [-100, 100];
+    interval y = [-100, 100];
+    time 5;
+}
+
+system {
+    var x = integ(-y0, 0);
+    var y = integ(x, 1);
+    emit x as x1;
+    emit y as y1;
+    interval x = [-100, 100];
+    interval y = [-100, 100];
+    time 5;
+}
+
+system {
+    var x = integ(-y1, 0);
+    var y = integ(x, 1);
+    emit x as x2;
+    emit y as y2;
+    interval x = [-100, 100];
+    interval y = [-100, 100];
+    time 5;
+}
+
+system {
+    var x = integ(-y2, 0);
+    var y = integ(x, 1);
+    emit x as x3;
+    emit y as y3;
+    interval x = [-100, 100];
+    interval y = [-100, 100];
+    time 5;
+}
+
+system {
+    var x = integ(-y3, 0);
+    var y = integ(x, 1);
+    emit x as x4;
+    emit y as y4;
+    interval x = [-100, 100];
+    interval y = [-100, 100];
+    time 5;
+}
