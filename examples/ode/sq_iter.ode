@@ -1,0 +1,42 @@
+
+system {
+    var x = integ(x * x, 1);
+    emit x as xreal;
+    interval x = [0, 100];
+    time 1;
+}
+
+system {
+    var x = 1;
+    emit x as x0;
+    interval x = [0, 100];
+    time 1;
+}
+
+system {
+    var x = integ(x0 * x, 1);
+    emit x as x1;
+    interval x = [0, 100];
+    time 1;
+}
+
+system {
+    var x = integ(x1 * x, 1);
+    emit x as x2;
+    interval x = [0, 100];
+    time 1;
+}
+
+system {
+    var x = integ(x2 * x, 1);
+    emit x as x3;
+    interval x = [0, 100];
+    time 1;
+}
+
+system {
+    var x = integ(x3 * x, 1);
+    emit x as x4;
+    interval x = [0, 100];
+    time 1;
+}
