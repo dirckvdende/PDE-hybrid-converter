@@ -40,7 +40,7 @@ void Sim::run() {
     tFileStart - tRunStart).count() / 1000000.0;
     if (fileOutput) {
         dbg::log("Outputting to file...");
-        outputEmit("tmp/ode.txt", 1000);
+        outputEmit("tmp/ode.csv", 1000);
     }
     auto tEnd = std::chrono::high_resolution_clock::now();
     stats.fileTime = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -131,12 +131,33 @@ void Sim::outputEmit(std::string filename, size_t resolution) const {
     std::ofstream file(filename);
     if (!file.is_open())
         throw std::runtime_error("Could not open output file");
+    bool first = true;
     for (const auto &emit : emitVals) {
+        if (!first)
+            file << ',';
+        first = false;
         file << emit.first;
+    }
+    // Gather data
+    std::vector<std::vector<double>> data;
+    for (const auto &emit : emitVals) {
         size_t total = emit.second.size();
-        for (size_t i = 0; i < total; i += total / resolution)
-            file << ' ' << emit.second[i];
+        for (size_t i = 0, it = 0; i < total; i += total / resolution, it++) {
+            while (data.size() <= it)
+                data.emplace_back();
+            data[it].push_back(emit.second[i]);
+        }
+    }
+    // Output data as csv file
+    for (const std::vector<double> &line : data) {
         file << '\n';
+        bool first = true;
+        for (const double &val : line) {
+            if (!first)
+                file << ',';
+            first = false;
+            file << val;
+        }
     }
     file.close();
 }
