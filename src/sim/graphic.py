@@ -32,6 +32,8 @@ for line in f.readlines():
         for i in range(len(entries)):
             data[i].append(entries[i])
 
+data.sort(key=(lambda row : row[0]))
+
 for row in data:
     if row[0] in varNames or len(varNames) == 0:
         plt.plot([float(x) for x in row[1:]], label=row[0])
