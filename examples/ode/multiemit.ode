@@ -1,0 +1,14 @@
+
+system {
+    var x = integ(x, 1);
+    interval x = [1, 100];
+    emit x as a;
+    emit x as b;
+    time 5;
+}
+
+system {
+    var y = integ(a + b, 1);
+    emit y as yval;
+    time 5;
+}
