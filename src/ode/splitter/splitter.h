@@ -2,6 +2,7 @@
 #pragma once
 
 #include "ode/spec.h"
+#include <string>
 #include <vector>
 
 namespace ode::splitter {
@@ -49,10 +50,44 @@ private:
      */
     void splitSystem(const ODESystem &system);
 
+    /**
+     * Determine variable dependencies within a system
+     * @param system The system to process the dependencies of
+     * @return A list of lists, each sublist contains the indices of the
+     * variables that the current variable depends on
+     */
+    std::vector<std::vector<size_t>> getDependencies(const ODESystem &system)
+    const;
+
+    /**
+     * Determine the strongly connected components of a dependency graph
+     * @param deps The dependencies, as returned by getDependencies()
+     * @return A list of lists, each sublist contains the indices of a strongly
+     * connected component. The parent list of topologically sorted
+     */
+    std::vector<std::vector<size_t>> getStronglyConnected(const
+    std::vector<std::vector<size_t>> &deps) const;
+
+    /**
+     * Generate output systems based on a list of strongly connected components
+     * @param system The system to process
+     * @param comps The strongly connected components of the dependency graph
+     */
+    void generateFromComponents(const ODESystem &system, const
+    std::vector<std::vector<size_t>> &comps);
+
+    /**
+     * Generate a unique temporary name
+     * @return The unique identifier as a string
+     */
+    std::string getUniqueName();
+
     // List of input systems
     std::vector<ODESystem> systems;
     // List of output systems
     std::vector<ODESystem> outputSystems;
+    // Counter for unique name generation
+    size_t uniqueCounter;
 
 };
 
