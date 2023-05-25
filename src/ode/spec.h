@@ -2,7 +2,6 @@
 #pragma once
 
 #include "expr/expr.h"
-
 #include <string>
 #include <vector>
 
@@ -12,6 +11,7 @@ namespace ode {
  * Specification of a system of ODEs
  */
 struct ODESystem {
+    std::string str() const;
     // List of ODEs/variables (names of variables)
     std::vector<std::string> vars;
     // Expression for each variable
