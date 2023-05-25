@@ -91,6 +91,14 @@ private:
     &emits, std::unordered_map<std::string, std::vector<std::string>> &emitMap)
     const;
 
+    /**
+     * Topologically sort a graph given by adjacency lists
+     * @param G The graph to perform toposort on
+     * @return An ordered list, the indices of the graph, toposorted
+     */
+    std::vector<size_t> toposort(const std::vector<std::vector<size_t>> &G)
+    const;
+
     // List of input systems
     std::vector<ODESystem> systems;
     // List of output systems
