@@ -64,8 +64,7 @@ std::vector<std::vector<size_t>> &deps) const {
             return;
         done[i] = true;
         for (size_t e : deps[i])
-            if (!done[e])
-                visit(e);
+            visit(e);
         L.push_back(i);
     };
     // Assign a node to a component
@@ -79,6 +78,7 @@ std::vector<std::vector<size_t>> &deps) const {
     };
     for (size_t i = 0; i < deps.size(); i++)
         visit(i);
+    std::reverse(L.begin(), L.end());
     for (size_t l : L)
         assign(l, l);
     std::vector<std::vector<size_t>> compList(deps.size());
@@ -89,6 +89,7 @@ std::vector<std::vector<size_t>> &deps) const {
         for (size_t e : deps[i])
             compGraph[comp[i]].push_back(comp[e]);
     std::vector<size_t> order = toposort(compGraph);
+    std::reverse(order.begin(), order.end());
     std::vector<std::vector<size_t>> out;
     for (size_t i : order)
         if (!compList[i].empty())
@@ -116,6 +117,7 @@ std::vector<std::vector<size_t>> &comps) {
                 for (const std::string &emitName : emitMap[name])
                     cur.emit.push_back({name, emitName});
             newNames.push_back({name, getUniqueName()});
+            cur.emit.push_back(newNames.back());
         }
         for (const std::pair<std::string, std::string> &name : newNames)
             tmpNames[name.first] = name.second;
