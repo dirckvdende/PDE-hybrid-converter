@@ -141,6 +141,13 @@ public:
     void replaceSymbols(const std::unordered_map<std::string, size_t> &symbols);
 
     /**
+     * Replace symbols with other symbols
+     * @param symbols A map from symbol names to new symbol names
+     */
+    void replaceSymbols(const std::unordered_map<std::string, std::string>
+    &symbols);
+
+    /**
      * Evaluate an expression. If there are still derivatives or symbols left,
      * an error is thrown
      * @return The evaluated value as a double. Other types are implicitly
