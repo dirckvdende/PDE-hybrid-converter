@@ -143,6 +143,16 @@ void ExprNode::replaceSymbols(const std::unordered_map<std::string, size_t>
         child->replaceSymbols(symbols);
 }
 
+void ExprNode::replaceSymbols(const std::unordered_map<std::string, std::string>
+&symbols) {
+    if (type == NODE_SYMB && symbols.find(content) != symbols.end()) {
+        content = symbols.at(content);
+        return;
+    }
+    for (ExprNode *child : children)
+        child->replaceSymbols(symbols);
+}
+
 double ExprNode::eval() const {
     return evalDirect({});
 }
