@@ -25,7 +25,7 @@ void Parser::run() {
     runExprParser();
 }
 
-const std::vector<ODESystem> &Parser::getSpecs() const {
+const std::vector<ode::ODESystem> &Parser::getSpecs() const {
     return specs;
 }
 

@@ -2,7 +2,7 @@
 #pragma once
 
 #include "treeparser/parser.h"
-#include "spec.h"
+#include "ode/spec.h"
 #include <string>
 #include <vector>
 
