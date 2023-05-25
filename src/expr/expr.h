@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace expr {
@@ -146,6 +147,12 @@ public:
      */
     void replaceSymbols(const std::unordered_map<std::string, std::string>
     &symbols);
+
+    /**
+     * Get all symbols names in this expression tree
+     * @param symbols A set where the symbol names should be put
+     */
+    void findAllSymbols(std::unordered_set<std::string> &symbols);
 
     /**
      * Evaluate an expression. If there are still derivatives or symbols left,
