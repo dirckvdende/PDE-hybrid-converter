@@ -35,7 +35,7 @@ jobs:
         chmod +x build/main
         chmod +x build/tests/compiler
     - name: Test compiler
-      run: build/tests/examples
+      run: build/tests/compiler
   TestSim:
     name: Test ODE simulator
     needs: Build
@@ -50,7 +50,7 @@ jobs:
     - name: Change executable permissions
       run: |
         chmod +x build/main
-        chmod +x build/tests/examples
+        chmod +x build/tests/sim
     - name: Test simulator
       run: build/tests/sim
   TestSplitter:
@@ -67,6 +67,6 @@ jobs:
     - name: Change executable permissions
       run: |
         chmod +x build/main
-        chmod +x build/tests/examples
+        chmod +x build/tests/splitter
     - name: Test simulator
       run: build/tests/splitter
