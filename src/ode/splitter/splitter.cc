@@ -51,6 +51,9 @@ std::vector<std::vector<size_t>> Splitter::getDependencies(const ODESystem
 
 std::vector<std::vector<size_t>> Splitter::getStronglyConnected(const
 std::vector<std::vector<size_t>> &deps) const {
+    // Kosaraju's algorithm is used to determine the strongly connected
+    // components of a graph. Source:
+    // https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm
     std::vector<size_t> L;
     std::vector<std::vector<size_t>> rev(deps.size());
     std::vector<bool> done(deps.size(), false);
