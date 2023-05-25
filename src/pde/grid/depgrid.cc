@@ -3,7 +3,6 @@
 #include <iostream>
 #include <queue>
 #include <sstream>
-#include <stdexcept>
 
 using namespace pde::grid;
 

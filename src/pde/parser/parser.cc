@@ -4,7 +4,6 @@
 #include "expr/parser.h"
 #include "parser.h"
 #include <algorithm>
-#include <stdexcept>
 
 using namespace pde::parser;
 
