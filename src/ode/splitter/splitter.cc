@@ -4,7 +4,7 @@
 using namespace ode;
 using namespace ode::splitter;
 
-Splitter::Splitter() { }
+Splitter::Splitter() : uniqueCounter(0) { }
 
 Splitter::~Splitter() { }
 
@@ -23,5 +23,26 @@ const std::vector<ODESystem> &Splitter::getOutputSystems() const {
 }
 
 void Splitter::splitSystem(const ODESystem &system) {
+    std::vector<std::vector<size_t>> deps = getDependencies(system);
+    std::vector<std::vector<size_t>> comps = getStronglyConnected(deps);
+    generateFromComponents(system, comps);
+}
+
+std::vector<std::vector<size_t>> Splitter::getDependencies(const ODESystem
+&sytem) const {
     // TODO: implement
+}
+
+std::vector<std::vector<size_t>> Splitter::getStronglyConnected(const
+std::vector<std::vector<size_t>> &deps) const {
+    // TODO: implement
+}
+
+void Splitter::generateFromComponents(const ODESystem &system, const
+std::vector<std::vector<size_t>> &comps) {
+    // TODO: implement
+}
+
+std::string Splitter::getUniqueName() {
+    return "__v" + std::to_string(uniqueCounter++);
 }
