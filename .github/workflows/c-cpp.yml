@@ -1,0 +1,72 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  Build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Make
+      run: make
+    - name: Upload build
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact-ubuntu
+        path: build
+  TestCompiler:
+    name: Test compiler
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Download build
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifact-ubuntu
+        path: build
+    - name: Change executable permissions
+      run: |
+        chmod +x build/main
+        chmod +x build/tests/compiler
+    - name: Test compiler
+      run: build/tests/examples
+  TestSim:
+    name: Test ODE simulator
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Download build
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifact-ubuntu
+        path: build
+    - name: Change executable permissions
+      run: |
+        chmod +x build/main
+        chmod +x build/tests/examples
+    - name: Test simulator
+      run: build/tests/sim
+  TestSplitter:
+    name: Test ODE splitter
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Download build
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifact-ubuntu
+        path: build
+    - name: Change executable permissions
+      run: |
+        chmod +x build/main
+        chmod +x build/tests/examples
+    - name: Test simulator
+      run: build/tests/splitter
