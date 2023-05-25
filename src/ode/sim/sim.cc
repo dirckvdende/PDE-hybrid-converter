@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-using namespace sim;
+using namespace ode::sim;
 
 Sim::Sim() : specs(parser.getSpecs()), fileOutput(false), stepSize(1e-3) { }
 

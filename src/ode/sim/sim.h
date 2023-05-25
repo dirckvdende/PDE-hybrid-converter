@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace sim {
+namespace ode::sim {
 
 /**
  * Main object used to simulate ODEs

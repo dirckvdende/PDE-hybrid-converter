@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-using namespace sim;
+using namespace ode::sim;
 
 Parser::Parser() { }
 
