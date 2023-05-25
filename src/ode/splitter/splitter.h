@@ -82,6 +82,15 @@ private:
      */
     std::string getUniqueName();
 
+    /**
+     * Convert list of emits to map to vectors
+     * @param emits A reference to the list of emits
+     * @param emitMap The map to put the emits in
+     */
+    void processEmits(const std::vector<std::pair<std::string, std::string>>
+    &emits, std::unordered_map<std::string, std::vector<std::string>> &emitMap)
+    const;
+
     // List of input systems
     std::vector<ODESystem> systems;
     // List of output systems
