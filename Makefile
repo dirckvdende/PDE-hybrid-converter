@@ -1,6 +1,6 @@
 
 cc = g++
-cargs = -Isrc -std=c++17 -Wall -Wextra -Wpedantic -g
+cargs = -Isrc -std=c++17 -Wall -Wextra -Wpedantic -g -include project.h
 cfiles = $(shell find src -name "*.cc")
 hfiles = $(cfiles:.cc=.h)
 ofiles = $(subst src,build/src,$(cfiles:.cc=.o))
