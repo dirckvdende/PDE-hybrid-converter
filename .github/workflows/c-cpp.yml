@@ -34,6 +34,7 @@ jobs:
       run: |
         chmod +x build/main
         chmod +x build/tests/compiler
+        chmod -R +w tmp
     - name: Test compiler
       run: build/tests/compiler
   TestSim:
@@ -51,6 +52,7 @@ jobs:
       run: |
         chmod +x build/main
         chmod +x build/tests/sim
+        chmod -R +w tmp
     - name: Test simulator
       run: build/tests/sim
   TestSplitter:
@@ -68,5 +70,6 @@ jobs:
       run: |
         chmod +x build/main
         chmod +x build/tests/splitter
+        chmod -R +w tmp
     - name: Test simulator
       run: build/tests/splitter
