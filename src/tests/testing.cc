@@ -65,16 +65,16 @@ void TestSuite::run(const std::string &cmd) {
     (endTime - startTime);
     runtime += duration.count();
     int exitCode = WEXITSTATUS(exitStatus);
-    if (exitCode == 0 && duration.count() <= 100000000) {
+    if (exitCode == 0 && duration.count() <= maxTime) {
         success++;
         std::cout << colored("[ SUCCESS ] ", COL_GREEN) << cmd << " (" <<
         (double(duration.count()) / 1000000.0) << " ms)" << std::endl;
     } else {
         failed++;
         std::cout << colored("[ FAILURE ] ", COL_RED) << cmd << std::endl;
-        if (duration.count() > 100000000) {
+        if (duration.count() > maxTime) {
             std::cout << colored("Test case took too long (" +
-            std::to_string(duration.count() / 1000000) + " ms)", COL_RED) <<
+            std::to_string(duration.count() / 1000000.0) + " ms)", COL_RED) <<
             std::endl;
         }
     }

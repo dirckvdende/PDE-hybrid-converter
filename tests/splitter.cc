@@ -34,5 +34,5 @@ int main() {
     for (const std::string &file : testfiles)
         suite.append("build/main --splitter " + file);
     suite.run();
-    return suite.successful();
+    return !suite.successful();
 }
