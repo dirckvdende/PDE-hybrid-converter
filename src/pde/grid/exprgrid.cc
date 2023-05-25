@@ -1,6 +1,5 @@
 
 #include "exprgrid.h"
-#include <stdexcept>
 #include <vector>
 
 using namespace pde::grid;

@@ -5,7 +5,6 @@
 #include "parser.h"
 #include "treeparser/settings.h"
 #include <algorithm>
-#include <stdexcept>
 
 using namespace ode::parser;
 

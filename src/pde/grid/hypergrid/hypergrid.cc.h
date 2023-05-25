@@ -1,7 +1,6 @@
 
 #include "hypergrid.h"
 #include <vector>
-#include <stdexcept>
 #include <numeric>
 
 namespace pde::grid::hypergrid {
