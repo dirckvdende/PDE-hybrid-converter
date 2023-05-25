@@ -1,7 +1,7 @@
 
 #include "pde/parser/parser.h"
 #include "dbg/dbg.h"
-#include "sim/sim.h"
+#include "ode/sim/sim.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -42,7 +42,7 @@ int runCompiler(int argc, char *argv[]) {
  */
 int runSim(int argc, char *argv[]) {
     std::string filename;
-    sim::Sim simulator;
+    ode::sim::Sim simulator;
     for (int i = 1; i < argc; i++) {
         std::string arg = argv[i];
         if (arg.size() >= 1 && arg.front() != '-')
