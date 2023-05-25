@@ -152,7 +152,7 @@ public:
      * Get all symbols names in this expression tree
      * @param symbols A set where the symbol names should be put
      */
-    void findAllSymbols(std::unordered_set<std::string> &symbols);
+    void findAllSymbols(std::unordered_set<std::string> &symbols) const;
 
     /**
      * Evaluate an expression. If there are still derivatives or symbols left,
