@@ -1,5 +1,6 @@
 
 #include "expr.h"
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <vector>
