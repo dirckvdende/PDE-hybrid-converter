@@ -46,6 +46,7 @@ std::vector<std::vector<size_t>> Splitter::getDependencies(const ODESystem
             if (varIndex.find(name) != varIndex.end())
                 out[i].push_back(varIndex.at(name));
     }
+    return out;
 }
 
 std::vector<std::vector<size_t>> Splitter::getStronglyConnected(const
