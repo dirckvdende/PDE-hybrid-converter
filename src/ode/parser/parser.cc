@@ -29,6 +29,12 @@ const std::vector<ode::ODESystem> &Parser::getSpecs() const {
     return specs;
 }
 
+void Parser::clear() {
+    txt.clear();
+    preConfig.clear();
+    specs.clear();
+}
+
 void Parser::runTreeParser() {
     treeParser.setText(txt);
     static const treeparser::Settings settings = {

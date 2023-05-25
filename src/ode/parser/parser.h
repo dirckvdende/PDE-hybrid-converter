@@ -42,6 +42,11 @@ public:
      */
     const std::vector<ODESystem> &getSpecs() const;
 
+    /**
+     * Clear both input text and stored specifications
+     */
+    void clear();
+
 private:
 
     /**
