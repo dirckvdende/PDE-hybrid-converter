@@ -2,6 +2,7 @@
 #include "pde/parser/parser.h"
 #include "dbg/dbg.h"
 #include "ode/sim/sim.h"
+#include "ode/splitter/run.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -78,8 +79,11 @@ void detectDebugMode(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
     detectDebugMode(argc, argv);
     // Detect running argument
-    for (int i = 1; i < argc; i++)
+    for (int i = 1; i < argc; i++) {
         if (std::string(argv[i]) == "--ode")
             return runSim(argc, argv);
+        if (std::string(argv[i]) == "--splitter")
+            return ode::splitter::run(argc, argv);
+    }
     return runCompiler(argc, argv);
 }
