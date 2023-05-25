@@ -153,7 +153,7 @@ void ExprNode::replaceSymbols(const std::unordered_map<std::string, std::string>
         child->replaceSymbols(symbols);
 }
 
-void ExprNode::findAllSymbols(std::unordered_set<std::string> &symbols) {
+void ExprNode::findAllSymbols(std::unordered_set<std::string> &symbols) const {
     if (type == NODE_SYMB) {
         symbols.insert(content);
         return;
