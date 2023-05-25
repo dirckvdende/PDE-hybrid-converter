@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace ode::sim {
+namespace ode::parser {
 
 /**
  * Parses an input ODE configuration file

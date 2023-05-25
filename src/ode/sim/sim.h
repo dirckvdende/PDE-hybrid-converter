@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "parser.h"
+#include "ode/parser/parser.h"
 #include "ode/spec.h"
 #include <string>
 #include <unordered_map>
@@ -89,7 +89,7 @@ private:
     // Input text
     std::string txt;
     // Parses the input text
-    Parser parser;
+    parser::Parser parser;
     // List of ODE specifications to process
     const std::vector<ODESystem> &specs;
     // Indicates if the results should be output to a text file
