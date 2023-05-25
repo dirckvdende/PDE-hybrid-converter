@@ -70,7 +70,7 @@ private:
     // Succeeded and failed test counts
     size_t success, failed;
     // Maximum execution time per test case in nanoseconds
-    static const size_t maxTime = 10000000000ULL;
+    static const long int maxTime = 10000000000LL;
 
 };
 
