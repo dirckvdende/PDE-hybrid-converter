@@ -63,6 +63,12 @@ public:
     void setMaxSize(size_t val);
 
     /**
+     * Set the spread in each dimension in which the border should spread
+     * @param val The new values for the spread in each dimension
+     */
+    void setSpread(const std::vector<size_t> &val);
+
+    /**
      * Get the number of grid cells currently stored in this object
      * @return The number cells as an integer
      */
@@ -133,6 +139,12 @@ private:
      */
     void determineDomain();
 
+    /**
+     * Determine the border cells and store them, based on the stored spread
+     * range. This function should be run after determineDomain()
+     */
+    void determineBorder();
+
     // Names of the dimensions of the grid, used to evaluate the domain expression
     std::vector<std::string> dims;
     // Pivot position, which corresponds to point 0 on the grid
@@ -144,9 +156,14 @@ private:
     expr::ExprNode expr;
     // The maximum number of grid cells that should be stored
     size_t maxSize;
+    // The range in each dimension in which the border should spread
+    std::vector<size_t> spread;
     // The set of all grid cells belonging to the domain, as currently
     // determined
     std::unordered_set<std::vector<long>, VectorHash> cells;
+    // The set of all grid cells on the border of the domain, as currently
+    // determined
+    std::unordered_set<std::vector<long>, VectorHash> borderCells;
 
 };
 
