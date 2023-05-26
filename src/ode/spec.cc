@@ -13,7 +13,7 @@ std::string ODESystem::str() const {
     for (size_t i = 0; i < vars.size(); i++)
         out.append("    interval " + vars[i] + " = [" +
         std::to_string(bounds[i].first) + ", " +
-        std::to_string(bounds[i].second) + "]\n");
+        std::to_string(bounds[i].second) + "];\n");
     out.append("    time " + std::to_string(time) + ";\n");
     out.append("}");
     return out;
