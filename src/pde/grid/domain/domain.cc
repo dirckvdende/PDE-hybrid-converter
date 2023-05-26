@@ -1,6 +1,7 @@
 
 #include "domain.h"
 #include "expr/expr.h"
+#include <queue>
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -33,8 +34,17 @@ void Domain::setExpr(const expr::ExprNode &val) {
     expr.replaceSymbols(dimMap);
 }
 
+void Domain::setMaxSize(size_t val) {
+    maxSize = val;
+}
+
+size_t Domain::size() const {
+    return cells.size();
+}
+
 void Domain::run() {
-    // TODO: implement
+    determineDomain();
+    // TODO: implement borders
 }
 
 std::vector<double> Domain::toPoint(const std::vector<long> &loc) const {
@@ -51,4 +61,43 @@ bool Domain::inDomain(const std::vector<long> &loc) const {
 bool Domain::inDomain(const std::vector<double> &point) const {
     static const double EPS = 1e-10;
     return abs(expr.evalDirect(point)) > EPS;
+}
+
+std::vector<std::vector<long>> Domain::getNeighbours(const std::vector<long>
+&loc) const {
+    std::vector<std::vector<long>> out;
+    for (size_t i = 0; i < loc.size(); i++) {
+        static const std::vector<long> diffs = {-1, 1};
+        for (long diff : diffs) {
+            std::vector<long> nb = loc;
+            nb[i] += diff;
+            if (!isStored(nb))
+                out.push_back(nb);
+        }
+    }
+    return out;
+}
+
+bool Domain::isStored(const std::vector<long> &loc) const {
+    return cells.find(loc) == cells.end();
+}
+
+void Domain::determineDomain() {
+    const std::vector<long> zero(dims.size(), 0);
+    if (!inDomain(zero))
+        std::runtime_error("Pivot not in domain");
+    std::queue<std::vector<long>> locs;
+    locs.push(zero);
+    while (!locs.empty() && size() <= maxSize) {
+        std::vector<long> cur = locs.front();
+        locs.pop();
+        for (const std::vector<long> &nb : getNeighbours(cur)) {
+            if (inDomain(nb)) {
+                locs.push(nb);
+                cells.insert(nb);
+            }
+        }
+    }
+    if (size() > maxSize)
+        throw std::runtime_error("Maximum domain size exceeded");
 }
