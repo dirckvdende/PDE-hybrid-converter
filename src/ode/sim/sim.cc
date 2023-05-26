@@ -140,7 +140,8 @@ void Sim::outputEmit(std::string filename, size_t resolution) const {
     std::vector<std::vector<double>> data;
     for (const auto &emit : emitVals) {
         size_t total = emit.second.size();
-        for (size_t i = 0, it = 0; i < total; i += total / resolution, it++) {
+        for (size_t i = 0, it = 0; i < total; i += std::max(total / resolution,
+        1UL), it++) {
             while (data.size() <= it)
                 data.push_back({stepSize * i});
             data[it].push_back(emit.second[i]);
