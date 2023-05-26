@@ -1,7 +1,9 @@
 
 #pragma once
 
+#include "domain/domain.h"
 #include "grid.h"
+#include "pde/parser/spec.h"
 
 namespace pde::grid {
 
@@ -24,7 +26,17 @@ public:
      */
     virtual ~PDEGrid();
 
+    /**
+     * Generate all grid contents and auxilliary information
+     */
+    void generate();
+
 private:
+
+    // PDE user input specification
+    parser::PDESystem system;
+    // Object used for determining which cells are in the domain
+    domain::Domain domain;
 
 };
 
