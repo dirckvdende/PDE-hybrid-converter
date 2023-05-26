@@ -37,6 +37,17 @@ void Domain::run() {
     // TODO: implement
 }
 
+std::vector<double> Domain::toPoint(const std::vector<long> &loc) const {
+    std::vector<double> out(loc.size());
+    for (size_t i = 0; i < loc.size(); i++)
+        out[i] = pivot[i] + scale * loc[i];
+    return out;
+}
+
+bool Domain::inDomain(const std::vector<long> &loc) const {
+    return inDomain(toPoint(loc));
+}
+
 bool Domain::inDomain(const std::vector<double> &point) const {
     static const double EPS = 1e-10;
     return abs(expr.evalDirect(point)) > EPS;
