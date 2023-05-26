@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <cstddef>
+#include <iterator>
 #include <vector>
 
 namespace pde::grid::hypergrid {
@@ -15,15 +17,32 @@ class HyperGrid {
 public:
 
     /**
+     * Constructor, grid is empty on initialization
+     */
+    HyperGrid();
+
+    /**
      * Constructor
      * @param dims The dimensions of the grid (size per dimension)
      */
-    HyperGrid(std::vector<size_t> dims);
+    HyperGrid(const std::vector<size_t> &dims);
+
+    /**
+     * Copy constructor
+     * @param grid The other hypergrid to copy from
+     */
+    HyperGrid(const HyperGrid<T> &grid);
 
     /**
      * Destructor
      */
     ~HyperGrid();
+
+    /**
+     * Assignment operator
+     * @param grid The other hypergrid to copy from
+     */
+    HyperGrid<T> &operator=(const HyperGrid<T> &grid);
 
     /**
      * Get the size of the grid
@@ -32,37 +51,60 @@ public:
     size_t size() const;
 
     /**
+     * Check if the grid is empty
+     * @return A boolean indicating if the grid is empty
+     */
+    bool empty() const;
+
+    /**
+     * Clear the entire grid, frees up the memory
+     */
+    void clear();
+
+    /**
+     * Fill the grid with a given value
+     * @param val The value to fill the grid with
+     */
+    void fill(const T &val);
+
+    /**
+     * Change the dimensions of the grid, first clears the grid
+     * @param val The new dimensions of the grid
+     */
+    void reshape(const std::vector<size_t> &val);
+
+    /**
      * Get the dimensions of the grid
      * @return A constant reference to the dimensions of the grid
      */
-    const std::vector<size_t> &getDims() const;
+    const std::vector<size_t> &getShape() const;
 
     /**
      * Get the data at a specific location in the grid
      * @param loc The location in the grid
      * @return A reference to the data
      */
-    T &get(std::vector<size_t> loc);
-    const T &get(std::vector<size_t> loc) const;
+    T &at(const std::vector<size_t> &loc);
+    const T &at(const std::vector<size_t> &loc) const;
 
     /**
      * Get data in the grid using an index
      * @param index The index of the element
      * @return A reference to the data
      */
-    T &get(size_t index);
-    const T &get(size_t index) const;
+    T &at(size_t index);
+    const T &at(size_t index) const;
 
     /**
-     * Alternative to get()
+     * Alternative to at()
      * @param loc The location in the grid
      * @return A reference to the data at the location
      */
-    T &operator[](std::vector<size_t> loc);
-    const T &operator[](std::vector<size_t> loc) const;
+    T &operator[](const std::vector<size_t> &loc);
+    const T &operator[](const std::vector<size_t> &loc) const;
 
     /**
-     * Alternative to get()
+     * Alternative to at()
      * @param index The index of the element
      * @return A reference to the data at the index
      */
@@ -74,7 +116,7 @@ public:
      * @param loc The location in the grid
      * @return A number, the converted index
      */
-    size_t toIndex(std::vector<size_t> loc) const;
+    size_t toIndex(const std::vector<size_t> &loc) const;
 
     /**
      * Convert an index to a location in the grid (big-endian)
@@ -84,17 +126,32 @@ public:
     std::vector<size_t> toLoc(size_t index) const;
 
     /**
-     * Fill the grid with a given value
-     * @param val The value to fill the grid with
+     * Get a pointer to the start of the grid allocated data
+     * @return A pointer to the start of the allocated data
      */
-    void fill(T val);
+    T *begin();
+    const T *cbegin() const;
+    const T *begin() const;
+
+    /**
+     * Get a pointer to the end of the grid allocated data
+     * @return A pointer to the end of the allocated data
+     */
+    T *end();
+    const T *cend() const;
+    const T *end() const;
 
 private:
 
+    /**
+     * Calculate the total grid size and store the result
+     */
+    void calcGridSize();
+
     // The dimensions of the grid
-    const std::vector<size_t> dims;
+    std::vector<size_t> dims;
     // Total amount of points in the grid
-    const size_t gridSize;
+    size_t gridSize;
     // Actual data in the grid
     T *data;
 
