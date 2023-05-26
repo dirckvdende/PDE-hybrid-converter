@@ -33,6 +33,11 @@ public:
 
 private:
 
+    /**
+     * Generate the domain specification
+     */
+    void generateDomain();
+
     // PDE user input specification
     parser::PDESystem system;
     // Object used for determining which cells are in the domain
