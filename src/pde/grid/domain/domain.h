@@ -74,6 +74,20 @@ public:
      */
     void run();
 
+    /**
+     * Normalize the grid to have all stored cells have positive coordinates in
+     * each dimension
+     */
+    void normalize();
+
+    /**
+     * Get the minimum and maximum coordinate value of the domain cells in each
+     * dimension
+     * @return A list of pairs, which contain the minimum and maximum values in
+     * each dimension
+     */
+    std::vector<std::pair<long, long>> getRange() const;
+
 private:
 
     /**

@@ -1,6 +1,7 @@
 
 #include "domain.h"
 #include "expr/expr.h"
+#include "util.h"
 #include <queue>
 #include <string>
 #include <vector>
@@ -44,7 +45,32 @@ size_t Domain::size() const {
 
 void Domain::run() {
     determineDomain();
+    normalize();
     // TODO: implement borders
+}
+
+void Domain::normalize() {
+    std::vector<std::pair<long, long>> range = getRange();
+    std::unordered_set<std::vector<long>, VectorHash> cellsCopy = cells;
+    cells.clear();
+    for (std::vector<long> cell : cellsCopy) {
+        for (size_t i = 0; i < cell.size(); i++)
+            cell[i] -= range[i].first;
+        cells.insert(cell);
+    }
+    for (size_t i = 0; i < range.size(); i++)
+        pivot[i] += range[i].first * scale;
+}
+
+std::vector<std::pair<long, long>> Domain::getRange() const {
+    std::vector<std::pair<long, long>> range(dims.size(), {0, 0});
+    for (const std::vector<long> &cell : cells) {
+        for (size_t i = 0; i < cell.size(); i++) {
+            range[i].first = std::min(range[i].first, cell[i]);
+            range[i].second = std::max(range[i].second, cell[i]);
+        }
+    }
+    return range;
 }
 
 std::vector<double> Domain::toPoint(const std::vector<long> &loc) const {
