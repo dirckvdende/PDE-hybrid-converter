@@ -64,6 +64,21 @@ public:
 private:
 
     /**
+     * Convert an integer location to a real location in the domain space
+     * @param loc The integer location
+     * @return The real location
+     */
+    std::vector<double> toPoint(const std::vector<long> &loc) const;
+
+    /**
+     * Check if a point given by an integer location is in the domain (not
+     * adjusted for scale and pivot)
+     * @param loc The location of the point
+     * @return A boolean indicating if the point is in the domain
+     */
+    bool inDomain(const std::vector<long> &loc) const;
+
+    /**
      * Check if a point is in the domain, given its coordinates in the domain
      * @param point The coordinates of the point
      * @return A boolean indicating if the point is in the domain
