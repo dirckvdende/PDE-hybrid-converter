@@ -1,6 +1,8 @@
 
 #include "domain.h"
 #include "expr/expr.h"
+#include "pde/grid/cell.h"
+#include "pde/grid/grid.h"
 #include "util.h"
 #include <queue>
 #include <string>
@@ -88,6 +90,34 @@ std::vector<std::pair<long, long>> Domain::getRange() const {
         }
     }
     return range;
+}
+
+void Domain::apply(Grid &grid) const {
+    std::vector<std::pair<long, long>> range = getRange();
+    std::vector<size_t> shape;
+    for (const std::pair<long, long> &r : range) {
+        if (r.first < 0)
+            std::runtime_error("Domain not normalized before apply()");
+        shape.push_back(size_t(r.second));
+    }
+    // Check if the size of the shape will be too large
+    size_t shapeSize = 1;
+    for (const size_t &s : shape)
+        shapeSize *= s;
+    if (shapeSize > maxSize)
+        std::runtime_error("Domain too large to process");
+    grid.reshape(shape);
+    for (size_t index = 0; index < grid.size(); index++) {
+        std::vector<long> lpt;
+        for (const size_t &p : grid.toLoc(index))
+            lpt.push_back(long(p));
+        if (cells.find(lpt) != cells.end())
+            grid[index].type = CELL_DOMAIN;
+        else if (borderCells.find(lpt) != borderCells.end())
+            grid[index].type = CELL_BORDER;
+        else
+            grid[index].type = CELL_OUTSIDE;
+    }
 }
 
 std::vector<double> Domain::toPoint(const std::vector<long> &loc) const {

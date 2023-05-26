@@ -2,6 +2,7 @@
 #pragma once
 
 #include "expr/expr.h"
+#include "pde/grid/grid.h"
 #include "util.h"
 #include <string>
 #include <vector>
@@ -93,6 +94,13 @@ public:
      * each dimension
      */
     std::vector<std::pair<long, long>> getRange() const;
+
+    /**
+     * Output the generated domain and border cells to a grid. This function
+     * should be called after calculation and normalization of the grid
+     * @param grid A reference to the grid to output the domain information to
+     */
+    void apply(Grid &grid) const;
 
 private:
 
