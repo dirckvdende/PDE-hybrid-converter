@@ -56,6 +56,19 @@ public:
     void setExpr(const expr::ExprNode &val);
 
     /**
+     * Change the maximum number of grid cells that should be determined. If
+     * this number is exceeded, an error is thrown
+     * @param val The new maximum size
+     */
+    void setMaxSize(size_t val);
+
+    /**
+     * Get the number of grid cells currently stored in this object
+     * @return The number cells as an integer
+     */
+    size_t size() const;
+
+    /**
      * Determine the cells that make up the grid, given the pivot, scale and
      * domain expression
      */
@@ -85,6 +98,27 @@ private:
      */
     bool inDomain(const std::vector<double> &point) const;
 
+    /**
+     * Get all of the neighbours of an integer grid location that have not yet
+     * been stored
+     * @param loc The location of the grid point to determine the neighbours of
+     * @return A list of grid points
+     */
+    std::vector<std::vector<long>> getNeighbours(const std::vector<long> &loc)
+    const;
+
+    /**
+     * Check if a grid point has been stored yet
+     * @param loc The integer location of the grid point
+     * @return A boolean indicating if the grid point is stored
+     */
+    bool isStored(const std::vector<long> &loc) const;
+
+    /**
+     * Determine all of the points inside the domain and store them
+     */
+    void determineDomain();
+
     // Names of the dimensions of the grid, used to evaluate the domain expression
     std::vector<std::string> dims;
     // Pivot position, which corresponds to point 0 on the grid
@@ -94,6 +128,8 @@ private:
     // The expression that should be evaluated at a grid point to check if it is
     // in the domain
     expr::ExprNode expr;
+    // The maximum number of grid cells that should be stored
+    size_t maxSize;
     // The set of all grid cells belonging to the domain, as currently
     // determined
     std::unordered_set<std::vector<long>, VectorHash> cells;
