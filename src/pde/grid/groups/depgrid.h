@@ -17,17 +17,25 @@ public:
 
     /**
      * Constructor
-     * @param dims The dimensions of the grid
-     * @param range The range per dimension that dependencies span
-     * @param maxSize The maximum group size
      */
-    DependGrid(std::vector<size_t> dims, std::vector<size_t> range, size_t
-    maxSize = SIZE_MAX);
+    DependGrid();
+
+    /**
+     * Constructor
+     * @param dims The dimensions of the grid
+     */
+    DependGrid(const std::vector<size_t> &dims);
 
     /**
      * Destructor
      */
     ~DependGrid();
+
+    /**
+     * Set the range per dimension that dependencies span
+     * @param val The new range per dimension
+     */
+    void setSpread(const std::vector<size_t> &val);
 
     /**
      * Determine all grid cells that depend on cells from other groups given a
@@ -42,7 +50,7 @@ public:
      * @param loc The location of the cell
      * @return A boolean indicating if the the cell is dependent on other groups
      */
-    bool hasDepend(std::vector<size_t> loc);
+    bool hasDepend(const std::vector<size_t> &loc);
 
     /**
      * Get the number of cells that depend on cells from other groups, according
@@ -52,17 +60,17 @@ public:
     size_t dependCount() const;
 
     /**
-     * Print the depends property, used for debugging
-     * @param os The output stream to print to
-     * @warning ONLY WORKS FOR 2D GRIDS
+     * Get a string representation of the dependency grid, with 1 if a cell
+     * depends on another, and 0 otherwise. Only works for 2D grids
+     * @return The string representation
      */
-    void printDepend(std::ostream &os) const;
+    std::string str() const;
 
     /**
      * Get the range per dimension of the dependencies
      * @return The range per dimension as a vector
      */
-    std::vector<size_t> getRange() const;
+    std::vector<size_t> getSpread() const;
 
 private:
 
@@ -71,7 +79,7 @@ private:
     hypergrid::HyperGrid<size_t> depends;
 
     // The range per dimension that dependencies span
-    std::vector<size_t> range;
+    std::vector<size_t> spread;
 
 };
 

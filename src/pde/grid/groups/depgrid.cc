@@ -5,19 +5,26 @@
 #include <sstream>
 #include <stdexcept>
 
+using namespace pde;
+using namespace pde::grid;
 using namespace pde::grid::groups;
 
-DependGrid::DependGrid(std::vector<size_t> dims, std::vector<size_t> range,
-size_t maxSize) : GroupGrid(dims, maxSize), depends(dims), range(range) { }
+DependGrid::DependGrid() { }
+
+DependGrid::DependGrid(const std::vector<size_t> &dims) : GroupGrid(dims) { }
 
 DependGrid::~DependGrid() { }
 
+void DependGrid::setSpread(const std::vector<size_t> &val) {
+    spread = val;
+}
+
 void DependGrid::calc() {
     depends.fill(0);
-    if (range.size() != getShape().size())
+    if (spread.size() != getShape().size())
         throw std::runtime_error("Invalid range given");
-    for (size_t d = 0; d < range.size(); d++) {
-        if (range[d] == 0)
+    for (size_t d = 0; d < spread.size(); d++) {
+        if (spread[d] == 0)
             continue;
         // Go over all cells and mark ones with neighbour different/marked
         std::vector<std::vector<size_t>> cur, next;
@@ -43,7 +50,7 @@ void DependGrid::calc() {
                 cur.push_back(loc);
         }
         // Flood fill for extra distance
-        for (size_t i = 1; i < range[d]; i++) {
+        for (size_t i = 1; i < spread[d]; i++) {
             for (std::vector<size_t> loc : cur) {
                 if (loc[d] > 0) {
                     loc[d]--;
@@ -68,7 +75,7 @@ void DependGrid::calc() {
     }
 }
 
-bool DependGrid::hasDepend(std::vector<size_t> loc) {
+bool DependGrid::hasDepend(const std::vector<size_t> &loc) {
     return depends[loc];
 }
 
@@ -80,14 +87,18 @@ size_t DependGrid::dependCount() const {
     return c;
 }
 
-void DependGrid::printDepend(std::ostream &os) const {
+std::string DependGrid::str() const {
+    std::string out;
     for (size_t i = 0; i < getShape()[0]; i++) {
-        for (size_t j = 0; j < getShape()[1]; j++)
-            os << (depends[{i, j}] > 0 ? 1 : 0) << " ";
-        os << std::endl;
+        for (size_t j = 0; j < getShape()[1]; j++) {
+            out.push_back(depends[{i, j}] > 0 ? '1' : '0');
+            out.push_back(' ');
+        }
+        out.push_back('\n');
     }
+    return out;
 }
 
-std::vector<size_t> DependGrid::getRange() const {
-    return range;
+std::vector<size_t> DependGrid::getSpread() const {
+    return spread;
 }
