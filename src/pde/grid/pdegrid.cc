@@ -13,10 +13,10 @@ PDEGrid::PDEGrid() : componentLimit(168) { }
 PDEGrid::~PDEGrid() { }
 
 void PDEGrid::generate() {
+    calcSpread();
     setPivot(system.pivot);
     setScale(system.scale);
     generateDomain();
-    calcSpread();
     divideGroups();
     generateBorderExpressions();
     generateDomainExpressions();
