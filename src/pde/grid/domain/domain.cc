@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <iostream>
+
 using namespace pde::grid::domain;
 
 Domain::Domain() { }
@@ -98,7 +100,7 @@ void Domain::apply(Grid &grid) const {
     for (const std::pair<long, long> &r : range) {
         if (r.first < 0)
             std::runtime_error("Domain not normalized before apply()");
-        shape.push_back(size_t(r.second));
+        shape.push_back(size_t(r.second) + 1);
     }
     // Check if the size of the shape will be too large
     size_t shapeSize = 1;
