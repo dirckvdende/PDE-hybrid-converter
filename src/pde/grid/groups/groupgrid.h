@@ -19,10 +19,15 @@ public:
 
     /**
      * Constructor
+     */
+    GroupGrid();
+
+    /**
+     * Constructor
      * @param dims The dimensions of the grid
      * @param maxSize The maximum size of a group
      */
-    GroupGrid(std::vector<size_t> dims, size_t maxSize = SIZE_MAX);
+    GroupGrid(const std::vector<size_t> &dims, size_t maxSize = SIZE_MAX);
 
     /**
      * Destructor
@@ -34,14 +39,14 @@ public:
      * @param loc The location of the grid point
      * @return The group number of the point
      */
-    size_t group(std::vector<size_t> loc);
+    size_t group(const std::vector<size_t> &loc);
 
     /**
      * Join the groups of two grid points
      * @param locA The location of the first grid point
      * @param locB The location of the second grid point
      */
-    void join(std::vector<size_t> locA, std::vector<size_t> locB);
+    void join(const std::vector<size_t> &locA, const std::vector<size_t> &locB);
 
     /**
      * Check if two groups can be joined or if their sizes exceed the maximum
@@ -51,16 +56,20 @@ public:
      * @return A boolean indicating if the groups of the grid points can be
      * joined, returns true if they are already in the same group
      */
-    bool canJoin(std::vector<size_t> locA, std::vector<size_t> locB);
+    bool canJoin(const std::vector<size_t> &locA, const std::vector<size_t>
+    &locB);
 
     /**
-     * Prints out the groups of the grid to the given output stream. Only prints
-     * if the grid is 2D
-     * @param os The output stream
-     * @param grid The grid to output
-     * @return The output stream
+     * Get a string representation of the grouped grid, if it is 2D
+     * @return The string representation
      */
-    friend std::ostream &operator<<(std::ostream &os, GroupGrid &grid);
+    std::string str();
+
+    /**
+     * Set the maximum group size
+     * @param val The new maximum group size
+     */
+    void setMaxSize(size_t val);
 
     /**
      * Get the maximum size of a group
@@ -68,12 +77,30 @@ public:
      */
     size_t getMaxSize() const;
 
+    /**
+     * Alternative reshape function for derived class, to also update DSU
+     * @param val The new shape of the grid
+     * @note When the grid is reshaped, all cells are placed in separate groups
+     * again!
+     */
+    void reshape(const std::vector<size_t> &val);
+
+    /**
+     * Alternative clear function to also update DSU
+     */
+    void clear();
+
+    /**
+     * Reset the groups the grid cells are a part of
+     */
+    void reset();
+
 private:
 
     // A dsu to keep track of the groups of the grid points
-    DisjointUnion dsu;
+    DisjointUnion *dsu;
     // The maximum group size
-    const size_t maxSize = SIZE_MAX;
+    size_t maxSize;
 
 };
 

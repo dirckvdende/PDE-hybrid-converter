@@ -7,39 +7,67 @@
 
 using namespace pde::grid::groups;
 
-GroupGrid::GroupGrid(std::vector<size_t> dims, size_t maxSize) :
-HyperGrid(dims), dsu(size()), maxSize(maxSize) { }
+GroupGrid::GroupGrid() : dsu(nullptr), maxSize(SIZE_MAX) { }
 
-GroupGrid::~GroupGrid() { }
+GroupGrid::GroupGrid(const std::vector<size_t> &dims, size_t maxSize) :
+HyperGrid(dims), dsu(new DisjointUnion(size())), maxSize(maxSize) { }
 
-size_t GroupGrid::group(std::vector<size_t> loc) {
-    return dsu.find(toIndex(loc));
+GroupGrid::~GroupGrid() {
+    delete dsu;
 }
 
-void GroupGrid::join(std::vector<size_t> locA, std::vector<size_t> locB) {
+size_t GroupGrid::group(const std::vector<size_t> &loc) {
+    return dsu->find(toIndex(loc));
+}
+
+void GroupGrid::join(const std::vector<size_t> &locA, const std::vector<size_t>
+&locB) {
     if (!canJoin(locA, locB))
         throw std::runtime_error("Attempted to exceed maximum group size");
-    dsu.join(toIndex(locA), toIndex(locB));
+    dsu->join(toIndex(locA), toIndex(locB));
 }
 
-bool GroupGrid::canJoin(std::vector<size_t> locA, std::vector<size_t> locB) {
+bool GroupGrid::canJoin(const std::vector<size_t> &locA, const
+std::vector<size_t> &locB) {
     size_t a = toIndex(locA), b = toIndex(locB);
-    if (dsu.find(a) == dsu.find(b))
+    if (dsu->find(a) == dsu->find(b))
         return true;
-    return dsu.groupSize(a) + dsu.groupSize(b) <= maxSize;
+    return dsu->groupSize(a) + dsu->groupSize(b) <= maxSize;
 }
 
-std::ostream &operator<<(std::ostream &os, GroupGrid &grid) {
-    if (grid.getShape().size() != 2)
-        return os << "[grid]\n";
-    for (size_t i = 0; i < grid.getShape()[0]; i++) {
-        for (size_t j = 0; j < grid.getShape()[1]; j++)
-            os << grid.group({i, j}) << ' ';
-        os << '\n';
+std::string GroupGrid::str() {
+    if (getShape().size() != 2)
+        return "[grid]\n";
+    std::string out;
+    for (size_t i = 0; i < getShape()[0]; i++) {
+        for (size_t j = 0; j < getShape()[1]; j++)
+            out.append(std::to_string(group({i, j})) + " ");
+        out.push_back('\n');
     }
-    return os;
+    return out;
+}
+
+void GroupGrid::setMaxSize(size_t val) {
+    maxSize = val;
 }
 
 size_t GroupGrid::getMaxSize() const {
     return maxSize;
+}
+
+void GroupGrid::reshape(const std::vector<size_t> &val) {
+    HyperGrid<std::monostate>::reshape(val);
+    delete dsu;
+    dsu = new DisjointUnion(size());
+}
+
+void GroupGrid::clear() {
+    HyperGrid<std::monostate>::clear();
+    delete dsu;
+    dsu = nullptr;
+}
+
+void GroupGrid::reset() {
+    delete dsu;
+    dsu = new DisjointUnion(size());
 }
