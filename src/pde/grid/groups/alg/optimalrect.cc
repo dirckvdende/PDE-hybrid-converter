@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "pde/grid/groups/groupgrid.h"
 #include "optimalrect.h"
 #include <cmath>
@@ -42,16 +43,17 @@ void OptimalRectAlg::calcMaxDims() {
         M = Mp;
     }
     rectDims = M[N].first;
-    std::cout << "Optimal ratio: " << M[N].second * 100.0 << " %" << std::endl;
-    std::cout << "Optimal dimensions: (";
+    dbg::log("Optimal rectangle ratio: " + std::to_string(M[N].second * 100.0) +
+    "%");
+    std::string dimString;
     bool first = true;
     for (size_t d : rectDims) {
         if (!first)
-            std::cout << ", ";
-        std::cout << d;
+            dimString.append(", ");
+        dimString.append(std::to_string(d));
         first = false;
     }
-    std::cout << ")" << std::endl;
+    dbg::log("Optimal rectangle dimensions: (" + dimString + ")");
 }
 
 void OptimalRectAlg::assignAllRects(std::vector<size_t> loc, size_t depth) {
