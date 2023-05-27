@@ -99,12 +99,11 @@ jobs:
       run: build/tests/groups/visual
   RemoveArtifacts:
     name: Remove saved build folder
-    needs: |
-      Build
-      TestCompiler
-      TestSim
-      TestSplitter
-      TestGroups
+    needs: Build
+    needs: TestCompiler
+    needs: TestSim
+    needs: TestSplitter
+    needs: TestGroups
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
