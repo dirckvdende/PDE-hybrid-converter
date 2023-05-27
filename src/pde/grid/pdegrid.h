@@ -38,6 +38,12 @@ public:
      */
     void setComponentLimit(size_t val);
 
+    /**
+     * Set the input PDE system
+     * @param val The PDE system specification
+     */
+    void setSystem(const parser::PDESystem &val);
+
 private:
 
     /**
