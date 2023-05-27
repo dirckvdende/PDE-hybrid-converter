@@ -1,6 +1,6 @@
 
 #include "run.h"
-#include "parser/parser.h"
+#include "compiler.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -10,7 +10,7 @@ using namespace pde;
 
 int pde::run(int argc, char *argv[]) {
     std::string filename;
-    pde::parser::Parser parser;
+    Compiler compiler;
     for (int i = 1; i < argc; i++) {
         std::string arg = argv[i];
         if (arg.size() >= 1 && arg.front() != '-')
@@ -23,8 +23,7 @@ int pde::run(int argc, char *argv[]) {
     std::ifstream file(filename);
     std::stringstream stream;
     stream << file.rdbuf();
-    std::string txt = stream.str();
-    parser.setText(txt);
-    parser.run();
+    compiler.setInput(stream.str());
+    compiler.run();
     return 0;
 }
