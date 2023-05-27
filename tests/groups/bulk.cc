@@ -77,9 +77,9 @@ public:
         std::cout.setstate(std::ios_base::failbit);
         alg->run();
         grid->calc();
-        std::cout.clear();
         size_t border = grid->dependCount();
         size_t interior = grid->size() - border;
+        delete grid;
         return double(interior) / double(border + interior);
     }
     

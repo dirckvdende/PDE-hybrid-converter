@@ -15,7 +15,7 @@ DependGrid::DependGrid(const std::vector<size_t> &dims) : GroupGrid(dims) { }
 
 DependGrid::DependGrid(const std::vector<size_t> &dims, const
 std::vector<size_t> &spread, size_t maxSize) : GroupGrid(dims, maxSize),
-spread(spread) { }
+depends(dims), spread(spread) { }
 
 DependGrid::~DependGrid() { }
 
@@ -105,4 +105,14 @@ std::string DependGrid::str() const {
 
 std::vector<size_t> DependGrid::getSpread() const {
     return spread;
+}
+
+void DependGrid::reshape(const std::vector<size_t> &val) {
+    GroupGrid::reshape(val);
+    depends.reshape(val);
+}
+
+void DependGrid::clear() {
+    GroupGrid::clear();
+    depends.clear();
 }
