@@ -2,6 +2,7 @@
  * This program tests the time it takes for the algorithms to run
  */
 
+#include "dbg/dbg.h"
 #include "pde/grid/groups/alg/alg.h"
 #include "pde/grid/groups/alg/random.h"
 #include "pde/grid/groups/alg/squares.h"
@@ -67,6 +68,7 @@ public:
 };
 
 int main(int argc, char *argv[]) {
+    dbg::DEBUG_ENABLED = true;
     TestTimes test({100, 100}, {1, 1}, 168);
     test.setConfig(argc, argv);
     test.add<pde::grid::groups::alg::RandomAlg>("random");
