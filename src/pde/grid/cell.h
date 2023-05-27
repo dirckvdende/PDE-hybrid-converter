@@ -1,6 +1,9 @@
 
 #pragma once
 
+#include "expr/expr.h"
+#include <vector>
+
 namespace pde::grid {
 
 /**
@@ -11,10 +14,11 @@ enum GridCellType {
 };
 
 /**
- * Described a cell in the generated PDE grid
+ * Describes a cell in the generated PDE grid
  */
 struct GridCell {
     GridCellType type;
+    std::vector<expr::ExprNode> vals;
 };
 
 }
