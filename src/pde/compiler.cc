@@ -20,6 +20,7 @@ void Compiler::run() {
     parser.run();
     system = parser.getSpecs();
     grid.setSystem(system);
+    grid.setComponentLimit(5);
     grid.generate();
     // TODO: implement
 }
