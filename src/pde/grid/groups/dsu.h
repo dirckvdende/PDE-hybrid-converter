@@ -20,6 +20,11 @@ public:
     DisjointUnion(size_t n);
 
     /**
+     * Destructor
+     */
+    ~DisjointUnion();
+
+    /**
      * Get a representative of the group that the given integer is in
      * @param x The integer to get the group of
      * @return A representative (will be the same for all elements in the

@@ -36,7 +36,7 @@ public:
     /**
      * Destructor
      */
-    ~HyperGrid();
+    virtual ~HyperGrid();
 
     /**
      * Assignment operator
@@ -59,19 +59,19 @@ public:
     /**
      * Clear the entire grid, frees up the memory
      */
-    void clear();
+    virtual void clear();
 
     /**
      * Fill the grid with a given value
      * @param val The value to fill the grid with
      */
-    void fill(const T &val);
+    virtual void fill(const T &val);
 
     /**
      * Change the dimensions of the grid, first clears the grid
      * @param val The new dimensions of the grid
      */
-    void reshape(const std::vector<size_t> &val);
+    virtual void reshape(const std::vector<size_t> &val);
 
     /**
      * Get the dimensions of the grid

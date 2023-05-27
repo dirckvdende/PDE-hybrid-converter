@@ -28,7 +28,7 @@ void OptimalRectAlg::calcMaxDims() {
         for (size_t n = 0; n <= N; n++) {
             Mp[n].second = 0.0;
             Mp[n].first.push_back(1);
-            if (n > reduce[d]) {
+            if (n > reduce[d] && n > 1) {
                 for (size_t x = std::max(reduce[d], 1UL); x <= n; x++) {
                     double val = M[n / x].second * double(x - reduce[d]) /
                     double(x);

@@ -8,6 +8,8 @@ DisjointUnion::DisjointUnion(size_t n) : parent(n), sizes(n, 1) {
         parent[i] = i;
 }
 
+DisjointUnion::~DisjointUnion() { }
+
 size_t DisjointUnion::find(size_t x) {
     if (parent[x] == x)
         return x;

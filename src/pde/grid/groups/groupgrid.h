@@ -32,7 +32,7 @@ public:
     /**
      * Destructor
      */
-    ~GroupGrid();
+    virtual ~GroupGrid();
 
     /**
      * Get the group number of a grid point
@@ -83,17 +83,17 @@ public:
      * @note When the grid is reshaped, all cells are placed in separate groups
      * again!
      */
-    void reshape(const std::vector<size_t> &val);
+    virtual void reshape(const std::vector<size_t> &val);
 
     /**
      * Alternative clear function to also update DSU
      */
-    void clear();
+    virtual void clear();
 
     /**
      * Reset the groups the grid cells are a part of
      */
-    void reset();
+    virtual void reset();
 
 private:
 
