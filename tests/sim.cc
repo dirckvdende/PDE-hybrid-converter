@@ -32,7 +32,7 @@ int main() {
     std::vector<std::string> testfiles = getTestFiles("");
     tests::TestSuite suite;
     for (const std::string &file : testfiles)
-        suite.append("build/main --ode " + file);
+        suite.append("build/main -d --ode " + file);
     suite.run();
     return !suite.successful();
 }

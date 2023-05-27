@@ -5,6 +5,7 @@
  * This program should be executed from the root folder of this project!
  */
 
+#include "dbg/dbg.h"
 #include "pde/grid/groups/alg/alg.h"
 #include "pde/grid/groups/alg/optimalrect.h"
 #include "pde/grid/groups/alg/random.h"
@@ -74,6 +75,7 @@ public:
 };
 
 int main(int argc, char *argv[]) {
+    dbg::DEBUG_ENABLED = true;
     outputFolder = "tmp";
     TestVisual test({100, 100}, {1, 1}, 168);
     test.setConfig(argc, argv);
