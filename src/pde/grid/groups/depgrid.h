@@ -81,6 +81,19 @@ public:
      */
     std::vector<size_t> getSpread() const;
 
+    /**
+     * Alternative reshape function for derived class, to also update DSU
+     * @param val The new shape of the grid
+     * @note When the grid is reshaped, all cells are placed in separate groups
+     * again!
+     */
+    void reshape(const std::vector<size_t> &val);
+
+    /**
+     * Alternative clear function to also update DSU
+     */
+    void clear();
+
 private:
 
     // Grid to store result from calc() function, where the entry corresponds to

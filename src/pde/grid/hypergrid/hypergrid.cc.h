@@ -118,7 +118,8 @@ size_t HyperGrid<T>::toIndex(const std::vector<size_t> &loc) const {
         c += loc[loc.size() - i - 1];
     }
     if (c >= gridSize)
-        throw std::runtime_error("Invalid location conversion");
+        throw std::runtime_error("Invalid location conversion, " +
+        std::to_string(c) + " >= " + std::to_string(gridSize));
     return c;
 }
 
@@ -178,10 +179,6 @@ const T *HyperGrid<T>::end() const {
 
 template<class T>
 void HyperGrid<T>::calcGridSize() {
-    if (data == nullptr) {
-        gridSize = 0;
-        return;
-    }
     gridSize = 1;
     for (const size_t &val : dims)
         gridSize *= val;
