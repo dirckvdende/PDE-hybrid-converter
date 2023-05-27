@@ -187,7 +187,10 @@ void Domain::determineBorder() {
             cur.push_back(cell);
         for (size_t j = 0; j < spread[i] && !cur.empty(); j++) {
             for (const std::vector<long> &c : cur) {
-                for (const std::vector<long> &nb : getNeighbours(c)) {
+                std::vector<long> pos = c, neg = c;
+                pos[i]++, neg[i]--;
+                for (const std::vector<long> &nb :
+                std::vector<std::vector<long>>{pos, neg}) {
                     if (!isStored(nb)) {
                         next.push_back(nb);
                         borderCells.insert(nb);
