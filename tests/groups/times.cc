@@ -7,7 +7,6 @@
 #include "pde/grid/groups/alg/squares.h"
 #include "pde/grid/groups/alg/optimalrect.h"
 #include "pde/grid/groups/alg/spread.h"
-#include "pde/grid/groups/alg/rectspread.h"
 #include "pde/grid/groups/depgrid.h"
 #include "tests/groups.h"
 #include <chrono>
@@ -74,7 +73,6 @@ int main(int argc, char *argv[]) {
     test.add<pde::grid::groups::alg::SquaresAlg>("squares");
     test.add<pde::grid::groups::alg::OptimalRectAlg>("rect");
     test.add<pde::grid::groups::alg::SpreadAlg>("spread");
-    test.add<pde::grid::groups::alg::RectSpreadAlg>("rect-spread");
     test.runAll();
     return 0;
 }
