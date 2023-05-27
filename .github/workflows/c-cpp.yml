@@ -92,8 +92,8 @@ jobs:
         chmod +x build/tests/groups/visual
         mkdir tmp
     - name: Group algorithms performance test case
-      run: build/tests/splitter
+      run: build/tests/groups/performance
     - name: Group algorithms times test case
-      run: build/tests/times
+      run: build/tests/groups/times
     - name: Group algorithms visual test case
-      run: build/tests/visual
+      run: build/tests/groups/visual
