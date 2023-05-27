@@ -126,6 +126,14 @@ public:
     std::vector<size_t> toLoc(size_t index) const;
 
     /**
+     * Convert a pointer/reference to a location in the grid
+     * @param obj The pointer/reference to convert
+     * @return A vector containing the converted location
+     */
+    std::vector<size_t> toLoc(const T *obj) const;
+    std::vector<size_t> toLoc(const T &obj) const;
+
+    /**
      * Get a pointer to the start of the grid allocated data
      * @return A pointer to the start of the allocated data
      */

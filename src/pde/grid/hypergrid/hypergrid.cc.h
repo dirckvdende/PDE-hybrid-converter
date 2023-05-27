@@ -135,6 +135,18 @@ std::vector<size_t> HyperGrid<T>::toLoc(size_t index) const {
 }
 
 template<class T>
+std::vector<size_t> HyperGrid<T>::toLoc(const T *obj) const {
+    if (obj < data || obj - data >= gridSize)
+        throw std::runtime_error("Bad location conversion, invalid pointer");
+    return toLoc(obj - data);
+}
+
+template<class T>
+std::vector<size_t> HyperGrid<T>::toLoc(const T &obj) const {
+    return toLoc(&obj);
+}
+
+template<class T>
 T *HyperGrid<T>::begin() {
     return data;
 }
