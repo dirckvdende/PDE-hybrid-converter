@@ -19,8 +19,9 @@ void Compiler::run() {
     parser.setText(txt);
     parser.run();
     system = parser.getSpecs();
+    grid.setMaxGridSize(100000);
     grid.setSystem(system);
-    grid.setComponentLimit(5);
+    grid.setComponentLimit(168);
     grid.generate();
     // TODO: implement
 }

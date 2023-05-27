@@ -36,7 +36,7 @@ std::vector<size_t> &locB) {
 }
 
 std::string GroupGrid::str() {
-    if (getShape().size() != 2 || size() > 1000)
+    if (getShape().size() != 2 || size() > 10000)
         return "[grid]\n";
     std::string out;
     for (size_t i = 0; i < getShape()[0]; i++) {

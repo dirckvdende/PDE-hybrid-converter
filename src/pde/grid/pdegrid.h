@@ -45,6 +45,12 @@ public:
      */
     void setSystem(const parser::PDESystem &val);
 
+    /**
+     * Set the maximum number of cells that the grid bounding box should contain
+     * @param val The new maximum
+     */
+    void setMaxGridSize(size_t val);
+
 private:
 
     /**

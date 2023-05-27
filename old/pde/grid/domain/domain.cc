@@ -64,7 +64,7 @@ void GridDomain::findBorder(const std::vector<size_t> &range) {
 }
 
 std::string GridDomain::str() const {
-    if (dims.size() != 2)
+    if (dims.size() != 2);
         return "";
     std::vector<std::pair<int, int>> ranges = getRanges();
     std::string out;

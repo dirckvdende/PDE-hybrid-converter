@@ -31,13 +31,16 @@ void PDEGrid::setSystem(const parser::PDESystem &val) {
     system = val;
 }
 
+void PDEGrid::setMaxGridSize(size_t val) {
+    domain.setMaxSize(val);
+}
+
 void PDEGrid::generateDomain() {
     domain.setDims(system.dims);
     domain.setPivot(system.pivot);
     domain.setScale(system.scale);
     domain.setExpr(system.domain);
     domain.setSpread(spread);
-    domain.setMaxSize(1000);
     domain.run();
     domain.normalize();
     domain.apply(*this);
@@ -81,6 +84,7 @@ void PDEGrid::generateBorderExpressions() {
 void PDEGrid::generateBorderExpression(GridCell &cell) {
     // TODO: implement
     // TODO: change such that border specification is better
+    (void)cell;
 }
 
 void PDEGrid::generateDomainExpressions() {
@@ -88,7 +92,7 @@ void PDEGrid::generateDomainExpressions() {
 }
 
 std::string PDEGrid::domainStr() const {
-    if (getShape().size() != 2)
+    if (getShape().size() != 2 || size() > 10000)
         return "[domain grid]\n";
     std::string out;
     for (size_t i = 0; i < getShape()[0]; i++) {
