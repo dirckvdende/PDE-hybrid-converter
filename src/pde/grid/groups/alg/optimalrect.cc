@@ -18,7 +18,7 @@ void OptimalRectAlg::run() {
 
 void OptimalRectAlg::calcMaxDims() {
     size_t N = grid->getMaxSize();
-    std::vector<size_t> reduce = grid->getShape();
+    std::vector<size_t> reduce = grid->getSpread();
     for (size_t &r : reduce)
         r *= 2;
     std::vector<std::pair<std::vector<size_t>, double>> M(N + 1, {{}, 1.0});
