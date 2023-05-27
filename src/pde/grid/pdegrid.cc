@@ -42,7 +42,7 @@ void PDEGrid::generateDomain() {
 
 void PDEGrid::calcSpread() {
     // TODO: implement
-    spread = std::vector<size_t>(system.vars.size(), 1);
+    spread = std::vector<size_t>(system.dims.size(), 1);
 }
 
 void PDEGrid::divideGroups() {
@@ -60,7 +60,7 @@ void PDEGrid::divideGroups() {
     dbg::log("\nDependencies:\n");
     dbg::log(depends.str());
     dbg::log("Grid groups:\n");
-    dbg::log(((groups::GroupGrid)depends).str());
+    dbg::log(depends.GroupGrid::str());
 }
 
 void PDEGrid::generateBorderExpressions() {

@@ -24,7 +24,6 @@ void DependGrid::setSpread(const std::vector<size_t> &val) {
 }
 
 void DependGrid::calc() {
-    depends.fill(0);
     if (spread.size() != getShape().size())
         throw std::runtime_error("Invalid range given");
     for (size_t d = 0; d < spread.size(); d++) {
@@ -97,7 +96,11 @@ std::string DependGrid::str() const {
     std::string out;
     for (size_t i = 0; i < getShape()[0]; i++) {
         for (size_t j = 0; j < getShape()[1]; j++) {
-            out.push_back(depends[{i, j}] > 0 ? '1' : '0');
+            bool isDep = depends[{i, j}] > 0;
+            if (depends[{i, j}] > 0)
+                out.push_back('1');
+            else
+                out.push_back('0');
             out.push_back(' ');
         }
         out.push_back('\n');
@@ -112,6 +115,7 @@ std::vector<size_t> DependGrid::getSpread() const {
 void DependGrid::reshape(const std::vector<size_t> &val) {
     GroupGrid::reshape(val);
     depends.reshape(val);
+    depends.fill(0);
 }
 
 void DependGrid::clear() {

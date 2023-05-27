@@ -38,7 +38,7 @@ public:
     /**
      * Destructor
      */
-    ~DependGrid();
+    virtual ~DependGrid();
 
     /**
      * Set the range per dimension that dependencies span
@@ -87,12 +87,12 @@ public:
      * @note When the grid is reshaped, all cells are placed in separate groups
      * again!
      */
-    void reshape(const std::vector<size_t> &val);
+    virtual void reshape(const std::vector<size_t> &val);
 
     /**
      * Alternative clear function to also update DSU
      */
-    void clear();
+    virtual void clear();
 
 private:
 
