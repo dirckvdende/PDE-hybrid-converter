@@ -98,7 +98,8 @@ jobs:
     - name: Group algorithms visual test case
       run: build/tests/groups/visual
   RemoveArtifacts:
-    - name: Remove saved build folder
-      uses: geekyeggo/delete-artifact@v2
+    name: Remove saved build folder
+    steps:
+    - uses: geekyeggo/delete-artifact@v2
       with:
         name: build-artifact-ubuntu
