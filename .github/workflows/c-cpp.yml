@@ -15,7 +15,7 @@ jobs:
     - name: Make
       run: make
     - name: Upload build
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build-artifact-ubuntu
         path: build
@@ -26,7 +26,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Download build
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: build-artifact-ubuntu
         path: build
@@ -44,7 +44,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Download build
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: build-artifact-ubuntu
         path: build
@@ -62,7 +62,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Download build
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: build-artifact-ubuntu
         path: build
@@ -73,3 +73,27 @@ jobs:
         mkdir tmp
     - name: Test simulator
       run: build/tests/splitter
+  TestGroups:
+    name: Test group algorithms
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Download build
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifact-ubuntu
+        path: build
+    - name: Change executable permissions
+      run: |
+        chmod +x build/main
+        chmod +x build/tests/groups/performance
+        chmod +x build/tests/groups/times
+        chmod +x build/tests/groups/visual
+        mkdir tmp
+    - name: Group algorithms performance test case
+      run: build/tests/splitter
+    - name: Group algorithms times test case
+      run: build/tests/times
+    - name: Group algorithms visual test case
+      run: build/tests/visual
