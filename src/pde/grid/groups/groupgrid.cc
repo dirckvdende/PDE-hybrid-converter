@@ -10,7 +10,9 @@ using namespace pde::grid::groups;
 GroupGrid::GroupGrid() : dsu(nullptr), maxSize(SIZE_MAX) { }
 
 GroupGrid::GroupGrid(const std::vector<size_t> &dims, size_t maxSize) :
-HyperGrid(dims), dsu(new DisjointUnion(size())), maxSize(maxSize) { }
+dsu(nullptr), maxSize(maxSize) {
+    reshape(dims);
+}
 
 GroupGrid::~GroupGrid() {
     delete dsu;

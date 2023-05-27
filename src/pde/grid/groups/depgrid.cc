@@ -11,11 +11,15 @@ using namespace pde::grid::groups;
 
 DependGrid::DependGrid() { }
 
-DependGrid::DependGrid(const std::vector<size_t> &dims) : GroupGrid(dims) { }
+DependGrid::DependGrid(const std::vector<size_t> &dims) {
+    reshape(dims);
+}
 
 DependGrid::DependGrid(const std::vector<size_t> &dims, const
 std::vector<size_t> &spread, size_t maxSize) : GroupGrid(dims, maxSize),
-depends(dims), spread(spread) { }
+spread(spread) {
+    reshape(dims);
+}
 
 DependGrid::~DependGrid() { }
 
