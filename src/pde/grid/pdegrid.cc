@@ -24,6 +24,10 @@ void PDEGrid::setComponentLimit(size_t val) {
     componentLimit = val;
 }
 
+void PDEGrid::setSystem(const parser::PDESystem &val) {
+    system = val;
+}
+
 void PDEGrid::generateDomain() {
     domain.setDims(system.dims);
     domain.setPivot(system.pivot);
