@@ -12,6 +12,8 @@ PDEGrid::PDEGrid() : componentLimit(168) { }
 PDEGrid::~PDEGrid() { }
 
 void PDEGrid::generate() {
+    setPivot(system.pivot);
+    setScale(system.scale);
     generateDomain();
     calcSpread();
     divideGroups();
@@ -52,11 +54,14 @@ void PDEGrid::divideGroups() {
     groups::alg::OptimalRectAlg alg;
     alg.setGrid(depends);
     alg.run();
+    depends.calc();
     for (GridCell &cell : *this) {
         std::vector<size_t> loc = toLoc(cell);
         cell.group = depends.group(loc);
         cell.isStored = depends.hasDepend(loc);
     }
+    dbg::log("Number of dependencies: " + std::to_string(
+    depends.dependCount()));
     dbg::log("\nDependencies:\n");
     dbg::log(depends.str());
     dbg::log("Grid groups:\n");
