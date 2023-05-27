@@ -99,7 +99,14 @@ jobs:
       run: build/tests/groups/visual
   RemoveArtifacts:
     name: Remove saved build folder
+    needs: |
+      Build
+      TestCompiler
+      TestSim
+      TestSplitter
+      TestGroups
     steps:
+    - uses: actions/checkout@v3
     - uses: geekyeggo/delete-artifact@v2
       with:
         name: build-artifact-ubuntu
