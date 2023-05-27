@@ -60,7 +60,7 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-    TestPerformance test({100, 100}, {1, 1}, 121);
+    TestPerformance test({100, 100}, {1, 1}, 168);
     test.setConfig(argc, argv);
     test.add<pde::grid::groups::alg::RandomAlg>("RandomAlg");
     test.add<pde::grid::groups::alg::SquaresAlg>("SquaresAlg");

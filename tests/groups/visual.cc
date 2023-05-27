@@ -75,7 +75,7 @@ public:
 
 int main(int argc, char *argv[]) {
     outputFolder = "tmp";
-    TestVisual test({100, 100}, {1, 1}, 121);
+    TestVisual test({100, 100}, {1, 1}, 168);
     test.setConfig(argc, argv);
     test.add<pde::grid::groups::alg::RandomAlg>("RandomAlg");
     test.add<pde::grid::groups::alg::SquaresAlg>("SquaresAlg");
