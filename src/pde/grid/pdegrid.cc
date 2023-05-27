@@ -34,6 +34,7 @@ void PDEGrid::generateDomain() {
     domain.setScale(system.scale);
     domain.setExpr(system.domain);
     domain.setSpread(spread);
+    domain.setMaxSize(1000);
     domain.run();
     domain.normalize();
     domain.apply(*this);
