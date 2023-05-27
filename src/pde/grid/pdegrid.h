@@ -5,6 +5,7 @@
 #include "grid.h"
 #include "pde/parser/spec.h"
 #include "groups/depgrid.h"
+#include <string>
 
 namespace pde::grid {
 
@@ -78,6 +79,13 @@ private:
      * Generate domain cell expressions
      */
     void generateDomainExpressions();
+
+    /**
+     * Get a string representation of which cells are contained in the domain
+     * and which are not. Only works for 2D grids
+     * @return The string representation
+     */
+    std::string domainStr() const;
 
     // PDE user input specification
     parser::PDESystem system;

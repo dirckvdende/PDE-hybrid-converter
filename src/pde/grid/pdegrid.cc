@@ -4,6 +4,7 @@
 #include "groups/depgrid.h"
 #include "groups/alg/alg.h"
 #include "groups/alg/optimalrect.h"
+#include <string>
 
 using namespace pde::grid;
 
@@ -40,6 +41,8 @@ void PDEGrid::generateDomain() {
     domain.run();
     domain.normalize();
     domain.apply(*this);
+    dbg::log("Generated domain:\n");
+    dbg::log(domainStr());
 }
 
 void PDEGrid::calcSpread() {
@@ -62,7 +65,7 @@ void PDEGrid::divideGroups() {
     }
     dbg::log("Number of dependencies: " + std::to_string(
     depends.dependCount()));
-    dbg::log("\nDependencies:\n");
+    dbg::log("Dependencies:\n");
     dbg::log(depends.str());
     dbg::log("Grid groups:\n");
     dbg::log(depends.GroupGrid::str());
@@ -82,4 +85,26 @@ void PDEGrid::generateBorderExpression(GridCell &cell) {
 
 void PDEGrid::generateDomainExpressions() {
     // TODO: implement
+}
+
+std::string PDEGrid::domainStr() const {
+    if (getShape().size() != 2)
+        return "[domain grid]\n";
+    std::string out;
+    for (size_t i = 0; i < getShape()[0]; i++) {
+        for (size_t j = 0; j < getShape()[1]; j++) {
+            switch (operator[]({i, j}).type) {
+                case CELL_DOMAIN:
+                    out.push_back('.');
+                    break;
+                case CELL_BORDER:
+                    out.push_back('#');
+                    break;
+                default:
+                    out.push_back(' ');
+            }
+        }
+        out.push_back('\n');
+    }
+    return out;
 }
