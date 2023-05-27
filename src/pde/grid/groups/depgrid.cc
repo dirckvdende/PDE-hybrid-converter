@@ -13,6 +13,10 @@ DependGrid::DependGrid() { }
 
 DependGrid::DependGrid(const std::vector<size_t> &dims) : GroupGrid(dims) { }
 
+DependGrid::DependGrid(const std::vector<size_t> &dims, const
+std::vector<size_t> &spread, size_t maxSize) : GroupGrid(dims, maxSize),
+spread(spread) { }
+
 DependGrid::~DependGrid() { }
 
 void DependGrid::setSpread(const std::vector<size_t> &val) {

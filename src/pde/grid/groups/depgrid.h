@@ -27,6 +27,15 @@ public:
     DependGrid(const std::vector<size_t> &dims);
 
     /**
+     * Constructor
+     * @param dims The dimensions of the grid
+     * @param spread The spread of the dependencies
+     * @param maxSize The maximum size of the groups
+     */
+    DependGrid(const std::vector<size_t> &dims, const std::vector<size_t>
+    &spread, size_t maxSize = SIZE_MAX);
+
+    /**
      * Destructor
      */
     ~DependGrid();

@@ -8,7 +8,10 @@ objfiles = $(filter-out build/src/main.o, $(ofiles))
 dfiles = $(ofiles:.o=.d)
 
 subfolders = $(subst src,,$(subst src/,,$(shell find src -type d)))
-buildfolders = $(addprefix build/src/,$(subfolders)) build build/tests tmp
+testsubfolders = $(subst tests,,$(subst tests/,,$(shell find tests -type d)))
+buildfolders = $(addprefix build/src/,$(subfolders)) \
+	$(addprefix build/tests/,$(testsubfolders)) tmp
+
 
 testfiles = $(shell find tests -name "*.cc")
 tests = $(subst .cc,,$(addprefix build/,$(testfiles)))
