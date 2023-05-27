@@ -9,6 +9,8 @@ PDEGrid::~PDEGrid() { }
 
 void PDEGrid::generate() {
     generateDomain();
+    generateBorderExpressions();
+    generateDomainExpressions();
     // TODO: implement
 }
 
@@ -22,4 +24,20 @@ void PDEGrid::generateDomain() {
     domain.run();
     domain.normalize();
     domain.apply(*this);
+}
+
+void PDEGrid::generateBorderExpressions() {
+    // TODO: implement
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_BORDER)
+            generateBorderExpression(cell);
+}
+
+void PDEGrid::generateBorderExpression(GridCell &cell) {
+    // TODO: change such that border specification is better
+
+}
+
+void PDEGrid::generateDomainExpressions() {
+    // TODO: implement
 }

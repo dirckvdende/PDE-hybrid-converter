@@ -38,6 +38,22 @@ private:
      */
     void generateDomain();
 
+    /**
+     * Generate border cell expressions
+     */
+    void generateBorderExpressions();
+
+    /**
+     * Generate a border expression for a specific cell
+     * @param cell A reference to the cell to generate the border expression for
+     */
+    void generateBorderExpression(GridCell &cell);
+
+    /**
+     * Generate domain cell expressions
+     */
+    void generateDomainExpressions();
+
     // PDE user input specification
     parser::PDESystem system;
     // Object used for determining which cells are in the domain
