@@ -105,6 +105,7 @@ jobs:
       TestSim
       TestSplitter
       TestGroups
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: geekyeggo/delete-artifact@v2
