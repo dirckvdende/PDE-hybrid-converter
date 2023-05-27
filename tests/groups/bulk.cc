@@ -79,6 +79,7 @@ public:
         grid->calc();
         size_t border = grid->dependCount();
         size_t interior = grid->size() - border;
+        std::cout.clear();
         delete grid;
         return double(interior) / double(border + interior);
     }
