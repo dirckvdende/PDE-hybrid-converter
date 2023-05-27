@@ -4,6 +4,7 @@
 #include "domain/domain.h"
 #include "grid.h"
 #include "pde/parser/spec.h"
+#include "groups/depgrid.h"
 
 namespace pde::grid {
 
@@ -31,12 +32,30 @@ public:
      */
     void generate();
 
+    /**
+     * Set the hardware component limit (maximum number of grid cells per group)
+     * @param val New maximum
+     */
+    void setComponentLimit(size_t val);
+
 private:
 
     /**
      * Generate the domain specification
      */
     void generateDomain();
+
+    /**
+     * Determine the dependency spread in each dimension
+     */
+    void calcSpread();
+
+    /**
+     * Divide the grid up into groups, using the set component limit. Also
+     * determines if a cell value needs to be stored between iterations (if it
+     * is in the domain anyway)
+     */
+    void divideGroups();
 
     /**
      * Generate border cell expressions
@@ -58,6 +77,13 @@ private:
     parser::PDESystem system;
     // Object used for determining which cells are in the domain
     domain::Domain domain;
+    // Hardware component limit (abstract)
+    size_t componentLimit;
+    // Object used for determining the groups that grid cells should be divided
+    // into
+    groups::DependGrid depends;
+    // Dependency spread
+    std::vector<size_t> spread;
 
 };
 
