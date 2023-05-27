@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "pdegrid.h"
 #include "groups/depgrid.h"
 #include "groups/alg/alg.h"
@@ -51,6 +52,10 @@ void PDEGrid::divideGroups() {
         cell.group = depends.group(loc);
         cell.isStored = depends.hasDepend(loc);
     }
+    dbg::log("\nDependencies:\n");
+    dbg::log(depends.str());
+    dbg::log("Grid groups:\n");
+    dbg::log(((groups::GroupGrid)depends).str());
 }
 
 void PDEGrid::generateBorderExpressions() {
