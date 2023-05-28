@@ -2,6 +2,7 @@
 #pragma once
 
 #include "grid/pdegrid.h"
+#include "ode.h"
 #include "ode/spec.h"
 #include "parser/parser.h"
 #include "parser/spec.h"
@@ -40,10 +41,9 @@ public:
 private:
 
     /**
-     * Output all of the generated expressions to the ODE system stored in this
-     * compiler object
+     * Output the generated ODEs to a file
      */
-    void generateODE();
+    void output() const;
 
     // Input text
     std::string txt;
@@ -53,8 +53,8 @@ private:
     parser::PDESystem system;
     // PDE grid to generate expressions on a grid
     grid::PDEGrid grid;
-    // ODE system output, without iterations
-    ode::ODESystem ode;
+    // ODE system generator
+    ODEGenerator generator;
 
 };
 
