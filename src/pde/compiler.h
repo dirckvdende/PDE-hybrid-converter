@@ -6,7 +6,9 @@
 #include "ode/spec.h"
 #include "parser/parser.h"
 #include "parser/spec.h"
+#include "ode/splitter/splitter.h"
 #include <string>
+#include <vector>
 
 namespace pde {
 
@@ -53,6 +55,10 @@ private:
     parser::PDESystem system;
     // ODE system generator
     ODEGenerator generator;
+    // ODE splitter, to take apart groups
+    ode::splitter::Splitter splitter;
+    // Output ODE systems
+    std::vector<ode::ODESystem> outputSystems;
 
 };
 
