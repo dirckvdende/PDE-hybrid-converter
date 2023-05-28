@@ -22,12 +22,9 @@ void Compiler::run() {
     parser.setText(txt);
     parser.run();
     system = parser.getSpecs();
-    grid.setMaxGridSize(100000);
-    grid.setSystem(system);
-    grid.setComponentLimit(168);
-    grid.generate();
     generator.setPDE(system);
-    generator.setGrid(grid);
+    // TODO: implement real compiler settings
+    generator.changeSettings(CompilerSettings());
     dbg::log("Generating iteration expressions...");
     generator.run();
     output();

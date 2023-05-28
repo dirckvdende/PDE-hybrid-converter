@@ -8,12 +8,12 @@
 
 using namespace pde;
 
-ODEGenerator::ODEGenerator() : grid(nullptr) { }
+ODEGenerator::ODEGenerator() { }
 
 ODEGenerator::~ODEGenerator() { }
 
-void ODEGenerator::setGrid(grid::PDEGrid &gridRef) {
-    grid = &gridRef;
+void ODEGenerator::changeSettings(const CompilerSettings &val) {
+    settings = val;
 }
 
 void ODEGenerator::setPDE(const parser::PDESystem &sys) {
@@ -21,16 +21,20 @@ void ODEGenerator::setPDE(const parser::PDESystem &sys) {
 }
 
 void ODEGenerator::run() {
-    if (hasTimeReference())
-        addTimeSystem();
     for (size_t iteration = 0; iteration < pde.iterations; iteration++) {
         dbg::log("Processing iteration #" + std::to_string(iteration) + " out "
         "of " + std::to_string(pde.iterations));
-        grid->setIteration(iteration);
-        grid->generateExpressions();
+        grid::PDEGrid grid;
+        grid.setSystem(pde);
+        grid.setMaxGridSize(settings.maxGridSize);
+        grid.setComponentLimit(settings.componentLimit);
+        grid.setIteration(iteration);
+        grid.generate();
+        if (iteration == 0 && hasTimeReference(grid))
+            addTimeSystem();
         systems.emplace_back();
         ode::ODESystem &ode = systems.back();
-        for (grid::GridCell &cell : *grid) {
+        for (grid::GridCell &cell : grid) {
             if (cell.type == grid::CELL_BORDER || cell.type == grid::CELL_DOMAIN) {
                 ode.vars.insert(ode.vars.begin(), cell.vars.begin(),
                 cell.vars.end());
@@ -50,9 +54,9 @@ const std::vector<ode::ODESystem> &ODEGenerator::getSystems() const {
     return systems;
 }
 
-bool ODEGenerator::hasTimeReference() const {
+bool ODEGenerator::hasTimeReference(const grid::PDEGrid &grid) const {
     std::unordered_set<std::string> symbs;
-    for (const grid::GridCell &cell : *grid)
+    for (const grid::GridCell &cell : grid)
         for (const expr::ExprNode &node : cell.vals)
             node.findAllSymbols(symbs);
     return symbs.find("t") != symbs.end();

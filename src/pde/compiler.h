@@ -51,8 +51,6 @@ private:
     parser::Parser parser;
     // The input PDE system
     parser::PDESystem system;
-    // PDE grid to generate expressions on a grid
-    grid::PDEGrid grid;
     // ODE system generator
     ODEGenerator generator;
 
