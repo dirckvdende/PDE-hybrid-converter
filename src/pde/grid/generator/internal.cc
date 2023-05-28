@@ -19,6 +19,7 @@ void InternalExprGenerator::setSystem(const parser::PDESystem &sys) {
             throw std::runtime_error("Boundary expression contains invalid "
             "names");
     }
+    findAllDerivs();
 }
 
 void InternalExprGenerator::generate(GridCell &cell) {
@@ -28,4 +29,20 @@ void InternalExprGenerator::generate(GridCell &cell) {
         cell.vals.push_back(system.vals[i]);
         cell.vals.back().replaceDirect(loc);
     }
+}
+
+void InternalExprGenerator::findAllDerivs() {
+    std::unordered_map<std::string, size_t> indexMap;
+    for (size_t i = 0; i < system.dims.size(); i++)
+        indexMap.emplace(system.dims[i], i);
+    for (expr::ExprNode &node : system.vals) {
+        std::vector<std::vector<size_t>> cur;
+        // TODO: ...
+        derivs.push_back(cur);
+    }
+}
+
+void InternalExprGenerator::generateApprox(GridCell &cell, const
+std::vector<size_t> &derivs) {
+    // TODO: implement
 }

@@ -23,7 +23,7 @@ public:
     /**
      * Destructor
      */
-    ~BoundaryExprGenerator();
+    virtual ~BoundaryExprGenerator();
 
     /**
      * Set the system that the user entered. This function expands the parent
