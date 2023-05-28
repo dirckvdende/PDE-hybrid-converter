@@ -34,6 +34,6 @@ void Compiler::output() const {
     // TODO: implement custom output files
     std::ofstream file("tmp/compiler.ode");
     for (const ode::ODESystem &ode : generator.getSystems())
-        file << ode.str() << '\n\n';
+        file << ode.str() << "\n\n";
     file.close();
 }
