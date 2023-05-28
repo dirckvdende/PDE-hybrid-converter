@@ -21,15 +21,16 @@ void ODEGenerator::setPDE(const parser::PDESystem &sys) {
 }
 
 void ODEGenerator::run() {
+    grid::PDEGrid grid;
+    grid.setSystem(pde);
+    grid.setMaxGridSize(settings.maxGridSize);
+    grid.setComponentLimit(settings.componentLimit);
+    grid.generate();
     for (size_t iteration = 0; iteration < pde.iterations; iteration++) {
         dbg::log("Processing iteration #" + std::to_string(iteration) + " out "
         "of " + std::to_string(pde.iterations));
-        grid::PDEGrid grid;
-        grid.setSystem(pde);
-        grid.setMaxGridSize(settings.maxGridSize);
-        grid.setComponentLimit(settings.componentLimit);
         grid.setIteration(iteration);
-        grid.generate();
+        grid.generateExpressions();
         if (iteration == 0 && hasTimeReference(grid))
             addTimeSystem();
         systems.emplace_back();

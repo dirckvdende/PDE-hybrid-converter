@@ -31,9 +31,17 @@ public:
     virtual ~PDEGrid();
 
     /**
-     * Generate all grid contents and auxilliary information
+     * Generate grid contents and auxilliary information, except iteration-
+     * specific information, such as variable names and expressions
      */
     void generate();
+
+    /**
+     * Generate all expressions on the domain and boundary, which takes into
+     * account the iteration counter. Also generates the variable names for the
+     * current iteration
+     */
+    void generateExpressions();
 
     /**
      * Set the iteration counter
@@ -60,12 +68,6 @@ public:
     void setMaxGridSize(size_t val);
 
 private:
-
-    /**
-     * Generate all expressions on the domain and boundary, which takes into
-     * account the iteration counter
-     */
-    void generateExpressions();
 
     /**
      * Generate the domain specification
