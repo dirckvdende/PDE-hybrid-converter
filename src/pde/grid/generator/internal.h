@@ -7,6 +7,9 @@
 
 namespace pde::grid::generator {
 
+/**
+ * This object can generate expressions for internal domain cells on the grid
+ */
 class InternalExprGenerator final : public ExprGenerator {
 
 public:
