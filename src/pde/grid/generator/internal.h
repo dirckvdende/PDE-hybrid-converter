@@ -25,6 +25,13 @@ public:
     ~InternalExprGenerator();
 
     /**
+     * Set the system that the user entered. This function expands the parent
+     * definition to also do preprocessing of the boundary expressions
+     * @param sys The system to save in this generator
+     */
+    virtual void setSystem(const parser::PDESystem &sys);
+
+    /**
      * Generate the expression for a given grid cell
      * @param cell A reference to the grid cell
      */
