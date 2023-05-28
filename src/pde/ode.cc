@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "expr/expr.h"
 #include "grid/cell.h"
 #include "grid/grid.h"
@@ -23,6 +24,8 @@ void ODEGenerator::run() {
     if (hasTimeReference())
         addTimeSystem();
     for (size_t iteration = 0; iteration < pde.iterations; iteration++) {
+        dbg::log("Processing iteration #" + std::to_string(iteration) + " out "
+        "of " + std::to_string(pde.iterations));
         grid->setIteration(iteration);
         grid->generateExpressions();
         systems.emplace_back();

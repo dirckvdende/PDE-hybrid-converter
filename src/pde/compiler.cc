@@ -1,5 +1,6 @@
 
 #include "compiler.h"
+#include "dbg/dbg.h"
 #include "grid/cell.h"
 #include "grid/pdegrid.h"
 #include "parser/parser.h"
@@ -25,7 +26,9 @@ void Compiler::run() {
     grid.setSystem(system);
     grid.setComponentLimit(168);
     grid.generate();
+    generator.setPDE(system);
     generator.setGrid(grid);
+    dbg::log("Generating iteration expressions...");
     generator.run();
     output();
 }
