@@ -231,6 +231,15 @@ void ExprNode::replaceDirect(const std::vector<double> &vals) {
         child->replaceDirect(vals);
 }
 
+bool ExprNode::containsNonTimeVars() const {
+    if (type == NODE_SYMB && content != "t")
+        return true;
+    for (ExprNode *child : children)
+        if (child->containsNonTimeVars())
+            return true;
+    return false;
+}
+
 std::string ExprNode::binaryStr() const {
     static const std::unordered_map<NodeType, std::string> typeMap = {
         {NODE_ADD, "+"}, {NODE_SUB, "-"}, {NODE_MUL, "*"}, {NODE_DIV, "/"},
