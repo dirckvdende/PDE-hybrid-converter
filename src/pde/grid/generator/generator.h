@@ -3,6 +3,7 @@
 
 #include "pde/grid/cell.h"
 #include "pde/grid/grid.h"
+#include "pde/parser/spec.h"
 
 namespace pde::grid::generator {
 
@@ -30,6 +31,12 @@ public:
     void setGrid(Grid &gridRef);
 
     /**
+     * Set the system that the user entered
+     * @param sys The system to save in this generator
+     */
+    void setSystem(const parser::PDESystem &sys);
+
+    /**
      * Generate the expression for a given grid cell
      * @param cell A reference to the grid cell
      */
@@ -37,6 +44,8 @@ public:
 
 protected:
 
+    // The PDE system to use for generating expressions
+    parser::PDESystem system;
     // Grid that the generator should be getting data from and outputting data
     // to
     Grid *grid;
