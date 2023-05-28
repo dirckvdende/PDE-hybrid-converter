@@ -22,7 +22,7 @@ public:
     /**
      * Destructor
      */
-    ~ExprGenerator();
+    virtual ~ExprGenerator();
 
     /**
      * Set the grid that the generator should use
