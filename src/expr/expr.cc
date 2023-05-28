@@ -219,6 +219,18 @@ double ExprNode::evalDirect(const std::vector<double> &vals) const {
     return 0.0;
 }
 
+void ExprNode::replaceDirect(const std::vector<double> &vals) {
+    if (type == NODE_MARKER) {
+        if (markerIndex >= vals.size())
+            throw std::runtime_error("Index of marker too high to evaluate");
+        type = NODE_NUM;
+        number = vals[markerIndex];
+        return;
+    }
+    for (ExprNode *child : children)
+        child->replaceDirect(vals);
+}
+
 std::string ExprNode::binaryStr() const {
     static const std::unordered_map<NodeType, std::string> typeMap = {
         {NODE_ADD, "+"}, {NODE_SUB, "-"}, {NODE_MUL, "*"}, {NODE_DIV, "/"},
