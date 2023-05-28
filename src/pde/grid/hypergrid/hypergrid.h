@@ -119,6 +119,14 @@ public:
     size_t toIndex(const std::vector<size_t> &loc) const;
 
     /**
+     * Convert a pointer/reference to an index
+     * @param obj The pointer/reference to convert
+     * @return A number, the converted index
+     */
+    size_t toIndex(const T *obj) const;
+    size_t toIndex(const T &obj) const;
+
+    /**
      * Convert an index to a location in the grid (big-endian)
      * @param index The index to convert
      * @return A vector containing the converted location
