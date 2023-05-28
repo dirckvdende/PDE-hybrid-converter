@@ -120,6 +120,7 @@ void Domain::apply(Grid &grid) const {
         else
             grid[index].type = CELL_OUTSIDE;
     }
+    grid.setPivot(pivot);
 }
 
 std::vector<double> Domain::toPoint(const std::vector<long> &loc) const {
