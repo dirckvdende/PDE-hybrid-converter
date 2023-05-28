@@ -31,9 +31,22 @@ public:
     virtual ~PDEGrid();
 
     /**
-     * Generate all grid contents and auxilliary information
+     * Generate all grid contents and auxilliary information, except for the
+     * grid expressions
      */
     void generate();
+
+    /**
+     * Generate all expressions on the domain and boundary, which takes into
+     * account the iteration counter
+     */
+    void generateExpressions();
+
+    /**
+     * Set the iteration counter
+     * @param val The iteration counter value
+     */
+    void setIteration(size_t val);
 
     /**
      * Set the hardware component limit (maximum number of grid cells per group)
@@ -78,17 +91,14 @@ private:
     void divideGroups();
 
     /**
-     * Generate all expressions on the domain and boundary
-     */
-    void generateExpressions();
-
-    /**
      * Get a string representation of which cells are contained in the domain
      * and which are not. Only works for 2D grids
      * @return The string representation
      */
     std::string domainStr() const;
 
+    // Iteration counter
+    size_t iteration;
     // PDE user input specification
     parser::PDESystem system;
     // Object used for determining which cells are in the domain
