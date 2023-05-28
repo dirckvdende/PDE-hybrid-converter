@@ -20,6 +20,7 @@ void Parser::run() {
     runTreeParser();
     dbg::log("Running expression parser...");
     runExprParser();
+    checkIllegalNames();
     dbg::log("Done parsing expressions:");
     dbg::log(system.str());
 }
@@ -106,6 +107,12 @@ void Parser::checkRequiredFields() const {
         if (preConfig.at(eq).size() != sz)
             throw std::runtime_error("Invalid number of \"" + eq + "\" entries "
             "given, should be " + std::to_string(sz));
+}
+
+void Parser::checkIllegalNames() const {
+    for (const std::string &var : system.vars)
+        if (var == "t")
+            throw std::runtime_error("Cannot declare \"t\" as a variable");
 }
 
 double Parser::parseNum(const std::string &txt) const {

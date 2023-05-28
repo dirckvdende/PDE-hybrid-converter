@@ -63,6 +63,12 @@ private:
     void checkRequiredFields() const;
 
     /**
+     * Check if there are any illegal name uses, such as "t", which cannot be
+     * declared as a variable. Throws an error if needed
+     */
+    void checkIllegalNames() const;
+
+    /**
      * Parse a single number from a string
      * @param txt The text to parse
      * @return The parsed number as a double
