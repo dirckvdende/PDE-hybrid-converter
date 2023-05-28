@@ -180,6 +180,12 @@ public:
      */
     void replaceDirect(const std::vector<double> &vals);
 
+    /**
+     * Check if this expression contains any variables other than "t"
+     * @return A boolean indicating if any other variables were found
+     */
+    bool containsNonTimeVars() const;
+
     // The node type
     NodeType type;
     // Node children (pointers)
