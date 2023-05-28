@@ -18,9 +18,23 @@ void PDEGrid::generate() {
     setPivot(system.pivot);
     setScale(system.scale);
     generateDomain();
-    generateNames();
     divideGroups();
-    generateExpressions();
+}
+
+void PDEGrid::generateExpressions() {
+    generateNames();
+    boundaryGen.setGrid(*this);
+    internalGen.setGrid(*this);
+    boundaryGen.setSystem(system);
+    internalGen.setSystem(system);
+    boundaryGen.setIteration(iteration);
+    internalGen.setIteration(iteration);
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_BORDER)
+            boundaryGen.generate(cell);
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_DOMAIN)
+            internalGen.generate(cell);
 }
 
 void PDEGrid::setIteration(size_t val) {
@@ -39,21 +53,6 @@ void PDEGrid::setMaxGridSize(size_t val) {
     domain.setMaxSize(val);
 }
 
-void PDEGrid::generateExpressions() {
-    boundaryGen.setGrid(*this);
-    internalGen.setGrid(*this);
-    boundaryGen.setSystem(system);
-    internalGen.setSystem(system);
-    boundaryGen.setIteration(iteration);
-    internalGen.setIteration(iteration);
-    for (GridCell &cell : *this)
-        if (cell.type == CELL_BORDER)
-            boundaryGen.generate(cell);
-    for (GridCell &cell : *this)
-        if (cell.type == CELL_DOMAIN)
-            internalGen.generate(cell);
-}
-
 void PDEGrid::generateDomain() {
     domain.setDims(system.dims);
     domain.setPivot(system.pivot);
@@ -68,10 +67,12 @@ void PDEGrid::generateDomain() {
 }
 
 void PDEGrid::generateNames() {
-    for (GridCell &cell : *this)
+    for (GridCell &cell : *this) {
+        cell.vars.clear();
         for (size_t i = 0; i < system.vars.size(); i++)
             cell.vars.push_back(generator::toGridVar(system.vars[i],
             toLoc(cell), iteration));
+    }
 }
 
 void PDEGrid::calcSpread() {
