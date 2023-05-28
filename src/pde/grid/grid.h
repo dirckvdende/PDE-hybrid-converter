@@ -37,6 +37,15 @@ public:
      */
     void setScale(double val);
 
+    /**
+     * Get the real coordinates of a grid cell given by a reference/pointer.
+     * This uses the pivot and scale stored in this object
+     * @param cell A pointer/reference to the grid cell
+     * @return A list, the real coordinates of the cell
+     */
+    std::vector<double> toRealLoc(const GridCell *cell);
+    std::vector<double> toRealLoc(const GridCell &cell);
+
 private:
 
     // Pivot point of the grid, this indicates the coordinates of the 0 integer
