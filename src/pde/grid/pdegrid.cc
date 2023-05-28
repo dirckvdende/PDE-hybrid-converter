@@ -70,7 +70,7 @@ void PDEGrid::generateNames() {
     for (GridCell &cell : *this)
         for (size_t i = 0; i < system.vars.size(); i++)
             cell.vars.push_back(generator::toGridVar(system.vars[i],
-            toLoc(cell)));
+            toLoc(cell), iteration));
 }
 
 void PDEGrid::calcSpread() {
