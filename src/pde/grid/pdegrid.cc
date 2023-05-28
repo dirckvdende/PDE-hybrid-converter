@@ -9,7 +9,7 @@
 
 using namespace pde::grid;
 
-PDEGrid::PDEGrid() : componentLimit(168) { }
+PDEGrid::PDEGrid() : iteration(0), componentLimit(168) { }
 
 PDEGrid::~PDEGrid() { }
 
@@ -20,8 +20,25 @@ void PDEGrid::generate() {
     generateDomain();
     generateNames();
     divideGroups();
-    generateExpressions();
-    // TODO: implement
+}
+
+void PDEGrid::generateExpressions() {
+    boundaryGen.setGrid(*this);
+    internalGen.setGrid(*this);
+    boundaryGen.setSystem(system);
+    internalGen.setSystem(system);
+    boundaryGen.setIteration(iteration);
+    internalGen.setIteration(iteration);
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_BORDER)
+            boundaryGen.generate(cell);
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_DOMAIN)
+            internalGen.generate(cell);
+}
+
+void PDEGrid::setIteration(size_t val) {
+    iteration = val;
 }
 
 void PDEGrid::setComponentLimit(size_t val) {
@@ -80,19 +97,6 @@ void PDEGrid::divideGroups() {
     dbg::log(depends.str());
     dbg::log("Grid groups:\n");
     dbg::log(depends.GroupGrid::str());
-}
-
-void PDEGrid::generateExpressions() {
-    boundaryGen.setGrid(*this);
-    internalGen.setGrid(*this);
-    boundaryGen.setSystem(system);
-    internalGen.setSystem(system);
-    for (GridCell &cell : *this)
-        if (cell.type == CELL_BORDER)
-            boundaryGen.generate(cell);
-    for (GridCell &cell : *this)
-        if (cell.type == CELL_DOMAIN)
-            internalGen.generate(cell);
 }
 
 std::string PDEGrid::domainStr() const {
