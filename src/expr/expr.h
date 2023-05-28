@@ -171,6 +171,15 @@ public:
      */
     double evalDirect(const std::vector<double> &vals) const;
 
+    /**
+     * Replace all markers with values directly, without evaluating the entire
+     * tree. Note that this does not make a copy of the tree!
+     * @param vals A vector giving the values by index
+     * @return The evaluated value as a double. Other types are implicitly
+     * converted to double
+     */
+    void replaceDirect(const std::vector<double> &vals);
+
     // The node type
     NodeType type;
     // Node children (pointers)
