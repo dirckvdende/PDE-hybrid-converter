@@ -26,6 +26,8 @@ struct GridCell {
     bool isStored;
     // Expressions for the values of the grid cells
     std::vector<expr::ExprNode> vals;
+    // Names of the variables in this grid cell
+    std::vector<std::string> vars;
 };
 
 }

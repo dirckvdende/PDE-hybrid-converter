@@ -61,6 +61,11 @@ private:
     void generateDomain();
 
     /**
+     * Generate the names for all of the grid cell and variable combinations
+     */
+    void generateNames();
+
+    /**
      * Determine the dependency spread in each dimension
      */
     void calcSpread();

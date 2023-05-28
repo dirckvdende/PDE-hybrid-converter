@@ -1,9 +1,10 @@
 
 #include "dbg/dbg.h"
-#include "pdegrid.h"
+#include "generator/util.h"
 #include "groups/depgrid.h"
 #include "groups/alg/alg.h"
 #include "groups/alg/optimalrect.h"
+#include "pdegrid.h"
 #include <string>
 
 using namespace pde::grid;
@@ -16,6 +17,7 @@ void PDEGrid::generate() {
     calcSpread();
     setPivot(system.pivot);
     setScale(system.scale);
+    generateNames();
     generateDomain();
     divideGroups();
     generateExpressions();
@@ -45,6 +47,13 @@ void PDEGrid::generateDomain() {
     domain.apply(*this);
     dbg::log("Generated domain:\n");
     dbg::log(domainStr());
+}
+
+void PDEGrid::generateNames() {
+    for (GridCell &cell : *this)
+        for (size_t i = 0; i < system.vars.size(); i++)
+            cell.vars.push_back(generator::toGridVar(system.vars[i],
+            toLoc(cell)));
 }
 
 void PDEGrid::calcSpread() {
