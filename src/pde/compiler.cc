@@ -27,13 +27,16 @@ void Compiler::run() {
     generator.changeSettings(CompilerSettings());
     dbg::log("Generating iteration expressions...");
     generator.run();
+    splitter.setSystems(generator.getSystems());
+    splitter.run();
+    outputSystems = splitter.getOutputSystems();
     output();
 }
 
 void Compiler::output() const {
     // TODO: implement custom output files
     std::ofstream file("tmp/compiler.ode");
-    for (const ode::ODESystem &ode : generator.getSystems())
+    for (const ode::ODESystem &ode : outputSystems)
         file << ode.str() << "\n\n";
     file.close();
 }
