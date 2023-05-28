@@ -4,6 +4,7 @@
 #include "grid/pdegrid.h"
 #include "ode/spec.h"
 #include "parser/spec.h"
+#include "settings.h"
 
 namespace pde {
 
@@ -26,11 +27,10 @@ public:
     ~ODEGenerator();
 
     /**
-     * Set the grid that holds the information to be processed by the ODE
-     * generator
-     * @param gridRef A reference to the grid
+     * Set the global compiler settings
+     * @param val The (updated) settings
      */
-    void setGrid(grid::PDEGrid &gridRef);
+    void changeSettings(const CompilerSettings &val);
 
     /**
      * Set the input PDE system
@@ -54,9 +54,10 @@ private:
 
     /**
      * Check if the grid contains an expression that references time
+     * @param grid The grid to search through
      * @return A boolean indicating if a reference to "t" is present
      */
-    bool hasTimeReference() const;
+    bool hasTimeReference(const grid::PDEGrid &grid) const;
 
     /**
      * Add a system that defines time variable "t"
@@ -65,9 +66,8 @@ private:
 
     // The user input PDE system
     parser::PDESystem pde;
-    // A pointer to the grid that captures information about the final ODE
-    // systems
-    grid::PDEGrid *grid;
+    // Global compiler settings
+    CompilerSettings settings;
     // The generated ODEs
     std::vector<ode::ODESystem> systems;
 

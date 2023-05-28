@@ -20,21 +20,7 @@ void PDEGrid::generate() {
     generateDomain();
     generateNames();
     divideGroups();
-}
-
-void PDEGrid::generateExpressions() {
-    boundaryGen.setGrid(*this);
-    internalGen.setGrid(*this);
-    boundaryGen.setSystem(system);
-    internalGen.setSystem(system);
-    boundaryGen.setIteration(iteration);
-    internalGen.setIteration(iteration);
-    for (GridCell &cell : *this)
-        if (cell.type == CELL_BORDER)
-            boundaryGen.generate(cell);
-    for (GridCell &cell : *this)
-        if (cell.type == CELL_DOMAIN)
-            internalGen.generate(cell);
+    generateExpressions();
 }
 
 void PDEGrid::setIteration(size_t val) {
@@ -51,6 +37,21 @@ void PDEGrid::setSystem(const parser::PDESystem &val) {
 
 void PDEGrid::setMaxGridSize(size_t val) {
     domain.setMaxSize(val);
+}
+
+void PDEGrid::generateExpressions() {
+    boundaryGen.setGrid(*this);
+    internalGen.setGrid(*this);
+    boundaryGen.setSystem(system);
+    internalGen.setSystem(system);
+    boundaryGen.setIteration(iteration);
+    internalGen.setIteration(iteration);
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_BORDER)
+            boundaryGen.generate(cell);
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_DOMAIN)
+            internalGen.generate(cell);
 }
 
 void PDEGrid::generateDomain() {
