@@ -18,12 +18,12 @@ enum GridCellType {
  */
 struct GridCell {
     // Type of the grid cell
-    GridCellType type;
+    GridCellType type = CELL_OUTSIDE;
     // Group index of the grid cell
-    size_t group;
+    size_t group = 0;
     // Indicates if the value of this grid cell should be stored between
     // iterations
-    bool isStored;
+    bool isStored = false;
     // Expressions for the values of the grid cells
     std::vector<expr::ExprNode> vals;
     // Names of the variables in this grid cell

@@ -17,8 +17,8 @@ void PDEGrid::generate() {
     calcSpread();
     setPivot(system.pivot);
     setScale(system.scale);
-    generateNames();
     generateDomain();
+    generateNames();
     divideGroups();
     generateExpressions();
     // TODO: implement
