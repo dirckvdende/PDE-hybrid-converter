@@ -124,6 +124,18 @@ size_t HyperGrid<T>::toIndex(const std::vector<size_t> &loc) const {
 }
 
 template<class T>
+size_t HyperGrid<T>::toIndex(const T *obj) const {
+    if (obj < data || obj - data >= (long int)gridSize)
+        throw std::runtime_error("Bad index conversion, invalid pointer");
+    return size_t(obj - data);
+}
+
+template<class T>
+size_t HyperGrid<T>::toIndex(const T &obj) const {
+    return toIndex(&obj);
+}
+
+template<class T>
 std::vector<size_t> HyperGrid<T>::toLoc(size_t index) const {
     if (index >= gridSize)
         throw std::runtime_error("Invalid index conversion, too large");
