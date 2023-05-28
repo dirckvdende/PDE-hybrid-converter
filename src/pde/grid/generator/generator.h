@@ -37,6 +37,13 @@ public:
     virtual void setSystem(const parser::PDESystem &sys);
 
     /**
+     * Set the iteration counter for the generator, to take into account when
+     * generating names
+     * @param val The new iteration counter value
+     */
+    virtual void setIteration(size_t val);
+
+    /**
      * Generate the expression for a given grid cell
      * @param cell A reference to the grid cell
      */
@@ -49,6 +56,8 @@ protected:
     // Grid that the generator should be getting data from and outputting data
     // to
     Grid *grid;
+    // Iteration counter
+    size_t iteration;
 
 };
 
