@@ -18,8 +18,7 @@ void PDEGrid::generate() {
     setScale(system.scale);
     generateDomain();
     divideGroups();
-    generateBorderExpressions();
-    generateDomainExpressions();
+    generateExpressions();
     // TODO: implement
 }
 
@@ -74,21 +73,17 @@ void PDEGrid::divideGroups() {
     dbg::log(depends.GroupGrid::str());
 }
 
-void PDEGrid::generateBorderExpressions() {
-    // TODO: implement
+void PDEGrid::generateExpressions() {
+    boundaryGen.setGrid(*this);
+    internalGen.setGrid(*this);
+    boundaryGen.setSystem(system);
+    internalGen.setSystem(system);
     for (GridCell &cell : *this)
         if (cell.type == CELL_BORDER)
-            generateBorderExpression(cell);
-}
-
-void PDEGrid::generateBorderExpression(GridCell &cell) {
-    // TODO: implement
-    // TODO: change such that border specification is better
-    (void)cell;
-}
-
-void PDEGrid::generateDomainExpressions() {
-    // TODO: implement
+            boundaryGen.generate(cell);
+    for (GridCell &cell : *this)
+        if (cell.type == CELL_DOMAIN)
+            internalGen.generate(cell);
 }
 
 std::string PDEGrid::domainStr() const {

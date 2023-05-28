@@ -4,6 +4,8 @@
 #include "domain/domain.h"
 #include "grid.h"
 #include "pde/parser/spec.h"
+#include "generator/boundary.h"
+#include "generator/internal.h"
 #include "groups/depgrid.h"
 #include <string>
 
@@ -71,20 +73,9 @@ private:
     void divideGroups();
 
     /**
-     * Generate border cell expressions
+     * Generate all expressions on the domain and boundary
      */
-    void generateBorderExpressions();
-
-    /**
-     * Generate a border expression for a specific cell
-     * @param cell A reference to the cell to generate the border expression for
-     */
-    void generateBorderExpression(GridCell &cell);
-
-    /**
-     * Generate domain cell expressions
-     */
-    void generateDomainExpressions();
+    void generateExpressions();
 
     /**
      * Get a string representation of which cells are contained in the domain
@@ -104,6 +95,9 @@ private:
     groups::DependGrid depends;
     // Dependency spread
     std::vector<size_t> spread;
+    // Generators for expressions on the boundary and domain
+    generator::BoundaryExprGenerator boundaryGen;
+    generator::InternalExprGenerator internalGen;
 
 };
 
