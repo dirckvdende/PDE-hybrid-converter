@@ -28,7 +28,7 @@ public:
 
     /**
      * Set the text to be parser
-     * @param txt THe input text to be parsed
+     * @param txt The input text to be parsed
      */
     void setText(const std::string &txt);
 
