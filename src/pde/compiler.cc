@@ -30,7 +30,6 @@ void Compiler::run() {
     splitter.setSystems(generator.getSystems());
     splitter.run();
     outputSystems = splitter.getOutputSystems();
-    outputSystems = generator.getSystems();
     output();
 }
 
