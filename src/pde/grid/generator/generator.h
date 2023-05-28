@@ -28,13 +28,13 @@ public:
      * Set the grid that the generator should use
      * @param gridRef A reference to the grid to use for getting and output data
      */
-    void setGrid(Grid &gridRef);
+    virtual void setGrid(Grid &gridRef);
 
     /**
      * Set the system that the user entered
      * @param sys The system to save in this generator
      */
-    void setSystem(const parser::PDESystem &sys);
+    virtual void setSystem(const parser::PDESystem &sys);
 
     /**
      * Generate the expression for a given grid cell
