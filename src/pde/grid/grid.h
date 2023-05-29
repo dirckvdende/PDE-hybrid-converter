@@ -3,6 +3,7 @@
 
 #include "cell.h"
 #include "hypergrid/hypergrid.h"
+#include "pde/spec.h"
 #include <vector>
 
 namespace pde::grid {
@@ -26,18 +27,6 @@ public:
     virtual ~Grid();
 
     /**
-     * Set the pivot position of the grid
-     * @param val The pivot position
-     */
-    void setPivot(const std::vector<double> &val);
-
-    /**
-     * Set the scale of the grid
-     * @param val The new grid cell scale
-     */
-    void setScale(double val);
-
-    /**
      * Get the real coordinates of a grid cell given by a reference/pointer.
      * This uses the pivot and scale stored in this object
      * @param cell A pointer/reference to the grid cell
@@ -46,13 +35,19 @@ public:
     std::vector<double> toRealLoc(const GridCell *cell);
     std::vector<double> toRealLoc(const GridCell &cell);
 
-private:
-
     // Pivot point of the grid, this indicates the coordinates of the 0 integer
     // point
     std::vector<double> pivot;
-    // The scale of the grid
-    double scale;
+    // Iteration counter
+    size_t iteration;
+    // PDE user input specification
+    PDESystem system;
+    // Hardware component limit (abstract)
+    size_t componentLimit;
+    // Dependency spread
+    std::vector<size_t> spread;
+
+private:
 
 };
 
