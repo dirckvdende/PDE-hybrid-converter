@@ -82,8 +82,26 @@ expr::ExprNode SpatialApprox::getApprox(const expr::ExprNode &node) const {
         throw std::runtime_error("not implemented");
     std::vector<size_t> cur = grid->toLoc(curCell);
     cur[0]--;
-    expr::ExprNode *out = new expr::ExprNode(expr::NODE_ADD, {
-        
-    }, grid::generator::toGridVar(node.deriv.var, cur, iteration));
-    
+    std::vector<size_t> left = cur;
+    cur[0]++;
+    std::vector<size_t> mid = cur;
+    cur[0]++;
+    std::vector<size_t> right = cur;
+    expr::ExprNode out(expr::NODE_ADD, {
+        new expr::ExprNode(expr::NODE_ADD, {
+            new expr::ExprNode(expr::NODE_MUL, {
+                new expr::ExprNode(expr::NODE_NUM, {}, 1.0 / scale / scale),
+                new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(node.deriv.var, left, iteration))
+            }),
+            new expr::ExprNode(expr::NODE_MUL, {
+                new expr::ExprNode(expr::NODE_NUM, {}, -2.0 / scale / scale),
+                new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(node.deriv.var, mid, iteration))
+            })
+        }),
+        new expr::ExprNode(expr::NODE_MUL, {
+            new expr::ExprNode(expr::NODE_NUM, {}, 1.0 / scale / scale),
+            new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(node.deriv.var, right, iteration))
+        })
+    });
+    return out;
 }
