@@ -64,7 +64,6 @@ void Parser::runTreeParser() {
 
 void Parser::runExprParser() {
     checkRequiredFields();
-    // TODO: implement
     parseDims(preConfig.at("dims").front());
     system.domain = parseExpr(preConfig.at("domain").front());
     system.pivot = parseNumList(preConfig.at("pivot").front());

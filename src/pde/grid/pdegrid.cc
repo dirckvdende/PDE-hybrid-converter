@@ -5,6 +5,7 @@
 #include "groups/alg/alg.h"
 #include "groups/alg/optimalrect.h"
 #include "pdegrid.h"
+#include "pde/approx/spread.h"
 #include <string>
 
 using namespace pde::grid;
@@ -76,8 +77,7 @@ void PDEGrid::generateNames() {
 }
 
 void PDEGrid::calcSpread() {
-    // TODO: implement
-    spread = std::vector<size_t>(system.dims.size(), 1);
+    spread = approx::calcSpread(system);
 }
 
 void PDEGrid::divideGroups() {
