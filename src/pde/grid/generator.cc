@@ -14,6 +14,14 @@ GridGenerator::~GridGenerator() { }
 
 void GridGenerator::setSystem(const PDESystem &sys) {
     system = sys;
+    grid.dims = system.dims;
+    grid.pivot = system.pivot;
+    grid.scale = system.scale;
+    grid.iteration = 0;
+    // TODO: implement custom component limits/grid sizes
+    grid.componentLimit = 168;
+    grid.maxGridSize = 1000000;
+    grid.domain = system.domain;
 }
 
 void GridGenerator::prepare() {
@@ -31,7 +39,7 @@ void GridGenerator::run(size_t iteration) {
 }
 
 void GridGenerator::calcSpread() {
-    spread = approx::calcSpread(system);
+    grid.spread = approx::calcSpread(system);
 }
 
 void GridGenerator::generateDomain() {
@@ -45,7 +53,7 @@ void GridGenerator::generateDomain() {
 void GridGenerator::divideGroups() {
     depends.reshape(grid.getShape());
     depends.setMaxSize(grid.componentLimit);
-    depends.setSpread(spread);
+    depends.setSpread(grid.spread);
     groups::alg::OptimalRectAlg alg;
     alg.setGrid(depends);
     alg.run();

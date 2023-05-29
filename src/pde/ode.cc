@@ -20,6 +20,7 @@ void ODEGenerator::changeSettings(const CompilerSettings &val) {
 
 void ODEGenerator::run() {
     grid::GridGenerator gen;
+    gen.setSystem(pde);
     gen.grid.maxGridSize = settings.maxGridSize;
     gen.grid.componentLimit = settings.componentLimit;
     gen.prepare();
