@@ -92,9 +92,18 @@ std::string ExprNode::str() const {
             return content;
         case NODE_NUM:
             return std::to_string(number);
-        case NODE_DERIV:
-            return "d[" + content.substr(0, content.find(';')) + "](" +
-            content.substr(content.find(';') + 1) + ")";
+        case NODE_DERIV: {
+            std::string out = "d[";
+            bool first = true;
+            for (const std::string &dim : deriv.dims) {
+                if (!first)
+                    out.push_back(' ');
+                first = false;
+                out.append(dim);
+            }
+            out.append("](" + deriv.var + ")");
+            return out;
+        }
         case NODE_MINUS:
             return "-(" + children[0]->str() + ")";
         case NODE_INTEG:
