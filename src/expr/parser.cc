@@ -153,9 +153,11 @@ ExprNode *Parser::readDeriv() {
     ExprNode *node = nullptr;
     if (accept({TOK_DERIV})) {
         node = readDeriv();
-        node->content = content + " " + node->content;
+        node->deriv.dims.push_back(content);
     } else {
-        node = new ExprNode(NODE_DERIV, {}, content + ";" + cur().content);
+        node = new ExprNode(NODE_DERIV);
+        node->deriv.dims = {content};
+        node->deriv.var = cur().content;
         next();
     }
     expect({TOK_RBRACE});

@@ -196,6 +196,13 @@ public:
     double number;
     // Marker reference index
     size_t markerIndex;
+    // Derivative information
+    struct {
+        // List of dimension names
+        std::vector<std::string> dims;
+        // Variable to take derivative of
+        std::string var;
+    } deriv;
 
 private:
 

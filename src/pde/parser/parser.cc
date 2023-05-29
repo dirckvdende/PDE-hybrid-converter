@@ -132,13 +132,9 @@ void Parser::parseEquation(const std::string &txt) {
         incorrect();
     if (root[0].type != expr::NODE_DERIV)
         incorrect();
-    size_t semicol = root[0].content.find(';');
-    if (semicol == std::string::npos)
-        throw std::runtime_error("Internal error processing derivative");
-    std::string deriv = root[0].content.substr(0, semicol);
-    if (deriv != "t")
+    if (root[0].deriv.dims != std::vector<std::string>{"t"})
         incorrect();
-    std::string var = root[0].content.substr(semicol + 1);
+    std::string var = root[0].deriv.var;
     if (std::find(system.vars.begin(), system.vars.end(), var) !=
     system.vars.end())
         throw std::runtime_error("Duplicate variable in equation");
