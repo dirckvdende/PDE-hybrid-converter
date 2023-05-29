@@ -16,21 +16,14 @@ class BoundaryExprGenerator final : public ExprGenerator {
 public:
 
     /**
-     * Constructor
+     * Inherit constructor
      */
-    BoundaryExprGenerator();
+    using ExprGenerator::ExprGenerator;
 
     /**
      * Destructor
      */
     virtual ~BoundaryExprGenerator();
-
-    /**
-     * Set the system that the user entered. This function expands the parent
-     * definition to also do preprocessing of the boundary expressions
-     * @param sys The system to save in this generator
-     */
-    virtual void setSystem(const PDESystem &sys);
 
     /**
      * Generate the expression for a given grid cell

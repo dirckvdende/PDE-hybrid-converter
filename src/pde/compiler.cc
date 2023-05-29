@@ -2,7 +2,6 @@
 #include "compiler.h"
 #include "dbg/dbg.h"
 #include "grid/cell.h"
-#include "grid/pdegrid.h"
 #include "parser/parser.h"
 #include "spec.h"
 #include <fstream>
@@ -10,7 +9,7 @@
 
 using namespace pde;
 
-Compiler::Compiler() { }
+Compiler::Compiler() : generator(system) { }
 
 Compiler::~Compiler() { }
 
@@ -22,7 +21,6 @@ void Compiler::run() {
     parser.setText(txt);
     parser.run();
     system = parser.getSpecs();
-    generator.setPDE(system);
     // TODO: implement real compiler settings
     generator.changeSettings(CompilerSettings());
     dbg::log("Generating iteration expressions...");

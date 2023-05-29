@@ -16,32 +16,16 @@ public:
 
     /**
      * Constructor
+     * @param grid A reference to the grid that the expressions are to be
+     * generated on
+     * @param system A constant reference to the input PDE
      */
-    ExprGenerator();
+    ExprGenerator(Grid &grid, const PDESystem &system);
 
     /**
      * Destructor
      */
     virtual ~ExprGenerator();
-
-    /**
-     * Set the grid that the generator should use
-     * @param gridRef A reference to the grid to use for getting and output data
-     */
-    virtual void setGrid(Grid &gridRef);
-
-    /**
-     * Set the system that the user entered
-     * @param sys The system to save in this generator
-     */
-    virtual void setSystem(const PDESystem &sys);
-
-    /**
-     * Set the iteration counter for the generator, to take into account when
-     * generating names
-     * @param val The new iteration counter value
-     */
-    virtual void setIteration(size_t val);
 
     /**
      * Generate the expression for a given grid cell
@@ -52,12 +36,10 @@ public:
 protected:
 
     // The PDE system to use for generating expressions
-    PDESystem system;
+    const PDESystem &system;
     // Grid that the generator should be getting data from and outputting data
     // to
-    Grid *grid;
-    // Iteration counter
-    size_t iteration;
+    Grid &grid;
 
 };
 

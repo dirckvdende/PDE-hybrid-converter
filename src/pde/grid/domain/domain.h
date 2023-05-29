@@ -19,55 +19,14 @@ public:
 
     /**
      * Constructor
+     * @param grid A reference to the grid to modify
      */
-    Domain();
+    Domain(Grid &grid);
 
     /**
      * Destructor
      */
     ~Domain();
-
-    /**
-     * Set the names of the dimensions of the grid
-     * @param val The dimension names as a list of strings
-     */
-    void setDims(const std::vector<std::string> &val);
-
-    /**
-     * Set the pivot position of the domain grid, should be done before the
-     * calculation is performed
-     * @param val The pivot position
-     */
-    void setPivot(const std::vector<double> &val);
-
-    /**
-     * Set the scale of the grid, should be done before the calculation is
-     * performed
-     * @param val The new grid cell scale
-     */
-    void setScale(double val);
-
-    /**
-     * Set the expression that should be evaluated at each grid point, to check
-     * if the point is part of the domain, this should be done before the
-     * calculation is performed. Also, this function should be called AFTER
-     * setDims()
-     * @param val The new expression
-     */
-    void setExpr(const expr::ExprNode &val);
-
-    /**
-     * Change the maximum number of grid cells that should be determined. If
-     * this number is exceeded, an error is thrown
-     * @param val The new maximum size
-     */
-    void setMaxSize(size_t val);
-
-    /**
-     * Set the spread in each dimension in which the border should spread
-     * @param val The new values for the spread in each dimension
-     */
-    void setSpread(const std::vector<size_t> &val);
 
     /**
      * Get the number of grid cells currently stored in this object
@@ -83,7 +42,7 @@ public:
 
     /**
      * Normalize the grid to have all stored cells have positive coordinates in
-     * each dimension
+     * each dimension. Note that this function also alters the grid pivot
      */
     void normalize();
 
@@ -96,11 +55,10 @@ public:
     std::vector<std::pair<long, long>> getRange() const;
 
     /**
-     * Output the generated domain and border cells to a grid. This function
+     * Output the generated domain and border cells to the grid. This function
      * should be called after calculation and normalization of the grid
-     * @param grid A reference to the grid to output the domain information to
      */
-    void apply(Grid &grid) const;
+    void apply() const;
 
 private:
 
@@ -153,19 +111,8 @@ private:
      */
     void determineBorder();
 
-    // Names of the dimensions of the grid, used to evaluate the domain expression
-    std::vector<std::string> dims;
-    // Pivot position, which corresponds to point 0 on the grid
-    std::vector<double> pivot;
-    // The scale of the grid cells
-    double scale;
-    // The expression that should be evaluated at a grid point to check if it is
-    // in the domain
-    expr::ExprNode expr;
-    // The maximum number of grid cells that should be stored
-    size_t maxSize;
-    // The range in each dimension in which the border should spread
-    std::vector<size_t> spread;
+    // Grid to modify and use
+    Grid &grid;
     // The set of all grid cells belonging to the domain, as currently
     // determined
     std::unordered_set<std::vector<long>, VectorHash> cells;

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "spec.h"
+#include "pde/spec.h"
 #include "treeparser/parser.h"
 #include <string>
 #include <unordered_map>

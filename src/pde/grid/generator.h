@@ -35,31 +35,30 @@ public:
     void setSystem(const PDESystem &sys);
 
     /**
-     * Run the generator
+     * Run the generator general calculations before expression generation
      */
-    void run();
+    void prepare();
+
+    /**
+     * Run the generator for a specific iteration
+     * @param iteration The iteration number
+     */
+    void run(size_t iteration);
+
+    // The grid that operations are carried out on
+    Grid grid;
 
 private:
-
-    /**
-     * Configure the grid before running calculations
-     */
-    void configureGrid();
-
-    /**
-     * Generate the domain specification
-     */
-    void generateDomain();
-
-    /**
-     * Generate the names for all of the grid cell and variable combinations
-     */
-    void generateNames();
 
     /**
      * Determine the dependency spread in each dimension
      */
     void calcSpread();
+
+    /**
+     * Generate the domain specification
+     */
+    void generateDomain();
 
     /**
      * Divide the grid up into groups, using the set component limit. Also
@@ -69,14 +68,23 @@ private:
     void divideGroups();
 
     /**
+     * Generate the names for all of the grid cell and variable combinations
+     */
+    void generateNames();
+
+    /**
+     * Generate expressions for all of the nodes in the grid (that are boundary
+     * or domain)
+     */
+    void generateExpr();
+
+    /**
      * Get a string representation of which cells are contained in the domain
      * and which are not. Only works for 2D grids
      * @return The string representation
      */
     std::string domainStr() const;
 
-    // The grid that operations are carried out on
-    Grid grid;
     // User-entered system of PDEs
     PDESystem system;
     // Object used for generating the domain/boundary cells
