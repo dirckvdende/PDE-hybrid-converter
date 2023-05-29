@@ -113,6 +113,8 @@ private:
 
     // Grid to modify and use
     Grid &grid;
+    // Copy of the domain expression, which is modified with markers
+    expr::ExprNode expr;
     // The set of all grid cells belonging to the domain, as currently
     // determined
     std::unordered_set<std::vector<long>, VectorHash> cells;

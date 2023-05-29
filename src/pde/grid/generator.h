@@ -97,8 +97,6 @@ private:
     // Object used to determine the grid expressions for internal cells (domain
     // cells)
     generator::InternalExprGenerator internalGen;
-    // Calculated dependency spread
-    std::vector<size_t> spread;
 
 };
 
