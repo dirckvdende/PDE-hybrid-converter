@@ -17,7 +17,8 @@ children, double number) : type(type), children(children),
 number(number) { }
 
 ExprNode::ExprNode(const ExprNode &other) : type(other.type),
-content(other.content), number(other.number), markerIndex(other.markerIndex) {
+content(other.content), number(other.number), markerIndex(other.markerIndex),
+deriv(other.deriv) {
     for (ExprNode *child : other.children)
         children.push_back(new ExprNode(*child));
 }
@@ -65,6 +66,7 @@ ExprNode &ExprNode::operator=(const ExprNode &other) {
     content = other.content;
     number = other.number;
     markerIndex = other.markerIndex;
+    deriv = other.deriv;
     return *this;
 }
 
