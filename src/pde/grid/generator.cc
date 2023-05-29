@@ -3,6 +3,7 @@
 #include "generator.h"
 #include "generator/util.h"
 #include "groups/alg/optimalrect.h"
+#include "groups/alg/squares.h"
 #include "pde/approx/spread.h"
 #include <unordered_map>
 
@@ -61,9 +62,17 @@ void GridGenerator::divideGroups() {
     depends.reshape(grid.getShape());
     depends.setMaxSize(grid.componentLimit);
     depends.setSpread(grid.spread);
-    groups::alg::OptimalRectAlg alg;
-    alg.setGrid(depends);
-    alg.run();
+    groups::alg::DivisionAlg *alg;
+    bool isZero = true;
+    for (size_t i = 0; i < grid.dims.size(); i++)
+        if (grid.spread[i] != 0)
+            isZero = false;
+    if (isZero)
+        alg = new groups::alg::SquaresAlg;
+    else
+        alg = new groups::alg::OptimalRectAlg;
+    alg->setGrid(depends);
+    alg->run();
     depends.calc();
     for (GridCell &cell : grid) {
         std::vector<size_t> loc = grid.toLoc(cell);
