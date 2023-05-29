@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace pde::parser {
+namespace pde {
 
 /**
  * Specification of a system of PDEs

@@ -4,6 +4,7 @@
 #include "grid/cell.h"
 #include "grid/grid.h"
 #include "ode.h"
+#include "spec.h"
 #include <unordered_set>
 
 using namespace pde;
@@ -16,7 +17,7 @@ void ODEGenerator::changeSettings(const CompilerSettings &val) {
     settings = val;
 }
 
-void ODEGenerator::setPDE(const parser::PDESystem &sys) {
+void ODEGenerator::setPDE(const PDESystem &sys) {
     pde = sys;
 }
 

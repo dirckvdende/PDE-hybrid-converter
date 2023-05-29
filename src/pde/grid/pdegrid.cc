@@ -46,7 +46,7 @@ void PDEGrid::setComponentLimit(size_t val) {
     componentLimit = val;
 }
 
-void PDEGrid::setSystem(const parser::PDESystem &val) {
+void PDEGrid::setSystem(const PDESystem &val) {
     system = val;
 }
 

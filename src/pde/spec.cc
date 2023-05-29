@@ -2,7 +2,7 @@
 #include "spec.h"
 #include <string>
 
-using namespace pde::parser;
+using namespace pde;
 
 std::string PDESystem::str() const {
     std::string out;

@@ -3,7 +3,7 @@
 
 #include "domain/domain.h"
 #include "grid.h"
-#include "pde/parser/spec.h"
+#include "pde/spec.h"
 #include "generator/boundary.h"
 #include "generator/internal.h"
 #include "groups/depgrid.h"
@@ -59,7 +59,7 @@ public:
      * Set the input PDE system
      * @param val The PDE system specification
      */
-    void setSystem(const parser::PDESystem &val);
+    void setSystem(const PDESystem &val);
 
     /**
      * Set the maximum number of cells that the grid bounding box should contain
@@ -101,7 +101,7 @@ private:
     // Iteration counter
     size_t iteration;
     // PDE user input specification
-    parser::PDESystem system;
+    PDESystem system;
     // Object used for determining which cells are in the domain
     domain::Domain domain;
     // Hardware component limit (abstract)

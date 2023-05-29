@@ -3,7 +3,7 @@
 
 #include "pde/grid/cell.h"
 #include "pde/grid/grid.h"
-#include "pde/parser/spec.h"
+#include "pde/spec.h"
 
 namespace pde::grid::generator {
 
@@ -34,7 +34,7 @@ public:
      * Set the system that the user entered
      * @param sys The system to save in this generator
      */
-    virtual void setSystem(const parser::PDESystem &sys);
+    virtual void setSystem(const PDESystem &sys);
 
     /**
      * Set the iteration counter for the generator, to take into account when
@@ -52,7 +52,7 @@ public:
 protected:
 
     // The PDE system to use for generating expressions
-    parser::PDESystem system;
+    PDESystem system;
     // Grid that the generator should be getting data from and outputting data
     // to
     Grid *grid;

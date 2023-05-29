@@ -3,8 +3,8 @@
 
 #include "grid/pdegrid.h"
 #include "ode/spec.h"
-#include "parser/spec.h"
 #include "settings.h"
+#include "spec.h"
 
 namespace pde {
 
@@ -36,7 +36,7 @@ public:
      * Set the input PDE system
      * @param sys The PDE system
      */
-    void setPDE(const parser::PDESystem &sys);
+    void setPDE(const PDESystem &sys);
 
     /**
      * Run the generator and store generated ODE systems in this object
@@ -65,7 +65,7 @@ private:
     void addTimeSystem();
 
     // The user input PDE system
-    parser::PDESystem pde;
+    PDESystem pde;
     // Global compiler settings
     CompilerSettings settings;
     // The generated ODEs

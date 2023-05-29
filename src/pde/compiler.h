@@ -5,8 +5,8 @@
 #include "ode.h"
 #include "ode/spec.h"
 #include "parser/parser.h"
-#include "parser/spec.h"
 #include "ode/splitter/splitter.h"
+#include "spec.h"
 #include <string>
 #include <vector>
 
@@ -52,7 +52,7 @@ private:
     // The parser used to convert text input into a PDE system
     parser::Parser parser;
     // The input PDE system
-    parser::PDESystem system;
+    PDESystem system;
     // ODE system generator
     ODEGenerator generator;
     // ODE splitter, to take apart groups

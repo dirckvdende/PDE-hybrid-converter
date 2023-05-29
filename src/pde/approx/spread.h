@@ -2,7 +2,7 @@
 #pragma once
 
 #include "expr/expr.h"
-#include "pde/parser/spec.h"
+#include "pde/spec.h"
 #include <vector>
 
 namespace pde::approx {
@@ -12,7 +12,7 @@ namespace pde::approx {
  * @param system The PDE system
  * @return A vector of integers, the spread in each dimension
  */
-std::vector<size_t> calcSpread(const parser::PDESystem &system);
+std::vector<size_t> calcSpread(const PDESystem &system);
 
 /**
  * Calculate the maximum spread in each dimension given a variable expression
