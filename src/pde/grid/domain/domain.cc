@@ -14,38 +14,9 @@
 
 using namespace pde::grid::domain;
 
-Domain::Domain() { }
+Domain::Domain(Grid &grid) : grid(grid) { }
 
 Domain::~Domain() { }
-
-void Domain::setDims(const std::vector<std::string> &val) {
-    dims = val;
-}
-
-void Domain::setPivot(const std::vector<double> &val) {
-    pivot = val;
-}
-
-void Domain::setScale(double val) {
-    scale = val;
-}
-
-void Domain::setExpr(const expr::ExprNode &val) {
-    expr = val;
-    // Replace dimension names with markers
-    std::unordered_map<std::string, size_t> dimMap;
-    for (size_t i = 0; i < dims.size(); i++)
-        dimMap.emplace(dims[i], i);
-    expr.replaceSymbols(dimMap);
-}
-
-void Domain::setMaxSize(size_t val) {
-    maxSize = val;
-}
-
-void Domain::setSpread(const std::vector<size_t> &val) {
-    spread = val;
-}
 
 size_t Domain::size() const {
     return cells.size() + borderCells.size();
@@ -74,11 +45,11 @@ void Domain::normalize() {
         borderCells.insert(cell);
     }
     for (size_t i = 0; i < range.size(); i++)
-        pivot[i] += range[i].first * scale;
+        grid.pivot[i] += range[i].first * grid.scale;
 }
 
 std::vector<std::pair<long, long>> Domain::getRange() const {
-    std::vector<std::pair<long, long>> range(dims.size(), {0, 0});
+    std::vector<std::pair<long, long>> range(grid.dims.size(), {0, 0});
     for (const std::vector<long> &cell : cells) {
         for (size_t i = 0; i < cell.size(); i++) {
             range[i].first = std::min(range[i].first, cell[i]);
@@ -94,7 +65,7 @@ std::vector<std::pair<long, long>> Domain::getRange() const {
     return range;
 }
 
-void Domain::apply(Grid &grid) const {
+void Domain::apply() const {
     std::vector<std::pair<long, long>> range = getRange();
     std::vector<size_t> shape;
     for (const std::pair<long, long> &r : range) {
@@ -106,7 +77,7 @@ void Domain::apply(Grid &grid) const {
     size_t shapeSize = 1;
     for (const size_t &s : shape)
         shapeSize *= s;
-    if (shapeSize > maxSize)
+    if (shapeSize > grid.maxGridSize)
         std::runtime_error("Domain too large to process");
     grid.reshape(shape);
     for (size_t index = 0; index < grid.size(); index++) {
@@ -120,13 +91,12 @@ void Domain::apply(Grid &grid) const {
         else
             grid[index].type = CELL_OUTSIDE;
     }
-    grid.setPivot(pivot);
 }
 
 std::vector<double> Domain::toPoint(const std::vector<long> &loc) const {
     std::vector<double> out(loc.size());
     for (size_t i = 0; i < loc.size(); i++)
-        out[i] = pivot[i] + scale * loc[i];
+        out[i] = grid.pivot[i] + grid.scale * loc[i];
     return out;
 }
 
@@ -136,7 +106,7 @@ bool Domain::inDomain(const std::vector<long> &loc) const {
 
 bool Domain::inDomain(const std::vector<double> &point) const {
     static const double EPS = 1e-10;
-    return abs(expr.evalDirect(point)) > EPS;
+    return abs(grid.domain.evalDirect(point)) > EPS;
 }
 
 std::vector<std::vector<long>> Domain::getNeighbours(const std::vector<long>
@@ -160,12 +130,12 @@ bool Domain::isStored(const std::vector<long> &loc) const {
 }
 
 void Domain::determineDomain() {
-    const std::vector<long> zero(dims.size(), 0);
+    const std::vector<long> zero(grid.dims.size(), 0);
     if (!inDomain(zero))
         std::runtime_error("Pivot not in domain");
     std::queue<std::vector<long>> locs;
     locs.push(zero);
-    while (!locs.empty() && size() <= maxSize) {
+    while (!locs.empty() && size() <= grid.maxGridSize) {
         std::vector<long> cur = locs.front();
         locs.pop();
         for (const std::vector<long> &nb : getNeighbours(cur)) {
@@ -175,18 +145,18 @@ void Domain::determineDomain() {
             }
         }
     }
-    if (size() > maxSize)
+    if (size() > grid.maxGridSize)
         throw std::runtime_error("Maximum domain size exceeded");
 }
 
 void Domain::determineBorder() {
-    for (size_t i = 0; i < spread.size(); i++) {
+    for (size_t i = 0; i < grid.spread.size(); i++) {
         std::vector<std::vector<long>> cur, next;
         for (const std::vector<long> &cell : cells)
             cur.push_back(cell);
         for (const std::vector<long> &cell : borderCells)
             cur.push_back(cell);
-        for (size_t j = 0; j < spread[i] && !cur.empty(); j++) {
+        for (size_t j = 0; j < grid.spread[i] && !cur.empty(); j++) {
             for (const std::vector<long> &c : cur) {
                 std::vector<long> pos = c, neg = c;
                 pos[i]++, neg[i]--;

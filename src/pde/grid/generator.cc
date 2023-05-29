@@ -1,12 +1,14 @@
 
 #include "dbg/dbg.h"
 #include "generator.h"
+#include "generator/util.h"
 #include "groups/alg/optimalrect.h"
 #include "pde/approx/spread.h"
 
 using namespace pde::grid;
 
-GridGenerator::GridGenerator() { }
+GridGenerator::GridGenerator() : domain(grid), boundaryGen(grid, system),
+internalGen(grid, system) { }
 
 GridGenerator::~GridGenerator() { }
 
@@ -14,33 +16,30 @@ void GridGenerator::setSystem(const PDESystem &sys) {
     system = sys;
 }
 
-void GridGenerator::run() {
-    configureGrid();
+void GridGenerator::prepare() {
+    calcSpread();
+    generateDomain();
+    divideGroups();
 }
 
-void GridGenerator::configureGrid() {
-    grid.system = system;
-    grid.pivot = system.pivot;
-    grid.iteration = 0;
-    // TODO: implement changing component limit
-    grid.componentLimit = 168;
-}
-
-void GridGenerator::generateDomain() {
-    domain.setDims(system.dims);
-    domain.setPivot(system.pivot);
-    domain.setScale(system.scale);
-    domain.setExpr(system.domain);
-    domain.setSpread(spread);
-    domain.run();
-    domain.normalize();
-    domain.apply(grid);
-    dbg::log("Generated domain:\n");
-    dbg::log(domainStr());
+void GridGenerator::run(size_t iteration) {
+    dbg::log("Generating expressions for iteration " + std::to_string(
+    iteration));
+    grid.iteration = iteration;
+    generateNames();
+    generateExpr();
 }
 
 void GridGenerator::calcSpread() {
     spread = approx::calcSpread(system);
+}
+
+void GridGenerator::generateDomain() {
+    domain.run();
+    domain.normalize();
+    domain.apply();
+    dbg::log("Generated domain:\n");
+    dbg::log(domainStr());
 }
 
 void GridGenerator::divideGroups() {
@@ -62,6 +61,24 @@ void GridGenerator::divideGroups() {
     dbg::log(depends.str());
     dbg::log("Grid groups:\n");
     dbg::log(depends.GroupGrid::str());
+}
+
+void GridGenerator::generateNames() {
+    for (GridCell &cell : grid) {
+        cell.vars.clear();
+        for (size_t i = 0; i < system.vars.size(); i++)
+            cell.vars.push_back(generator::toGridVar(system.vars[i],
+            grid.toLoc(cell), grid.iteration));
+    }
+}
+
+void GridGenerator::generateExpr() {
+    for (GridCell &cell : grid) {
+        if (cell.type == CELL_BORDER)
+            boundaryGen.generate(cell);
+        else if (cell.type == CELL_DOMAIN)
+            internalGen.generate(cell);
+    }
 }
 
 std::string GridGenerator::domainStr() const {

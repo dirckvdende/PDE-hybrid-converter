@@ -35,17 +35,23 @@ public:
     std::vector<double> toRealLoc(const GridCell *cell);
     std::vector<double> toRealLoc(const GridCell &cell);
 
+    // Names of the grid dimensions
+    std::vector<std::string> dims;
     // Pivot point of the grid, this indicates the coordinates of the 0 integer
     // point
     std::vector<double> pivot;
+    // Grid scale
+    double scale;
     // Iteration counter
     size_t iteration;
-    // PDE user input specification
-    PDESystem system;
     // Hardware component limit (abstract)
     size_t componentLimit;
+    // Maximum (total) grid size
+    size_t maxGridSize;
     // Dependency spread
     std::vector<size_t> spread;
+    // Domain definition expression
+    expr::ExprNode domain;
 
 private:
 

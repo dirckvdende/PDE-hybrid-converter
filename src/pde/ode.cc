@@ -2,6 +2,7 @@
 #include "dbg/dbg.h"
 #include "expr/expr.h"
 #include "grid/cell.h"
+#include "grid/generator.h"
 #include "grid/grid.h"
 #include "ode.h"
 #include "spec.h"
@@ -9,7 +10,7 @@
 
 using namespace pde;
 
-ODEGenerator::ODEGenerator() { }
+ODEGenerator::ODEGenerator(const PDESystem &system) : pde(system) { }
 
 ODEGenerator::~ODEGenerator() { }
 
@@ -17,26 +18,18 @@ void ODEGenerator::changeSettings(const CompilerSettings &val) {
     settings = val;
 }
 
-void ODEGenerator::setPDE(const PDESystem &sys) {
-    pde = sys;
-}
-
 void ODEGenerator::run() {
-    grid::PDEGrid grid;
-    grid.setSystem(pde);
-    grid.setMaxGridSize(settings.maxGridSize);
-    grid.setComponentLimit(settings.componentLimit);
-    grid.generate();
+    grid::GridGenerator gen;
+    gen.grid.maxGridSize = settings.maxGridSize;
+    gen.grid.componentLimit = settings.componentLimit;
+    gen.prepare();
     for (size_t iteration = 0; iteration < pde.iterations; iteration++) {
-        dbg::log("Processing iteration #" + std::to_string(iteration) + " out "
-        "of " + std::to_string(pde.iterations));
-        grid.setIteration(iteration);
-        grid.generateExpressions();
-        if (iteration == 0 && hasTimeReference(grid))
+        gen.run(iteration);
+        if (iteration == 0 && hasTimeReference(gen.grid))
             addTimeSystem();
         systems.emplace_back();
         ode::ODESystem &ode = systems.back();
-        for (grid::GridCell &cell : grid) {
+        for (grid::GridCell &cell : gen.grid) {
             if (cell.type == grid::CELL_BORDER || cell.type == grid::CELL_DOMAIN) {
                 ode.vars.insert(ode.vars.begin(), cell.vars.begin(),
                 cell.vars.end());
@@ -56,7 +49,7 @@ const std::vector<ode::ODESystem> &ODEGenerator::getSystems() const {
     return systems;
 }
 
-bool ODEGenerator::hasTimeReference(const grid::PDEGrid &grid) const {
+bool ODEGenerator::hasTimeReference(const grid::Grid &grid) const {
     std::unordered_set<std::string> symbs;
     for (const grid::GridCell &cell : grid)
         for (const expr::ExprNode &node : cell.vals)

@@ -12,7 +12,7 @@ std::vector<double> Grid::toRealLoc(const GridCell *cell) {
     std::vector<size_t> loc = toLoc(cell);
     std::vector<double> out(loc.size());
     for (size_t i = 0; i < loc.size(); i++)
-        out[i] = loc[i] * system.scale + pivot[i];
+        out[i] = loc[i] * scale + pivot[i];
     return out;
 }
 

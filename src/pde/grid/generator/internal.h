@@ -16,21 +16,14 @@ class InternalExprGenerator final : public ExprGenerator {
 public:
 
     /**
-     * Constructor
+     * Inherit constructor
      */
-    InternalExprGenerator();
+    using ExprGenerator::ExprGenerator;
 
     /**
      * Destructor
      */
     virtual ~InternalExprGenerator();
-
-    /**
-     * Set the system that the user entered. This function expands the parent
-     * definition to also do preprocessing of the boundary expressions
-     * @param sys The system to save in this generator
-     */
-    virtual void setSystem(const PDESystem &sys);
 
     /**
      * Generate the expression for a given grid cell
@@ -39,11 +32,6 @@ public:
     virtual void generate(GridCell &cell);
 
 private:
-
-    /**
-     * Find all derivatives in all variable expressions and store them
-     */
-    void findAllDerivs();
 
     /**
      * Generate an approximation of a derivative at a given grid cell. This

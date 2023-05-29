@@ -1,7 +1,8 @@
 
 #pragma once
 
-#include "grid/pdegrid.h"
+#include "grid/generator.h"
+#include "grid/grid.h"
 #include "ode/spec.h"
 #include "settings.h"
 #include "spec.h"
@@ -18,8 +19,9 @@ public:
 
     /**
      * Constructor
+     * @param system A constant reference to the input PDE
      */
-    ODEGenerator();
+    ODEGenerator(const PDESystem &system);
 
     /**
      * Destructor
@@ -31,12 +33,6 @@ public:
      * @param val The (updated) settings
      */
     void changeSettings(const CompilerSettings &val);
-
-    /**
-     * Set the input PDE system
-     * @param sys The PDE system
-     */
-    void setPDE(const PDESystem &sys);
 
     /**
      * Run the generator and store generated ODE systems in this object
@@ -57,7 +53,7 @@ private:
      * @param grid The grid to search through
      * @return A boolean indicating if a reference to "t" is present
      */
-    bool hasTimeReference(const grid::PDEGrid &grid) const;
+    bool hasTimeReference(const grid::Grid &grid) const;
 
     /**
      * Add a system that defines time variable "t"
@@ -65,7 +61,7 @@ private:
     void addTimeSystem();
 
     // The user input PDE system
-    PDESystem pde;
+    const PDESystem &pde;
     // Global compiler settings
     CompilerSettings settings;
     // The generated ODEs
