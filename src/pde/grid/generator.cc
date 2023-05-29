@@ -4,6 +4,7 @@
 #include "generator/util.h"
 #include "groups/alg/optimalrect.h"
 #include "pde/approx/spread.h"
+#include <unordered_map>
 
 using namespace pde::grid;
 
@@ -22,6 +23,12 @@ void GridGenerator::setSystem(const PDESystem &sys) {
     grid.componentLimit = 168;
     grid.maxGridSize = 1000000;
     grid.domain = system.domain;
+    // Replace dimension names with markers in variable expressions
+    std::unordered_map<std::string, size_t> dimMap;
+    for (size_t i = 0; i < system.dims.size(); i++)
+        dimMap.emplace(system.dims[i], i);
+    for (expr::ExprNode &node : system.vals)
+        node.replaceSymbols(dimMap);
 }
 
 void GridGenerator::prepare() {
