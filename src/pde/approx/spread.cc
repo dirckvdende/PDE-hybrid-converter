@@ -4,7 +4,7 @@
 using namespace pde;
 using namespace pde::approx;
 
-std::vector<size_t> pde::approx::calcSpread(const parser::PDESystem &system) {
+std::vector<size_t> pde::approx::calcSpread(const PDESystem &system) {
     std::vector<size_t> out(system.dims.size(), 0);
     std::unordered_map<std::string, size_t> nameMap;
     for (size_t i = 0; i < system.dims.size(); i++)

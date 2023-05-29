@@ -11,7 +11,7 @@ BoundaryExprGenerator::BoundaryExprGenerator() { }
 
 BoundaryExprGenerator::~BoundaryExprGenerator() { }
 
-void BoundaryExprGenerator::setSystem(const parser::PDESystem &sys) {
+void BoundaryExprGenerator::setSystem(const PDESystem &sys) {
     ExprGenerator::setSystem(sys);
     // Replace dimension names with index markers
     std::unordered_map<std::string, size_t> indexMap;

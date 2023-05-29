@@ -4,7 +4,7 @@
 #include "grid/cell.h"
 #include "grid/pdegrid.h"
 #include "parser/parser.h"
-#include "parser/spec.h"
+#include "spec.h"
 #include <fstream>
 #include <string>
 

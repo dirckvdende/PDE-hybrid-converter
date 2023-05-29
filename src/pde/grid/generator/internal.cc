@@ -7,7 +7,7 @@ InternalExprGenerator::InternalExprGenerator() { }
 
 InternalExprGenerator::~InternalExprGenerator() { }
 
-void InternalExprGenerator::setSystem(const parser::PDESystem &sys) {
+void InternalExprGenerator::setSystem(const PDESystem &sys) {
     ExprGenerator::setSystem(sys);
     // Replace dimension names with index markers
     std::unordered_map<std::string, size_t> indexMap;

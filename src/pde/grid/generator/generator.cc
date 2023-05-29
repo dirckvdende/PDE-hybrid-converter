@@ -11,7 +11,7 @@ void ExprGenerator::setGrid(Grid &gridRef) {
     grid = &gridRef;
 }
 
-void ExprGenerator::setSystem(const parser::PDESystem &sys) {
+void ExprGenerator::setSystem(const PDESystem &sys) {
     system = sys;
 }
 

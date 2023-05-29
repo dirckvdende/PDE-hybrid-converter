@@ -5,6 +5,7 @@
 #include "parser.h"
 #include <algorithm>
 
+using namespace pde;
 using namespace pde::parser;
 
 Parser::Parser() { }
