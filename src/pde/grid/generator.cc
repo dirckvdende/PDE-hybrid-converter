@@ -30,6 +30,8 @@ void GridGenerator::setSystem(const PDESystem &sys) {
         dimMap.emplace(system.dims[i], i);
     for (expr::ExprNode &node : system.vals)
         node.replaceSymbols(dimMap);
+    for (expr::ExprNode &init : system.init)
+        init.replaceSymbols(dimMap);
 }
 
 void GridGenerator::prepare() {
