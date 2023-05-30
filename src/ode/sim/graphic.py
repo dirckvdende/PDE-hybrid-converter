@@ -16,7 +16,7 @@ varNames = set()
 for name in sys.argv[2:]:
     varNames.add(name)
 
-os.system("./build/main --ode " + sys.argv[1])
+os.system("./build/main -d --ode " + sys.argv[1])
 f = open("./tmp/ode.csv")
 
 data = []
