@@ -32,7 +32,7 @@ void ODEGenerator::run() {
         ode::ODESystem &ode = systems.back();
         for (grid::GridCell &cell : gen.grid) {
             if (cell.type == grid::CELL_BORDER || cell.type == grid::CELL_DOMAIN) {
-                ode.vars.insert(ode.vars.begin(), cell.vars.begin(),
+                ode.vars.insert(ode.vars.end(), cell.vars.begin(),
                 cell.vars.end());
                 ode.vals.insert(ode.vals.end(), cell.vals.begin(), cell.vals.end());
                 if (cell.isStored)
