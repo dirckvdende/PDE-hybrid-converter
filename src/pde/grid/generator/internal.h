@@ -55,6 +55,12 @@ private:
      */
     void genDimMap();
 
+    /**
+     * Calculate initial values for the given cell
+     * @param cell A reference to the grid cell
+     */
+    void calcInit(GridCell &cell);
+
     // Map from dimension names to indices, for quick access
     std::unordered_map<std::string, size_t> dimMap;
 

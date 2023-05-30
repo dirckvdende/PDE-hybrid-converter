@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "internal.h"
 #include "util.h"
 #include <stack>
@@ -16,6 +17,7 @@ void InternalExprGenerator::generate(GridCell &cell) {
         cell.vals.back().replaceDirect(loc);
     }
     replaceAll(cell);
+    calcInit(cell);
 }
 
 void InternalExprGenerator::replaceAll(GridCell &cell) {
@@ -42,6 +44,7 @@ void InternalExprGenerator::replaceAll(GridCell &cell) {
 expr::ExprNode InternalExprGenerator::generateApprox(GridCell &cell, const
 std::vector<size_t> &deriv, const std::string &name) {
     // TODO: implement properly
+    (void)deriv;
     std::vector<size_t> mid = grid.toLoc(cell);
     std::vector<size_t> left = mid, right = mid;
     left[0]--;
@@ -69,4 +72,12 @@ void InternalExprGenerator::genDimMap() {
         return;
     for (size_t i = 0; i < grid.dims.size(); i++)
         dimMap.emplace(grid.dims[i], i);
+}
+
+void InternalExprGenerator::calcInit(GridCell &cell) {
+    std::vector<double> loc = grid.toRealLoc(cell);
+    cell.init.clear();
+    for (size_t i = 0; i < system.init.size(); i++) {
+        cell.init.push_back(system.init[i].evalDirect(loc));
+    }
 }

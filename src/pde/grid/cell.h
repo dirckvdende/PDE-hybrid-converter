@@ -28,6 +28,8 @@ struct GridCell {
     std::vector<expr::ExprNode> vals;
     // Names of the variables in this grid cell
     std::vector<std::string> vars;
+    // Initial values of the variables
+    std::vector<double> init;
 };
 
 }

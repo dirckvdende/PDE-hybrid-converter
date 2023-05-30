@@ -34,7 +34,17 @@ void ODEGenerator::run() {
             if (cell.type == grid::CELL_BORDER || cell.type == grid::CELL_DOMAIN) {
                 ode.vars.insert(ode.vars.end(), cell.vars.begin(),
                 cell.vars.end());
-                ode.vals.insert(ode.vals.end(), cell.vals.begin(), cell.vals.end());
+                if (cell.type == grid::CELL_DOMAIN) {
+                    for (size_t i = 0; i < cell.vals.size(); i++) {
+                        ode.vals.push_back(expr::ExprNode(expr::NODE_INTEG));
+                        ode.vals.back()[0] = cell.vals[i];
+                        ode.vals.back()[1] = expr::ExprNode(expr::NODE_NUM, {},
+                        cell.init[i]);
+                    }
+                } else {
+                    ode.vals.insert(ode.vals.end(), cell.vals.begin(),
+                    cell.vals.end());
+                }
                 if (cell.isStored)
                     for (const std::string &var : cell.vars)
                         ode.emit.push_back({var, var});
