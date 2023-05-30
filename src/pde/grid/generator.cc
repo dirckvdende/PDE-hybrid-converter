@@ -75,6 +75,7 @@ void GridGenerator::divideGroups() {
         alg = new groups::alg::OptimalRectAlg;
     alg->setGrid(depends);
     alg->run();
+    delete alg;
     depends.calc();
     for (GridCell &cell : grid) {
         std::vector<size_t> loc = grid.toLoc(cell);
