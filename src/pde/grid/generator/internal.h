@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "expr/expr.h"
 #include "generator.h"
 #include "pde/grid/cell.h"
 #include "pde/grid/grid.h"
@@ -34,15 +35,28 @@ public:
 private:
 
     /**
-     * Generate an approximation of a derivative at a given grid cell. This
-     * derivative will then be replaced in the given grid cell
+     * Replace all derivatives in a grid cell with approximations
+     * @param cell A reference to the grid cell
+     */
+    void replaceAll(GridCell &cell);
+
+    /**
+     * Generate an approximation of a derivative at a given grid cell
      * @param cell A reference to the grid cell
      * @param deriv The derivative count per dimension
+     * @param name The variable name to take the derivative of
+     * @return The approximation as an expression
      */
-    void generateApprox(GridCell &cell, const std::vector<size_t> &deriv);
+    expr::ExprNode generateApprox(GridCell &cell, const std::vector<size_t>
+    &deriv, const std::string &name);
 
-    // Stores all of the spatial derivatives present in the expressions
-    std::vector<std::vector<std::vector<size_t>>> derivs;
+    /**
+     * Generate the dimension map, if it hasn't been already
+     */
+    void genDimMap();
+
+    // Map from dimension names to indices, for quick access
+    std::unordered_map<std::string, size_t> dimMap;
 
 };
 
