@@ -13,4 +13,10 @@ extern bool DEBUG_ENABLED;
  */
 void log(const std::string &txt);
 
+/**
+ * Output an error and halt the program
+ * @param txt The error message to print
+ */
+void error(const std::string &txt);
+
 }
