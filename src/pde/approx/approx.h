@@ -30,12 +30,6 @@ public:
     ~SpatialApprox();
 
     /**
-     * Store the scale of the grid in this object
-     * @param val The scale of the grid
-     */
-    void setScale(double val);
-
-    /**
      * Convert all spatial derivatives in the given grid cell
      * @param cell A reference to the cell in which to convert all derivatives
      */
@@ -89,14 +83,10 @@ private:
     expr::ExprNode getCoeffExpr(const std::vector<size_t> &pos, double coeff,
     const std::string &var) const;
 
-    // Grid scale
-    double scale;
     // Map from dimension names to dimension indices
     std::unordered_map<std::string, size_t> dimMap;
     // The grid on which all of the cells are defined
     grid::Grid &grid;
-    // Current iteration
-    size_t iteration;
     // A cache to store derivative to coefficient conversions
     std::unordered_map<std::vector<size_t>, Coeffs, grid::domain::VectorHash>
     coeffCache;
