@@ -3,7 +3,7 @@ pde {
     dims [x, y];
     domain x * x + y * y < 1;
     pivot [0, 0];
-    scale 0.1;
+    scale 0.99;
 
     equation dt(u) = dx(dx(u)) + dy(dy(u));
     init u = x * x + y * y;

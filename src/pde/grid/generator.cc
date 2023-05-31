@@ -93,6 +93,7 @@ void GridGenerator::generateNames() {
 
 void GridGenerator::generateExpr() {
     for (GridCell &cell : grid) {
+        cell.vals.clear();
         if (cell.type == CELL_BORDER)
             boundaryGen.generate(cell);
         else if (cell.type == CELL_DOMAIN)
