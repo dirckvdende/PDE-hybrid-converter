@@ -36,17 +36,12 @@ public:
     void setScale(double val);
 
     /**
-     * Convert all spatial derivatives in the stored grid
-     */
-    void convert();
-
-private:
-
-    /**
      * Convert all spatial derivatives in the given grid cell
      * @param cell A reference to the cell in which to convert all derivatives
      */
     void convert(grid::GridCell &cell);
+
+private:
 
     /**
      * Get the coefficients of a one-dimensional approximation of an n-th

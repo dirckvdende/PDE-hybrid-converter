@@ -13,11 +13,6 @@ void SpatialApprox::setScale(double val) {
     scale = val;
 }
 
-void SpatialApprox::convert() {
-    for (grid::GridCell &cell : grid)
-        convert(cell);
-}
-
 void SpatialApprox::convert(grid::GridCell &cell) {
     for (expr::ExprNode &node : cell.vals)
         replaceApprox(cell, node);
@@ -104,7 +99,7 @@ std::vector<size_t> &deriv) {
 expr::ExprNode SpatialApprox::getCoeffExpr(const std::vector<size_t> &pos,
 double coeff, const std::string &var) const {
     return expr::ExprNode(expr::NODE_MUL, {
-        new expr::ExprNode(expr::NODE_NUM, {}, 1.0),
+        new expr::ExprNode(expr::NODE_NUM, {}, coeff),
         new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(var,
         pos, iteration))
     });
