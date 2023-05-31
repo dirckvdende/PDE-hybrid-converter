@@ -9,7 +9,7 @@
 
 using namespace pde;
 
-Compiler::Compiler() : generator(system) { }
+Compiler::Compiler() : preprocess(system), generator(system) { }
 
 Compiler::~Compiler() { }
 
@@ -21,6 +21,7 @@ void Compiler::run() {
     parser.setText(txt);
     parser.run();
     system = parser.getSpecs();
+    preprocess.run();
     // TODO: implement real compiler settings
     generator.changeSettings(CompilerSettings());
     dbg::log("Generating iteration expressions...");

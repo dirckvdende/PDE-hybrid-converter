@@ -4,6 +4,7 @@
 #include "ode.h"
 #include "ode/spec.h"
 #include "parser/parser.h"
+#include "parser/preprocess.h"
 #include "ode/splitter/splitter.h"
 #include "spec.h"
 #include <string>
@@ -50,6 +51,8 @@ private:
     std::string txt;
     // The parser used to convert text input into a PDE system
     parser::Parser parser;
+    // System preprocessor
+    parser::Preprocessor preprocess;
     // The input PDE system
     PDESystem system;
     // ODE system generator

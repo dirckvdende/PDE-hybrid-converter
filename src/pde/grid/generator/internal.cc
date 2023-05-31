@@ -14,7 +14,7 @@ void InternalExprGenerator::generate(GridCell &cell) {
     cell.vals.clear();
     for (size_t i = 0; i < system.vars.size(); i++) {
         cell.vals.push_back(system.vals[i]);
-        cell.vals.back().replaceDirect(loc);
+        cell.vals.back().replaceDims(loc);
     }
     replaceAll(cell);
     calcInit(cell);
@@ -77,7 +77,6 @@ void InternalExprGenerator::genDimMap() {
 void InternalExprGenerator::calcInit(GridCell &cell) {
     std::vector<double> loc = grid.toRealLoc(cell);
     cell.init.clear();
-    for (size_t i = 0; i < system.init.size(); i++) {
-        cell.init.push_back(system.init[i].evalDirect(loc));
-    }
+    for (size_t i = 0; i < system.init.size(); i++)
+        cell.init.push_back(system.init[i].evalDims(loc));
 }

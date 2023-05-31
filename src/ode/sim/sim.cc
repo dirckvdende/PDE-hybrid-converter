@@ -84,7 +84,7 @@ void Sim::runSystem(const ODESystem &system) {
         names.push_back(system.vars[i]);
     }
     for (expr::ExprNode &eq : equations)
-        eq.replaceSymbols(nameMap);
+        eq.replaceVars(nameMap);
     // Determine initial values
     std::vector<double> vals;
     for (size_t i = 0; i < varStart; i++)
@@ -93,7 +93,7 @@ void Sim::runSystem(const ODESystem &system) {
         if (equations[i - varStart].type == expr::NODE_INTEG)
             vals.push_back(equations[i - varStart][1].eval());
         else
-            vals.push_back(equations[i - varStart].evalDirect(vals));
+            vals.push_back(equations[i - varStart].evalVars(vals));
         history.push_back({vals[i]});
     }
     // Run simulation
@@ -105,10 +105,9 @@ void Sim::runSystem(const ODESystem &system) {
             vals[i] = history[i][it];
         for (size_t i = varStart; i < names.size(); i++) {
             if (equations[i - varStart].type == expr::NODE_INTEG)
-                vals[i] += stepSize * equations[i - varStart][0].evalDirect(
-                vals);
+                vals[i] += stepSize * equations[i - varStart][0].evalVars(vals);
             else
-                vals[i] = equations[i - varStart].evalDirect(vals);
+                vals[i] = equations[i - varStart].evalVars(vals);
             // Limit range
             vals[i] = std::max(vals[i], system.bounds[i - varStart].first);
             vals[i] = std::min(vals[i], system.bounds[i - varStart].second);

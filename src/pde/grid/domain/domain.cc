@@ -24,10 +24,6 @@ size_t Domain::size() const {
 
 void Domain::run() {
     expr = grid.domain;
-    std::unordered_map<std::string, size_t> dimMap;
-    for (size_t i = 0; i < grid.dims.size(); i++)
-        dimMap.emplace(grid.dims[i], i);
-    expr.replaceSymbols(dimMap);
     determineDomain();
     determineBorder();
 }
@@ -110,7 +106,7 @@ bool Domain::inDomain(const std::vector<long> &loc) const {
 
 bool Domain::inDomain(const std::vector<double> &point) const {
     static const double EPS = 1e-10;
-    return abs(expr.evalDirect(point)) > EPS;
+    return abs(expr.evalDims(point)) > EPS;
 }
 
 std::vector<std::vector<long>> Domain::getNeighbours(const std::vector<long>
