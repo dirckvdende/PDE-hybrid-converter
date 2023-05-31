@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "pde/approx/approx.h"
 #include "expr/expr.h"
 #include "generator.h"
 #include "pde/grid/cell.h"
@@ -17,9 +18,12 @@ class InternalExprGenerator final : public ExprGenerator {
 public:
 
     /**
-     * Inherit constructor
+     * Constructor
+     * @param grid A reference to the grid that the expressions are to be
+     * generated on
+     * @param system A constant reference to the input PDE
      */
-    using ExprGenerator::ExprGenerator;
+    InternalExprGenerator(Grid &grid, const PDESystem &system);
 
     /**
      * Destructor
@@ -41,16 +45,6 @@ private:
     void replaceAll(GridCell &cell);
 
     /**
-     * Generate an approximation of a derivative at a given grid cell
-     * @param cell A reference to the grid cell
-     * @param deriv The derivative count per dimension
-     * @param name The variable name to take the derivative of
-     * @return The approximation as an expression
-     */
-    expr::ExprNode generateApprox(GridCell &cell, const std::vector<size_t>
-    &deriv, const std::string &name);
-
-    /**
      * Generate the dimension map, if it hasn't been already
      */
     void genDimMap();
@@ -61,8 +55,8 @@ private:
      */
     void calcInit(GridCell &cell);
 
-    // Map from dimension names to indices, for quick access
-    std::unordered_map<std::string, size_t> dimMap;
+    // Approximation helper
+    approx::SpatialApprox approx;
 
 };
 
