@@ -1,0 +1,25 @@
+
+system {
+    var a0 = 1.0;
+    var a1 = integ(a0 - 2 * a1 + a2, 0.0);
+    var a2 = integ(a1 - 2 * a2 + a3, 0.0);
+    var a3 = integ(a2 - 2 * a3 + a4, 0.0);
+    var a4 = integ(a3 - 2 * a4 + a5, 0.0);
+    var a5 = integ(a4 - 2 * a5 + a6, 0.0);
+    var a6 = 1.0;
+    interval a0 = [-10, 10];
+    interval a1 = [-10, 10];
+    interval a2 = [-10, 10];
+    interval a3 = [-10, 10];
+    interval a4 = [-10, 10];
+    interval a5 = [-10, 10];
+    interval a6 = [-10, 10];
+    time 20;
+    emit a0 as a0;
+    emit a1 as a1;
+    emit a2 as a2;
+    emit a3 as a3;
+    emit a4 as a4;
+    emit a5 as a5;
+    emit a6 as a6;
+}
