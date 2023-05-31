@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <functional>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -22,7 +23,10 @@ enum NodeType {
     NODE_AND, NODE_OR,
     NODE_MINUS,
     NODE_INTEG, NODE_LIST,
-    NODE_MARKER,
+    // Dimension index indicator, uses index
+    NODE_DIM,
+    // Variable marker: replacement of a variable with an index
+    NODE_VAR_MARKER,
 };
 
 /**
@@ -136,12 +140,6 @@ public:
     void replace(const ExprNode &search, const ExprNode &repl);
 
     /**
-     * Replace symbols with markers
-     * @param symbols A map from symbol names to indices
-     */
-    void replaceSymbols(const std::unordered_map<std::string, size_t> &symbols);
-
-    /**
      * Replace symbols with other symbols
      * @param symbols A map from symbol names to new symbol names
      */
@@ -163,22 +161,47 @@ public:
     double eval() const;
 
     /**
-     * Evaluate an expression and simultaniously replace markers with their
-     * corresponding values
-     * @param vals A vector giving the values by index
+     * Evaluate an expression and use a fallback function if a node is
+     * encountered that cannot be evaluated
+     * @param fallback A function that is used if evaluation is not possible
      * @return The evaluated value as a double. Other types are implicitly
      * coverted to double
      */
-    double evalDirect(const std::vector<double> &vals) const;
+    double evalDirect(std::function<double(const ExprNode &)> fallback) const;
 
     /**
-     * Replace all markers with values directly, without evaluating the entire
-     * tree. Note that this does not make a copy of the tree!
-     * @param vals A vector giving the values by index
+     * Evaluate dimension nodes with given values
+     * @param vals An ordered list of the coordinates in each dimension
      * @return The evaluated value as a double. Other types are implicitly
      * converted to double
      */
-    void replaceDirect(const std::vector<double> &vals);
+    double evalDims(const std::vector<double> &vals) const;
+
+    /**
+     * Replace symbols with dimension nodes
+     * @param dimMap A map from dimension names to dimension indices
+     */
+    void replaceDims(const std::unordered_map<std::string, size_t> &dimMap);
+
+    /**
+     * Replace dimension nodes with values
+     * @param vals An ordered list of the coordinates in each dimension
+     */
+    void replaceDims(const std::vector<double> &vals);
+
+    /**
+     * Replace variables with variable markers
+     * @param nameMap A map from variable names to marker indices
+     */
+    void replaceVars(const std::unordered_map<std::string, size_t> &nameMap);
+
+    /**
+     * Evaluate an expression replacing variable markers with values
+     * @param vals An ordered list of the values for each variable
+     * @return The evaluated value as a double. Other types are implicitly
+     * converted to double
+     */
+    double evalVars(const std::vector<double> &vals) const;
 
     /**
      * Check if this expression contains any variables other than "t"
@@ -194,12 +217,15 @@ public:
     std::string content;
     // Numeric content
     double number;
-    // Marker reference index
-    size_t markerIndex;
+    // Index content
+    size_t index;
     // Derivative information
     struct {
         // List of dimension names
         std::vector<std::string> dims;
+        // Derivative amounts per dimension, which are not always present (only
+        // for concrete derivatives)
+        std::vector<size_t> count;
         // Variable to take derivative of
         std::string var;
     } deriv;
@@ -211,15 +237,6 @@ private:
      * @return A string representation of the expression
      */
     std::string binaryStr() const;
-
-    /**
-     * Helper function to evaluate a binary node
-     * @param op The evaluation function
-     * @param vals The values to replace markers with
-     * @return The evaluated value as a double
-     */
-    double evalBinary(double (*op)(double, double), const std::vector<double>
-    &vals) const;
 
 };
 

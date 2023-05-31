@@ -13,6 +13,6 @@ void BoundaryExprGenerator::generate(GridCell &cell) {
     std::vector<double> loc = grid.toRealLoc(cell);
     for (size_t i = 0; i < system.vars.size(); i++) {
         cell.vals.push_back(system.boundary[i]);
-        cell.vals.back().replaceDirect(loc);
+        cell.vals.back().replaceDims(loc);
     }
 }

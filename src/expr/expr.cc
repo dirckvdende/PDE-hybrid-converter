@@ -17,7 +17,7 @@ children, double number) : type(type), children(children),
 number(number) { }
 
 ExprNode::ExprNode(const ExprNode &other) : type(other.type),
-content(other.content), number(other.number), markerIndex(other.markerIndex),
+content(other.content), number(other.number), index(other.index),
 deriv(other.deriv) {
     for (ExprNode *child : other.children)
         children.push_back(new ExprNode(*child));
@@ -34,8 +34,12 @@ bool ExprNode::operator==(const ExprNode &other) const {
     if (type == NODE_NUM) {
         if (number != other.number)
             return false;
-    } else if (type == NODE_MARKER) {
-        if (markerIndex != other.markerIndex)
+    } else if (type == NODE_DIM) {
+        if (index != other.index)
+            return false;
+    } else if (type == NODE_DERIV) {
+        if (deriv.dims != other.deriv.dims || deriv.count != other.deriv.count
+        || deriv.var != other.deriv.var)
             return false;
     } else {
         if (content != other.content)
@@ -65,7 +69,7 @@ ExprNode &ExprNode::operator=(const ExprNode &other) {
     type = other.type;
     content = other.content;
     number = other.number;
-    markerIndex = other.markerIndex;
+    index = other.index;
     deriv = other.deriv;
     return *this;
 }
@@ -88,8 +92,8 @@ std::string ExprNode::str() const {
     switch (type) {
         case NODE_ERR:
             return "[ERR]";
-        case NODE_MARKER:
-            return "{" + std::to_string(markerIndex) + "}";
+        case NODE_DIM:
+            return "DIM{" + std::to_string(index) + "}";
         case NODE_SYMB:
             return content;
         case NODE_NUM:
@@ -143,17 +147,6 @@ void ExprNode::replace(const ExprNode &search, const ExprNode &repl) {
         *node = repl;
 }
 
-void ExprNode::replaceSymbols(const std::unordered_map<std::string, size_t>
-&symbols) {
-    if (type == NODE_SYMB && symbols.find(content) != symbols.end()) {
-        type = NODE_MARKER;
-        markerIndex = symbols.at(content);
-        return;
-    }
-    for (ExprNode *child : children)
-        child->replaceSymbols(symbols);
-}
-
 void ExprNode::replaceSymbols(const std::unordered_map<std::string, std::string>
 &symbols) {
     if (type == NODE_SYMB && symbols.find(content) != symbols.end()) {
@@ -174,72 +167,115 @@ void ExprNode::findAllSymbols(std::unordered_set<std::string> &symbols) const {
 }
 
 double ExprNode::eval() const {
-    return evalDirect({});
+    const ExprNode *cur = this;
+    return evalDirect([&](const ExprNode &node) -> double {
+        throw std::runtime_error("Could not evaluate expression \"" + cur->str()
+        + "\"");
+        return 0.0;
+    });
 }
 
-double ExprNode::evalDirect(const std::vector<double> &vals) const {
+double ExprNode::evalDirect(std::function<double(const ExprNode &)> fallback)
+const {
     switch (type) {
-        case NODE_MARKER:
-            if (markerIndex >= vals.size())
-                throw std::runtime_error("Could not evaluate expression, "
-                "undefined marker value");
-            return vals[markerIndex];
         case NODE_NUM:
             return number;
         case NODE_ADD:
-            return evalBinary([](double x, double y) -> double {return x + y;},
-            vals);
+            return children[0]->evalDirect(fallback) +
+            children[1]->evalDirect(fallback);
         case NODE_SUB:
-            return evalBinary([](double x, double y) -> double {return x - y;},
-            vals);
+            return children[0]->evalDirect(fallback) -
+            children[1]->evalDirect(fallback);
         case NODE_MUL:
-            return evalBinary([](double x, double y) -> double {return x * y;},
-            vals);
+            return children[0]->evalDirect(fallback) *
+            children[1]->evalDirect(fallback);
         case NODE_DIV:
-            return evalBinary([](double x, double y) -> double {return x / y;},
-            vals);
+            return children[0]->evalDirect(fallback) /
+            children[1]->evalDirect(fallback);
         case NODE_LT:
-            return evalBinary([](double x, double y) -> double {return x < y;},
-            vals);
+            return children[0]->evalDirect(fallback) <
+            children[1]->evalDirect(fallback);
         case NODE_LTE:
-            return evalBinary([](double x, double y) -> double {return x <= y;},
-            vals);
+            return children[0]->evalDirect(fallback) <=
+            children[1]->evalDirect(fallback);
         case NODE_GT:
-            return evalBinary([](double x, double y) -> double {return x > y;},
-            vals);
+            return children[0]->evalDirect(fallback) >
+            children[1]->evalDirect(fallback);
         case NODE_GTE:
-            return evalBinary([](double x, double y) -> double {return x >= y;},
-            vals);
+            return children[0]->evalDirect(fallback) >=
+            children[1]->evalDirect(fallback);
         case NODE_EQ:
-            return evalBinary([](double x, double y) -> double {return x == y;},
-            vals);
+            return children[0]->evalDirect(fallback) ==
+            children[1]->evalDirect(fallback);
         case NODE_NEQ:
-            return evalBinary([](double x, double y) -> double {return x != y;},
-            vals);
+            return children[0]->evalDirect(fallback) !=
+            children[1]->evalDirect(fallback);
         case NODE_AND:
-            return evalBinary([](double x, double y) -> double {return x && y;},
-            vals);
+            return children[0]->evalDirect(fallback) &&
+            children[1]->evalDirect(fallback);
         case NODE_OR:
-            return evalBinary([](double x, double y) -> double {return x || y;},
-            vals);
+            return children[0]->evalDirect(fallback) ||
+            children[1]->evalDirect(fallback);
         case NODE_MINUS:
-            return -operator[](0).evalDirect(vals);
+            return -children[0]->evalDirect(fallback);
         default:
-            throw std::runtime_error("Could not evaluate expression");
+            return fallback(*this);
     }
     return 0.0;
 }
 
-void ExprNode::replaceDirect(const std::vector<double> &vals) {
-    if (type == NODE_MARKER) {
-        if (markerIndex >= vals.size())
-            throw std::runtime_error("Index of marker too high to evaluate");
-        type = NODE_NUM;
-        number = vals[markerIndex];
+double ExprNode::evalDims(const std::vector<double> &vals) const {
+    const ExprNode *cur = this;
+    return evalDirect([&](const ExprNode &node) -> double {
+        if (node.type == NODE_DIM && node.index < vals.size())
+            return vals[node.index];
+        throw std::runtime_error("Could not evaluate node \"" + cur->str() +
+        "\"");
+        return 0.0;
+    });
+}
+
+void ExprNode::replaceDims(const std::unordered_map<std::string, size_t>
+&dimMap) {
+    if (type == NODE_SYMB && dimMap.find(content) != dimMap.end()) {
+        type = NODE_DIM;
+        index = dimMap.at(content);
         return;
     }
     for (ExprNode *child : children)
-        child->replaceDirect(vals);
+        child->replaceDims(dimMap);
+}
+
+void ExprNode::replaceDims(const std::vector<double> &val) {
+    if (type == NODE_DIM) {
+        type = NODE_NUM;
+        number = val[index];
+        return;
+    }
+    for (ExprNode *child : children)
+        child->replaceDims(val);
+}
+
+void ExprNode::replaceVars(const std::unordered_map<std::string, size_t>
+&nameMap) {
+    if (type == NODE_SYMB && nameMap.find(content) != nameMap.end()) {
+        type = NODE_NUM;
+        number = nameMap.at(content);
+        return;
+    }
+    for (ExprNode *child : children)
+        child->replaceVars(nameMap);
+}
+
+double ExprNode::evalVars(const std::vector<double> &vals) const {
+    const ExprNode *cur = this;
+    return evalDirect([&](const ExprNode &node) -> double {
+        if (node.type == NODE_VAR_MARKER && node.index < vals.size())
+            return vals[node.index];
+        throw std::runtime_error("Could not evaluate node \"" + cur->str() +
+        "\"");
+        return 0.0;
+    });
 }
 
 bool ExprNode::containsNonTimeVars() const {
@@ -260,9 +296,4 @@ std::string ExprNode::binaryStr() const {
     };
     return "(" + children[0]->str() + typeMap.at(type) + children[1]->str() +
     ")";
-}
-
-double ExprNode::evalBinary(double (*op)(double, double), const
-std::vector<double> &vals) const {
-    return op(operator[](0).evalDirect(vals), operator[](1).evalDirect(vals));
 }
