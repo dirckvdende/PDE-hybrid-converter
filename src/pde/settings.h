@@ -10,7 +10,7 @@ namespace pde {
  */
 struct CompilerSettings {
     size_t maxGridSize = 100000;
-    size_t componentLimit = 168;
+    size_t componentLimit = 10;
 };
 
 }
