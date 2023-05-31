@@ -59,11 +59,11 @@ expr::ExprNode &node) {
         for (size_t i = 0; i < pos.size(); i++)
             pos[i] = size_t(loc[i] + item.first[i]);
         if (out.type == expr::NODE_ERR) {
-            out = getCoeffExpr(pos, item.second, node.deriv.var);
+            out = getCoeffExpr(cell, pos, item.second, node.deriv.var);
         } else {
             expr::ExprNode tmp = expr::ExprNode(expr::NODE_ADD);
             tmp[0] = out;
-            tmp[1] = getCoeffExpr(pos, item.second, node.deriv.var);
+            tmp[1] = getCoeffExpr(cell, pos, item.second, node.deriv.var);
             out = tmp;
         }
     }
@@ -92,11 +92,12 @@ std::vector<size_t> &deriv) {
     return coeffCache.at(deriv);
 }
 
-expr::ExprNode SpatialApprox::getCoeffExpr(const std::vector<size_t> &pos,
-double coeff, const std::string &var) const {
+expr::ExprNode SpatialApprox::getCoeffExpr(const grid::GridCell &cell, const
+std::vector<size_t> &pos, double coeff, const std::string &var) const {
     return expr::ExprNode(expr::NODE_MUL, {
         new expr::ExprNode(expr::NODE_NUM, {}, coeff),
         new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(var,
-        pos, grid.iteration))
+        pos, cell.group == grid[pos].group ? grid.iteration : grid.iteration - 1
+        ))
     });
 }

@@ -75,13 +75,14 @@ private:
 
     /**
      * Get an expression for a position and coefficient
+     * @param cell The original cell that the expression is generated for
      * @param pos The position
      * @param coeff The coefficient multiplier
      * @param var The variable name that is approximated
      * @return The generated expression
      */
-    expr::ExprNode getCoeffExpr(const std::vector<size_t> &pos, double coeff,
-    const std::string &var) const;
+    expr::ExprNode getCoeffExpr(const grid::GridCell &cell, const
+    std::vector<size_t> &pos, double coeff, const std::string &var) const;
 
     // Map from dimension names to dimension indices
     std::unordered_map<std::string, size_t> dimMap;
