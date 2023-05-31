@@ -169,6 +169,7 @@ void ExprNode::findAllSymbols(std::unordered_set<std::string> &symbols) const {
 double ExprNode::eval() const {
     const ExprNode *cur = this;
     return evalDirect([&](const ExprNode &node) -> double {
+        (void)node;
         throw std::runtime_error("Could not evaluate expression \"" + cur->str()
         + "\"");
         return 0.0;
