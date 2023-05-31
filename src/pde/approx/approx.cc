@@ -23,7 +23,7 @@ std::vector<double> SpatialApprox::getCoeffs(size_t n) {
             c /= grid.scale;
         for (size_t i = 0; i <= n; i++) {
             coeffs[i] = c;
-            c = c / (i + 1) * (n - i);
+            c = c / (i + 1) * (n - i) * -1;
         }
         return coeffs;
     }
