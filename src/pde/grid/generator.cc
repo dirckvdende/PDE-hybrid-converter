@@ -21,7 +21,7 @@ void GridGenerator::setSystem(const PDESystem &sys) {
     grid.scale = system.scale;
     grid.iteration = 0;
     // TODO: implement custom component limits/grid sizes
-    grid.componentLimit = 10;
+    grid.componentLimit = 168;
     grid.maxGridSize = 1000000;
     grid.domain = system.domain;
 }
