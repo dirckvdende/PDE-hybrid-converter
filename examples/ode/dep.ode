@@ -1,0 +1,9 @@
+
+system {
+    var x = 1;
+    var y = integ(x, 0);
+    emit y as y;
+    interval x = [-1, 1];
+    interval y = [-100, 100];
+    time 10;
+}
