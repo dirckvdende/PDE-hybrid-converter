@@ -60,12 +60,20 @@ private:
      */
     void addTimeSystem();
 
+    /**
+     * Generate the initial iteration, which calculates initial conditions for
+     * cells that are needed between iterations
+     */
+    void generateInitIteration();
+
     // The user input PDE system
     const PDESystem &pde;
     // Global compiler settings
     CompilerSettings settings;
     // The generated ODEs
     std::vector<ode::ODESystem> systems;
+    // Object used to generate grid and expressions from PDE specification
+    grid::GridGenerator gen;
 
 };
 
