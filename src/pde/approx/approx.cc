@@ -5,8 +5,7 @@
 using namespace pde;
 using namespace pde::approx;
 
-SpatialApprox::SpatialApprox() : grid(nullptr), curCell(nullptr), iteration(0)
-{ }
+SpatialApprox::SpatialApprox(grid::Grid &grid) : grid(grid) { }
 
 SpatialApprox::~SpatialApprox() { }
 
@@ -14,39 +13,21 @@ void SpatialApprox::setScale(double val) {
     scale = val;
 }
 
-void SpatialApprox::setDims(const std::vector<std::string> &dims) {
-    dimMap.clear();
-    for (size_t i = 0; i < dims.size(); i++)
-        dimMap.emplace(dims[i], i);
-}
-
-void SpatialApprox::setGrid(grid::Grid &gridRef) {
-    grid = &gridRef;
-}
-
-void SpatialApprox::setIteration(size_t val) {
-    iteration = val;
-}
-
 void SpatialApprox::convert() {
-    for (grid::GridCell &cell : *grid)
+    for (grid::GridCell &cell : grid)
         convert(cell);
 }
 
 void SpatialApprox::convert(grid::GridCell &cell) {
-    curCell = &cell;
     for (expr::ExprNode &node : cell.vals)
-        replaceApprox(node);
-    curCell = nullptr;
+        replaceApprox(cell, node);
 }
 
 std::vector<double> SpatialApprox::getCoeffs(size_t n) {
     if (n % 2 == 0) {
         std::vector<double> coeffs(n + 1);
         // c_i = (-1)^(n-i) (n choose i) / scale^n
-        double c = 1.0;
-        if (n % 2 != 0)
-            c = -1.0;
+        double c = n % 2 == 0 ? 1.0 : -1.0;
         for (size_t i = 0; i < n; i++)
             c /= scale;
         for (size_t i = 0; i <= n; i++) {
@@ -67,41 +48,64 @@ std::vector<double> SpatialApprox::getCoeffs(size_t n) {
     return coeffs;
 }
 
-void SpatialApprox::replaceApprox(expr::ExprNode &node) const {
+void SpatialApprox::replaceApprox(grid::GridCell &cell, expr::ExprNode &node) {
     if (node.type == expr::NODE_DERIV) {
-        node = getApprox(node);
+        node = getApprox(cell, node);
         return;
     }
     for (expr::ExprNode *child : node.children)
-        replaceApprox(*child);
+        replaceApprox(cell, *child);
 }
 
-expr::ExprNode SpatialApprox::getApprox(const expr::ExprNode &node) const {
-    // TODO: implement
-    if (node.deriv.dims != std::vector<std::string>{"x", "x"})
-        throw std::runtime_error("not implemented");
-    std::vector<size_t> cur = grid->toLoc(curCell);
-    cur[0]--;
-    std::vector<size_t> left = cur;
-    cur[0]++;
-    std::vector<size_t> mid = cur;
-    cur[0]++;
-    std::vector<size_t> right = cur;
-    expr::ExprNode out(expr::NODE_ADD, {
-        new expr::ExprNode(expr::NODE_ADD, {
-            new expr::ExprNode(expr::NODE_MUL, {
-                new expr::ExprNode(expr::NODE_NUM, {}, 1.0 / scale / scale),
-                new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(node.deriv.var, left, iteration))
-            }),
-            new expr::ExprNode(expr::NODE_MUL, {
-                new expr::ExprNode(expr::NODE_NUM, {}, -2.0 / scale / scale),
-                new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(node.deriv.var, mid, iteration))
-            })
-        }),
-        new expr::ExprNode(expr::NODE_MUL, {
-            new expr::ExprNode(expr::NODE_NUM, {}, 1.0 / scale / scale),
-            new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(node.deriv.var, right, iteration))
-        })
-    });
+expr::ExprNode SpatialApprox::getApprox(grid::GridCell &cell, const
+expr::ExprNode &node) {
+    // TODO
+    const std::vector<size_t> loc = grid.toLoc(cell);
+    const SpatialApprox::Coeffs &coeffs = calcAllCoeffs(node.deriv.count);
+    expr::ExprNode out(expr::NODE_ERR);
+    for (const std::pair<std::vector<long>, double> &item : coeffs) {
+        std::vector<size_t> pos(item.first.size());
+        for (size_t i = 0; i < pos.size(); i++)
+            pos[i] = size_t(loc[i] + item.first[i]);
+        if (out.type == expr::NODE_ERR) {
+            out = getCoeffExpr(pos, item.second, node.deriv.var);
+        } else {
+            expr::ExprNode tmp = expr::ExprNode(expr::NODE_ADD);
+            tmp[0] = out;
+            tmp[1] = getCoeffExpr(pos, item.second, node.deriv.var);
+            out = tmp;
+        }
+    }
     return out;
+}
+
+const SpatialApprox::Coeffs &SpatialApprox::calcAllCoeffs(const
+std::vector<size_t> &deriv) {
+    if (coeffCache.find(deriv) == coeffCache.end()) {
+        Coeffs out = {{std::vector<long>(deriv.size(), 0), 1.0}};
+        for (size_t i = 0; i < deriv.size(); i++) {
+            std::vector<double> cur = getCoeffs(deriv[i]);
+            Coeffs rep;
+            for (size_t j = 0; j < cur.size(); j++) {
+                for (std::pair<std::vector<long>, double> item : out) {
+                    item.second *= cur[j];
+                    item.first[i] += j;
+                    item.first[i] -= cur.size() / 2;
+                    rep.push_back(item);
+                }
+            }
+            out = rep;
+        }
+        coeffCache.emplace(deriv, out);
+    }
+    return coeffCache.at(deriv);
+}
+
+expr::ExprNode SpatialApprox::getCoeffExpr(const std::vector<size_t> &pos,
+double coeff, const std::string &var) const {
+    return expr::ExprNode(expr::NODE_MUL, {
+        new expr::ExprNode(expr::NODE_NUM, {}, 1.0),
+        new expr::ExprNode(expr::NODE_SYMB, {}, grid::generator::toGridVar(var,
+        pos, iteration))
+    });
 }
