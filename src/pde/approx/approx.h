@@ -3,6 +3,7 @@
 
 #include "expr/expr.h"
 #include "pde/grid/cell.h"
+#include "pde/grid/domain/util.h"
 #include "pde/grid/grid.h"
 #include <unordered_map>
 #include <vector>
@@ -18,8 +19,10 @@ public:
 
     /**
      * Constructor
+     * @param grid A reference to the grid on which approximations are
+     * calculated
      */
-    SpatialApprox();
+    SpatialApprox(grid::Grid &grid);
 
     /**
      * Destructor
@@ -31,24 +34,6 @@ public:
      * @param val The scale of the grid
      */
     void setScale(double val);
-
-    /**
-     * Set the names of the dimensions
-     * @param dims A list of the names of the dimensions, in order
-     */
-    void setDims(const std::vector<std::string> &dims);
-
-    /**
-     * Set the grid on which all of the cells to be processed are present
-     * @param gridRef A reference to the grid
-     */
-    void setGrid(grid::Grid &gridRef);
-
-    /**
-     * Set the current iteration
-     * @param val The new value for the current iteration
-     */
-    void setIteration(size_t val);
 
     /**
      * Convert all spatial derivatives in the stored grid
@@ -73,27 +58,53 @@ private:
 
     /**
      * Replace all derivatives in an expression node with approximations
+     * @param cell The cell that the node originates from
      * @param node A reference to the root node
      */
-    void replaceApprox(expr::ExprNode &node) const;
+    void replaceApprox(grid::GridCell &cell, expr::ExprNode &node);
 
     /**
      * Convert a derivative expression node to an approximation
+     * @param cell The cell that the node originates from
      * @param node A constant reference to the derivative node to convert
      * @return The converted node
      */
-    expr::ExprNode getApprox(const expr::ExprNode &node) const;
+    expr::ExprNode getApprox(grid::GridCell &cell, const expr::ExprNode &node);
+
+    // Type for a list of coordinates and coefficients associates to these
+    // coordiantes
+    typedef std::vector<std::pair<std::vector<long>, double>> Coeffs;
+
+    /**
+     * Get the coefficients of all relative grid points, given the derivative
+     * counts
+     * @param deriv The derivative count per dimension
+     * @return A constant reference to a list of relative grid points and their
+     * coefficients
+     */
+    const Coeffs &calcAllCoeffs(const std::vector<size_t> &deriv);
+
+    /**
+     * Get an expression for a position and coefficient
+     * @param pos The position
+     * @param coeff The coefficient multiplier
+     * @param var The variable name that is approximated
+     * @return The generated expression
+     */
+    expr::ExprNode getCoeffExpr(const std::vector<size_t> &pos, double coeff,
+    const std::string &var) const;
 
     // Grid scale
     double scale;
     // Map from dimension names to dimension indices
     std::unordered_map<std::string, size_t> dimMap;
     // The grid on which all of the cells are defined
-    grid::Grid *grid;
-    // Keep track of the current cell being processed
-    grid::GridCell *curCell;
+    grid::Grid &grid;
     // Current iteration
     size_t iteration;
+    // A cache to store derivative to coefficient conversions
+    std::unordered_map<std::vector<size_t>, Coeffs, grid::domain::VectorHash>
+    coeffCache;
 
 };
 
