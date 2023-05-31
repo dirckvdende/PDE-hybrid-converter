@@ -270,8 +270,8 @@ void ExprNode::replaceDims(const std::vector<double> &val) {
 void ExprNode::replaceVars(const std::unordered_map<std::string, size_t>
 &nameMap) {
     if (type == NODE_SYMB && nameMap.find(content) != nameMap.end()) {
-        type = NODE_NUM;
-        number = nameMap.at(content);
+        type = NODE_VAR_MARKER;
+        index = nameMap.at(content);
         return;
     }
     for (ExprNode *child : children)
