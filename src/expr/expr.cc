@@ -100,12 +100,22 @@ std::string ExprNode::str() const {
             return std::to_string(number);
         case NODE_DERIV: {
             std::string out = "d[";
-            bool first = true;
-            for (const std::string &dim : deriv.dims) {
-                if (!first)
-                    out.push_back(' ');
-                first = false;
-                out.append(dim);
+            if (deriv.count.empty()) {
+                bool first = true;
+                for (const std::string &dim : deriv.dims) {
+                    if (!first)
+                        out.push_back(' ');
+                    first = false;
+                    out.append(dim);
+                }
+            } else {
+                bool first = true;
+                for (const size_t &amt : deriv.count) {
+                    if (!first)
+                        out.append(", ");
+                    first = false;
+                    out.append(std::to_string(amt));
+                }
             }
             out.append("](" + deriv.var + ")");
             return out;
