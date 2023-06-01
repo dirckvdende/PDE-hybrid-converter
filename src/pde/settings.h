@@ -13,6 +13,7 @@ struct CompilerSettings {
     size_t maxGridSize = 1000000;
     std::string filename;
     std::string outputFilename = "tmp/compiler.ode";
+    bool doSplitter = true;
 };
 
 }

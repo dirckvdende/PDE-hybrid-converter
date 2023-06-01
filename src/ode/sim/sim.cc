@@ -31,9 +31,12 @@ void Sim::run() {
     auto tRunStart = std::chrono::high_resolution_clock::now();
     stats.parseTime = std::chrono::duration_cast<std::chrono::microseconds>(
     tRunStart - tStart).count() / 1000000.0;
+    size_t index = 1;
     for (const ODESystem &system : specs) {
-        dbg::log("Running system...");
+        dbg::log("Running system " + std::to_string(index) + " out of " +
+        std::to_string(specs.size()) + "...");
         runSystem(system);
+        index++;
     }
     auto tFileStart = std::chrono::high_resolution_clock::now();
     stats.systemTime = std::chrono::duration_cast<std::chrono::microseconds>(
