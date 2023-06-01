@@ -25,9 +25,13 @@ void Compiler::run() {
     generator.apply(settings);
     dbg::log("Generating iteration expressions...");
     generator.run();
-    splitter.setSystems(generator.getSystems());
-    splitter.run();
-    outputSystems = splitter.getOutputSystems();
+    if (settings.doSplitter) {
+        splitter.setSystems(generator.getSystems());
+        splitter.run();
+        outputSystems = splitter.getOutputSystems();
+    } else {
+        outputSystems = generator.getSystems();
+    }
     output();
 }
 
@@ -53,6 +57,9 @@ void Compiler::readArgs(const std::vector<std::string> &args) {
                 case 'h':
                     showHelp();
                     exit(0);
+                    break;
+                case 's':
+                    settings.doSplitter = false;
                     break;
                 default:
                     break;
@@ -104,5 +111,7 @@ void Compiler::showHelp() {
         "    -h  Show this help page\n"
         "    -m  Set the maximum number of grid cells used in the\n"
         "        discretization of the PDE system\n"
-        "    -o Set the output filename\n\n";
+        "    -o  Set the output filename\n"
+        "    -s  Disable the output ODE splitter, which should only be used\n"
+        "        when debugging\n\n";
 }
