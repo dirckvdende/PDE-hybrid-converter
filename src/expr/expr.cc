@@ -92,8 +92,6 @@ std::string ExprNode::str() const {
     switch (type) {
         case NODE_ERR:
             return "[ERR]";
-        case NODE_DIM:
-            return "DIM{" + std::to_string(index) + "}";
         case NODE_SYMB:
             return content;
         case NODE_NUM:
@@ -135,6 +133,10 @@ std::string ExprNode::str() const {
             out.push_back(']');
             return out;
         }
+        case NODE_DIM:
+            return "DIM{" + std::to_string(index) + "}";
+        case NODE_VAR_MARKER:
+            return "VAR{" + std::to_string(index) + "}";
         default:
             return binaryStr();
     }
