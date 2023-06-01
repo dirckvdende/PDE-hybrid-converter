@@ -74,7 +74,12 @@ private:
      * @param resolution The (approximate) number of data points to output per
      * emit variable
      */
-    void outputEmit(std::string filename, size_t resolution) const;
+    void outputEmit(std::string filename, size_t resolution);
+
+    /**
+     * Remove stored emits that start with '_'
+     */
+    void cleanEmits();
 
     /**
      * Reset simulation statistics

@@ -126,10 +126,11 @@ void Sim::runSystem(const ODESystem &system) {
     stats.iterationTime += double(duration.count()) / 1000000.0;
 }
 
-void Sim::outputEmit(std::string filename, size_t resolution) const {
+void Sim::outputEmit(std::string filename, size_t resolution) {
     std::ofstream file(filename);
     if (!file.is_open())
         throw std::runtime_error("Could not open output file");
+    cleanEmits();
     file << "__time__";
     for (const auto &emit : emitVals) {
         file << ',';
@@ -158,6 +159,15 @@ void Sim::outputEmit(std::string filename, size_t resolution) const {
         }
     }
     file.close();
+}
+
+void Sim::cleanEmits() {
+    std::vector<std::string> names;
+    for (const auto &emit : emitVals)
+        if (emit.first.size() > 0 && emit.first[0] == '_')
+            names.push_back(emit.first);
+    for (const std::string &name : names)
+        emitVals.erase(name);
 }
 
 void Sim::resetStats() {
