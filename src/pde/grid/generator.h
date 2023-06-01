@@ -79,6 +79,21 @@ private:
     void generateExpr();
 
     /**
+     * Generate emit specifications for all nodes in the grid (that are boundary
+     * or domain)
+     */
+    void generateEmits();
+
+    /**
+     * Convert a variable name with a given cell to a positioned variable, to be
+     * used by the final emits of the system
+     * @param var The variable name
+     * @param cell The grid cell
+     * @return The positioned variable name
+     */
+    std::string toPosVar(const std::string &var, const GridCell &cell) const;
+
+    /**
      * Get a string representation of which cells are contained in the domain
      * and which are not. Only works for 2D grids
      * @return The string representation

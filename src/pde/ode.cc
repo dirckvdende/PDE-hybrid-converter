@@ -46,9 +46,9 @@ void ODEGenerator::run() {
                     ode.vals.insert(ode.vals.end(), cell.vals.begin(),
                     cell.vals.end());
                 }
-                if (cell.isStored)
-                    for (const std::string &var : cell.vars)
-                        ode.emit.push_back({var, var});
+                for (const std::pair<std::string, std::string> &emit :
+                cell.emits)
+                    ode.emit.push_back(emit);
                 ode.bounds.insert(ode.bounds.end(), pde.bounds.begin(),
                 pde.bounds.end());
             }

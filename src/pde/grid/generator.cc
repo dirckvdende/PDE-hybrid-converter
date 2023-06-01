@@ -38,6 +38,7 @@ void GridGenerator::run(size_t iteration) {
     grid.iteration = iteration;
     generateNames();
     generateExpr();
+    generateEmits();
 }
 
 void GridGenerator::calcSpread() {
@@ -99,6 +100,32 @@ void GridGenerator::generateExpr() {
         else if (cell.type == CELL_DOMAIN)
             internalGen.generate(cell);
     }
+}
+
+void GridGenerator::generateEmits() {
+    // Map from (base) variable name to index
+    std::unordered_map<std::string, size_t> varIndex;
+    for (size_t i = 0; i < system.vars.size(); i++)
+        varIndex.emplace(system.vars[i], i);
+    for (GridCell &cell : grid) {
+        cell.emits.clear();
+        if (cell.type == CELL_DOMAIN && cell.isStored)
+            for (const std::string &var : cell.vars)
+                cell.emits.push_back({var, var});
+        if (cell.type == CELL_DOMAIN && grid.iteration == system.iterations)
+            for (const std::pair<std::string, std::string> &emit : system.emits)
+                cell.emits.push_back({cell.vars[varIndex[emit.first]],
+                toPosVar(emit.second, cell)});
+    }
+}
+
+std::string GridGenerator::toPosVar(const std::string &var, const GridCell
+&cell) const {
+    std::vector<size_t> pos = grid.toLoc(cell);
+    std::string out = var;
+    for (const size_t &p : pos)
+        out.append("_" + std::to_string(p));
+    return out;
 }
 
 std::string GridGenerator::domainStr() const {
