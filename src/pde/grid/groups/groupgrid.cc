@@ -19,7 +19,11 @@ GroupGrid::~GroupGrid() {
 }
 
 size_t GroupGrid::group(const std::vector<size_t> &loc) {
-    return dsu->find(toIndex(loc));
+    return group(toIndex(loc));
+}
+
+size_t GroupGrid::group(size_t index) {
+    return dsu->find(index);
 }
 
 void GroupGrid::join(const std::vector<size_t> &locA, const std::vector<size_t>
@@ -38,13 +42,13 @@ std::vector<size_t> &locB) {
 }
 
 std::string GroupGrid::str() {
-    if (getShape().size() != 2 || size() > 10000)
+    if (getShape().size() > 2 || size() > 10000)
         return "[grid]\n";
     std::string out;
     for (size_t i = 0; i < getShape()[0]; i++) {
-        for (size_t j = 0; j < getShape()[1]; j++)
-            out.append(std::to_string(group({i, j})) + " ");
-        out.push_back('\n');
+        if (i > 0 && i % getShape()[0] == 0)
+            out.push_back('\n');
+        out.append(std::to_string(group(i)) + " ");
     }
     return out;
 }

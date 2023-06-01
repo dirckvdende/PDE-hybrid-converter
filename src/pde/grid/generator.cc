@@ -135,23 +135,22 @@ std::string GridGenerator::toPosVar(const std::string &var, const GridCell
 }
 
 std::string GridGenerator::domainStr() const {
-    if (grid.getShape().size() != 2 || grid.size() > 10000)
+    if (grid.getShape().size() > 2 || grid.size() > 10000)
         return "[domain grid]\n";
     std::string out;
-    for (size_t i = 0; i < grid.getShape()[0]; i++) {
-        for (size_t j = 0; j < grid.getShape()[1]; j++) {
-            switch (grid[{i, j}].type) {
-                case CELL_DOMAIN:
-                    out.push_back('.');
-                    break;
-                case CELL_BORDER:
-                    out.push_back('#');
-                    break;
-                default:
-                    out.push_back(' ');
-            }
+    for (size_t i = 0; i < grid.size(); i++) {
+        if (i > 0 && i % grid.getShape()[0] == 0)
+            out.push_back('\n');
+        switch (grid[i].type) {
+            case CELL_DOMAIN:
+                out.push_back('.');
+                break;
+            case CELL_BORDER:
+                out.push_back('#');
+                break;
+            default:
+                out.push_back(' ');
         }
-        out.push_back('\n');
     }
     return out;
 }
