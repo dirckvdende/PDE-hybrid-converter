@@ -104,6 +104,12 @@ private:
     void parseDims(const std::string &txt);
 
     /**
+     * Parse an emit statement. The result is output to the PDE system
+     * @param txt The text to parse
+     */
+    void parseEmit(const std::string &txt);
+
+    /**
      * Parse a single expression
      * @param txt The text to parse
      * @return The parsed expression node
