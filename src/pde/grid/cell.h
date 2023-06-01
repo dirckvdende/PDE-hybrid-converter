@@ -30,6 +30,8 @@ struct GridCell {
     std::vector<std::string> vars;
     // Initial values of the variables
     std::vector<double> init;
+    // Emit specifications
+    std::vector<std::pair<std::string, std::string>> emits;
 };
 
 }
