@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <iostream>
 
 using namespace ode;
 using namespace ode::splitter;
@@ -90,7 +91,8 @@ std::vector<std::vector<size_t>> &deps) const {
     std::vector<std::vector<size_t>> compGraph(deps.size());
     for (size_t i = 0; i < deps.size(); i++)
         for (size_t e : deps[i])
-            compGraph[comp[i]].push_back(comp[e]);
+            if (comp[i] != comp[e])
+                compGraph[comp[i]].push_back(comp[e]);
     std::vector<size_t> order = toposort(compGraph);
     std::reverse(order.begin(), order.end());
     std::vector<std::vector<size_t>> out;
