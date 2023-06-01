@@ -45,6 +45,7 @@ void Parser::runTreeParser() {
             { "interval", treeparser::OPT_TEXT },
             { "time", treeparser::OPT_TEXT },
             { "iterations", treeparser::OPT_TEXT },
+            { "emit", treeparser::OPT_TEXT },
         }
     };
     treeParser.updateSettings(settings);
@@ -77,6 +78,8 @@ void Parser::runExprParser() {
         parseAssignmentExpr(entry, system.boundary);
     for (const std::string &entry : preConfig.at("interval"))
         parseInterval(entry);
+    for (const std::string &entry : preConfig.at("emit"))
+        parseEmit(entry);
     system.time = parseNum(preConfig["time"].front());
     system.iterations = size_t(0.5 + parseNum(preConfig["iterations"].front()));
 }
@@ -190,6 +193,19 @@ void Parser::parseDims(const std::string &txt) {
             throw std::runtime_error("Incorrect dims format");
         system.dims.push_back(root[i].content);
     }
+}
+
+void Parser::parseEmit(const std::string &txt) {
+    size_t first = txt.find(' ');
+    size_t second = txt.find(' ', first + 1);
+    if (first == txt.npos || second == txt.npos)
+        std::runtime_error("Could not parse emit statement");
+    std::string inp = txt.substr(0, first);
+    std::string as = txt.substr(first + 1, second);
+    std::string out = txt.substr(second + 1);
+    if (as != "as")
+        std::runtime_error("Could not parse emit statement");
+    system.emits.push_back({inp, out});
 }
 
 expr::ExprNode Parser::parseExpr(const std::string &txt) const {

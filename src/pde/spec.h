@@ -40,6 +40,8 @@ struct PDESystem {
     std::vector<expr::ExprNode> boundary;
     // Bounds on the values of the different variables
     std::vector<std::pair<double, double>> bounds;
+    // Emit variables
+    std::vector<std::pair<std::string, std::string>> emits;
 
 };
 
