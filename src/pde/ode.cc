@@ -10,7 +10,8 @@
 
 using namespace pde;
 
-ODEGenerator::ODEGenerator(const PDESystem &system) : pde(system) { }
+ODEGenerator::ODEGenerator(const PDESystem &system) : pde(system),
+foundTime(false) { }
 
 ODEGenerator::~ODEGenerator() { }
 
@@ -26,7 +27,7 @@ void ODEGenerator::run() {
     generateInitIteration();
     for (size_t iteration = 1; iteration <= pde.iterations; iteration++) {
         gen.run(iteration);
-        if (iteration == 1 && hasTimeReference(gen.grid))
+        if (hasTimeReference(gen.grid))
             addTimeSystem();
         systems.emplace_back();
         ode::ODESystem &ode = systems.back();
@@ -70,6 +71,9 @@ bool ODEGenerator::hasTimeReference(const grid::Grid &grid) const {
 }
 
 void ODEGenerator::addTimeSystem() {
+    if (foundTime)
+        return;
+    foundTime = true;
     ode::ODESystem system;
     system.vars = {"t"};
     system.vals = {expr::ExprNode(expr::NODE_INTEG, {
@@ -84,10 +88,13 @@ void ODEGenerator::addTimeSystem() {
 
 void ODEGenerator::generateInitIteration() {
     gen.run(0);
+    if (hasTimeReference(gen.grid))
+        addTimeSystem();
     systems.emplace_back();
     ode::ODESystem &ode = systems.back();
     for (grid::GridCell &cell : gen.grid) {
-        if (cell.type == grid::CELL_DOMAIN && cell.isStored) {
+        if ((cell.type == grid::CELL_DOMAIN || cell.type == grid::CELL_BORDER)
+        && cell.isStored) {
             ode.vars.insert(ode.vars.end(), cell.vars.begin(),
             cell.vars.end());
             if (cell.type == grid::CELL_DOMAIN) {
