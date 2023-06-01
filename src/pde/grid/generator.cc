@@ -20,9 +20,6 @@ void GridGenerator::setSystem(const PDESystem &sys) {
     grid.pivot = system.pivot;
     grid.scale = system.scale;
     grid.iteration = 0;
-    // TODO: implement custom component limits/grid sizes
-    grid.componentLimit = 168;
-    grid.maxGridSize = 1000000;
     grid.domain = system.domain;
 }
 
@@ -30,6 +27,11 @@ void GridGenerator::prepare() {
     calcSpread();
     generateDomain();
     divideGroups();
+}
+
+void GridGenerator::apply(const CompilerSettings &settings) {
+    grid.componentLimit = settings.componentLimit;
+    grid.maxGridSize = settings.maxGridSize;
 }
 
 void GridGenerator::run(size_t iteration) {

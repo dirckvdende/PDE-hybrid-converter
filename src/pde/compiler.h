@@ -30,15 +30,21 @@ public:
     ~Compiler();
 
     /**
-     * Set the input text
-     * @param val The input text
-     */
-    void setInput(const std::string &val);
-
-    /**
      * Run the compiler
      */
     void run();
+
+    /**
+     * Process command line arguments to apply compiler settings
+     * @param args List of command line arguments
+     */
+    void readArgs(const std::vector<std::string> &args);
+
+    /**
+     * Check if the global compiler settings are valid
+     * @return A boolean indicating if the settings are valid
+     */
+    bool settingsValid() const;
 
 private:
 
@@ -46,6 +52,16 @@ private:
      * Output the generated ODEs to a file
      */
     void output() const;
+
+    /**
+     * Read the input file and set the input text
+     */
+    void readInputFile();
+
+    /**
+     * Show command line help
+     */
+    static void showHelp();
 
     // Input text
     std::string txt;
@@ -61,6 +77,8 @@ private:
     ode::splitter::Splitter splitter;
     // Output ODE systems
     std::vector<ode::ODESystem> outputSystems;
+    // Global compiler settings
+    CompilerSettings settings;
 
 };
 

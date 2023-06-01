@@ -29,10 +29,10 @@ public:
     ~ODEGenerator();
 
     /**
-     * Set the global compiler settings
-     * @param val The (updated) settings
+     * Apply global compiler settings
+     * @param settings The (updated) settings
      */
-    void changeSettings(const CompilerSettings &val);
+    void apply(const CompilerSettings &settings);
 
     /**
      * Run the generator and store generated ODE systems in this object

@@ -15,8 +15,9 @@ foundTime(false) { }
 
 ODEGenerator::~ODEGenerator() { }
 
-void ODEGenerator::changeSettings(const CompilerSettings &val) {
-    settings = val;
+void ODEGenerator::apply(const CompilerSettings &settings) {
+    this->settings = settings;
+    gen.apply(settings);
 }
 
 void ODEGenerator::run() {
