@@ -21,7 +21,6 @@ void Compiler::run() {
     parser.run();
     system = parser.getSpecs();
     preprocess.run();
-    // TODO: implement real compiler settings
     generator.apply(settings);
     dbg::log("Generating iteration expressions...");
     generator.run();
