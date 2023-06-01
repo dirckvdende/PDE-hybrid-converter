@@ -4,7 +4,6 @@
 #
 
 import matplotlib.pyplot as plt
-import numpy as np
 import os
 import sys
 
@@ -39,4 +38,4 @@ for row in data:
         plt.plot([float(x) for x in row[1:]], label=row[0])
 
 plt.legend()
-plt.savefig("tmp/ode.png")
+plt.savefig("tmp/ode.png", dpi=300)
