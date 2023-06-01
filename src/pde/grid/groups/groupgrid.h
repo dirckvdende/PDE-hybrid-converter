@@ -42,6 +42,13 @@ public:
     size_t group(const std::vector<size_t> &loc);
 
     /**
+     * get the group number of an index
+     * @param index The index that corresponds with a grid point
+     * @return The group number of the index point
+     */
+    size_t group(size_t index);
+
+    /**
      * Join the groups of two grid points
      * @param locA The location of the first grid point
      * @param locB The location of the second grid point

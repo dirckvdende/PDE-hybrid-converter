@@ -95,18 +95,13 @@ size_t DependGrid::dependCount() const {
 }
 
 std::string DependGrid::str() const {
-    if (getShape().size() != 2 || size() > 10000)
+    if (getShape().size() > 2 || size() > 10000)
         return "[dependency grid]\n";
     std::string out;
-    for (size_t i = 0; i < getShape()[0]; i++) {
-        for (size_t j = 0; j < getShape()[1]; j++) {
-            if (depends[{i, j}] > 0)
-                out.push_back('1');
-            else
-                out.push_back('0');
-            out.push_back(' ');
-        }
-        out.push_back('\n');
+    for (size_t i = 0; i < size(); i++) {
+        if (i > 0 && i % getShape()[0] == 0)
+            out.push_back('\n');
+        out.push_back(depends[i] > 0 ? '1' : '0');
     }
     return out;
 }
