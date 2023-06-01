@@ -6,6 +6,7 @@
 #include "generator/internal.h"
 #include "grid.h"
 #include "groups/depgrid.h"
+#include "pde/settings.h"
 #include "pde/spec.h"
 
 namespace pde::grid {
@@ -38,6 +39,12 @@ public:
      * Run the generator general calculations before expression generation
      */
     void prepare();
+
+    /**
+     * Apply global compiler settings
+     * @param settings The global settings
+     */
+    void apply(const CompilerSettings &settings);
 
     /**
      * Run the generator for a specific iteration
