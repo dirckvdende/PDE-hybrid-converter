@@ -112,7 +112,8 @@ void GridGenerator::generateEmits() {
         if (cell.type == CELL_DOMAIN && cell.isStored)
             for (const std::string &var : cell.vars)
                 cell.emits.push_back({var, var});
-        if (cell.type == CELL_DOMAIN && grid.iteration == system.iterations)
+        if ((cell.type == CELL_DOMAIN || cell.type == CELL_BORDER) &&
+        grid.iteration == system.iterations)
             for (const std::pair<std::string, std::string> &emit : system.emits)
                 cell.emits.push_back({cell.vars[varIndex[emit.first]],
                 toPosVar(emit.second, cell)});
@@ -123,8 +124,13 @@ std::string GridGenerator::toPosVar(const std::string &var, const GridCell
 &cell) const {
     std::vector<size_t> pos = grid.toLoc(cell);
     std::string out = var;
-    for (const size_t &p : pos)
-        out.append("_" + std::to_string(p));
+    for (const size_t &p : pos) {
+        std::string num = std::to_string(p);
+        out.push_back('_');
+        for (size_t i = num.size(); i < 6; i++)
+            out.push_back('0');
+        out.append(num);
+    }
     return out;
 }
 
