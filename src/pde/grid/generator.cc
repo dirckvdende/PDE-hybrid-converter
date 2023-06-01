@@ -109,7 +109,8 @@ void GridGenerator::generateEmits() {
         varIndex.emplace(system.vars[i], i);
     for (GridCell &cell : grid) {
         cell.emits.clear();
-        if (cell.type == CELL_DOMAIN && cell.isStored)
+        if ((cell.type == CELL_DOMAIN || cell.type == CELL_BORDER) &&
+        cell.isStored)
             for (const std::string &var : cell.vars)
                 cell.emits.push_back({var, var});
         if ((cell.type == CELL_DOMAIN || cell.type == CELL_BORDER) &&

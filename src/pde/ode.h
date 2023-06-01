@@ -74,6 +74,8 @@ private:
     std::vector<ode::ODESystem> systems;
     // Object used to generate grid and expressions from PDE specification
     grid::GridGenerator gen;
+    // Indicates if a time reference has been added already
+    bool foundTime;
 
 };
 
