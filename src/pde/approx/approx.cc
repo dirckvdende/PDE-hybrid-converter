@@ -50,7 +50,6 @@ void SpatialApprox::replaceApprox(grid::GridCell &cell, expr::ExprNode &node) {
 
 expr::ExprNode SpatialApprox::getApprox(grid::GridCell &cell, const
 expr::ExprNode &node) {
-    // TODO
     const std::vector<size_t> loc = grid.toLoc(cell);
     const SpatialApprox::Coeffs &coeffs = calcAllCoeffs(node.deriv.count);
     expr::ExprNode out(expr::NODE_ERR);

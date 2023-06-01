@@ -13,7 +13,6 @@ InternalExprGenerator::InternalExprGenerator(Grid &grid, const PDESystem
 InternalExprGenerator::~InternalExprGenerator() { }
 
 void InternalExprGenerator::generate(GridCell &cell) {
-    // TODO: implement approximation replacement
     std::vector<double> loc = grid.toRealLoc(cell);
     cell.vals.clear();
     for (size_t i = 0; i < system.vars.size(); i++) {
