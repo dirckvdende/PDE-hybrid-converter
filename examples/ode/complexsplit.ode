@@ -1,0 +1,17 @@
+
+system {
+    var x = integ(x, 1);
+    emit x as x;
+    interval x = [0, 1000];
+    time 5;
+}
+
+system {
+    var y = integ(x, 2);
+    var z = integ(50, 5);
+    emit y as y;
+    emit z as z;
+    interval y = [0, 1000];
+    interval z = [0, 1000];
+    time 5;
+}
