@@ -26,10 +26,9 @@ void Compiler::run() {
     generator.changeSettings(CompilerSettings());
     dbg::log("Generating iteration expressions...");
     generator.run();
-    // splitter.setSystems(generator.getSystems());
-    // splitter.run();
-    // outputSystems = splitter.getOutputSystems();
-    outputSystems = generator.getSystems();
+    splitter.setSystems(generator.getSystems());
+    splitter.run();
+    outputSystems = splitter.getOutputSystems();
     output();
 }
 
