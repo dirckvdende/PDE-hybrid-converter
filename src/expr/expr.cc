@@ -237,6 +237,12 @@ const {
     return 0.0;
 }
 
+void ExprNode::walk(std::function<void(ExprNode &)> func) {
+    func(*this);
+    for (ExprNode *child : children)
+        child->walk(func);
+}
+
 double ExprNode::evalDims(const std::vector<double> &vals) const {
     const ExprNode *cur = this;
     return evalDirect([&](const ExprNode &node) -> double {
