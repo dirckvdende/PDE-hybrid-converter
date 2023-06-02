@@ -2,7 +2,7 @@
 pde {
     dims [x];
     domain x * x < 50;
-    pivot [0, 0];
+    pivot [0];
     scale 0.08;
 
     equation dt(u) = dx(dx(u));
