@@ -72,6 +72,12 @@ public:
      */
     void addEmit(const std::string &inp, const std::string &out);
 
+    /**
+     * Get all emit names and indices, filtering out emits that start with '_'
+     * @return A list of pairs, containing the names and indices of the emits
+     */
+    std::vector<std::pair<std::string, size_t>> emitList() const;
+
 private:
 
     /**

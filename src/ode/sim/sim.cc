@@ -63,91 +63,116 @@ void Sim::runParser() {
     parser.run();
 }
 
-void Sim::runSystem(const ODESystem &system) {
-    // Make a copy of the equations
-    std::vector<expr::ExprNode> equations;
-    for (size_t i = 0; i < system.vals.size(); i++)
-        equations.push_back(system.vals[i]);
-    // Keep track of names of variables and emit history
-    std::vector<std::string> names;
-    std::unordered_map<std::string, size_t> nameMap;
-    std::vector<std::vector<double>> history;
-    for (const auto &emit : emitVals) {
-        if (nameMap.find(emit.first) == nameMap.end()) {
-            nameMap.emplace(emit.first, names.size());
-            names.push_back(emit.first);
-            history.push_back(emit.second);
-        }
-    }
-    size_t varStart = names.size();
-    for (size_t i = 0; i < system.vars.size(); i++) {
-        if (nameMap.find(system.vars[i]) != nameMap.end())
-            std::runtime_error("Duplicate variable in system");
-        nameMap.emplace(system.vars[i], names.size());
-        names.push_back(system.vars[i]);
-    }
-    for (expr::ExprNode &eq : equations)
-        eq.replaceVars(nameMap);
-    // Determine initial values
-    std::vector<double> vals;
-    for (size_t i = 0; i < varStart; i++)
-        vals.push_back(history[i].front());
-    for (size_t i = varStart; i < names.size(); i++) {
-        if (equations[i - varStart].type == expr::NODE_INTEG)
-            vals.push_back(equations[i - varStart][1].eval());
-        else
-            vals.push_back(equations[i - varStart].evalVars(vals));
-        history.push_back({vals[i]});
-    }
-    // Run simulation
+void Sim::runSystem(ODESystem system) {
     auto tStart = std::chrono::high_resolution_clock::now();
-    size_t it = 0;
-    for (double t = 0; t < system.time; t += stepSize, it++) {
-        // Read history values
-        for (size_t i = 0; i < varStart; i++)
-            vals[i] = history[i][it];
-        for (size_t i = varStart; i < names.size(); i++) {
-            if (equations[i - varStart].type == expr::NODE_INTEG)
-                vals[i] += stepSize * equations[i - varStart][0].evalVars(vals);
-            else
-                vals[i] = equations[i - varStart].evalVars(vals);
-            // Limit range
-            vals[i] = std::max(vals[i], system.bounds[i - varStart].first);
-            vals[i] = std::min(vals[i], system.bounds[i - varStart].second);
-            history[i].push_back(vals[i]);
-        }
-    }
-    // Output emit values
-    for (const auto &emit : system.emit)
-        emitVals[emit.second] = history[nameMap[emit.first]];
+    // Add variables of current system to dataframe
+    for (const std::string &var : system.vars)
+        dataframe.add(var);
+    // System variable index to dataframe index
+    std::vector<size_t> dataIndex(system.vars.size());
+    for (size_t i = 0; i < system.vars.size(); i++)
+        dataIndex[i] = dataframe.getIndex(system.vars[i]);
+    // Add emits of the current system
+    for (const std::pair<std::string, std::string> emit : system.emit)
+        dataframe.addEmit(emit.first, emit.second);
+    replaceVars(system);
+    generateInitCond(system, dataIndex);
+    size_t step = 1;
+    for (double t = stepSize; t < system.time; t += stepSize, step++)
+        runStep(system, step, dataIndex);
+    dataframe.reset();
     auto tEnd = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(tEnd -
     tStart);
-    stats.iterations += it;
+    stats.iterations += step;
     stats.systemCount++;
     stats.emitCount += system.emit.size();
     stats.iterationTime += double(duration.count()) / 1000000.0;
 }
 
+void Sim::replaceVars(ODESystem &system) {
+    for (expr::ExprNode &val : system.vals)
+        val.walk([&](expr::ExprNode &node) -> void {
+            if (node.type == expr::NODE_SYMB) {
+                node.type = expr::NODE_VAR_MARKER;
+                node.index = dataframe.getIndex(node.content);
+                node.content.clear();
+            }
+        });
+}
+
+void Sim::generateInitCond(const ODESystem &system, const std::vector<size_t>
+&dataIndex) {
+    for (size_t i = 0; i < system.vars.size(); i++) {
+        if (system.vals[i].type == expr::NODE_INTEG) {
+            dataframe.append(dataIndex[i], system.vals[i][1].eval());
+        } else {
+            double val = system.vals[i].evalDirect([&](const expr::ExprNode
+            &node) -> double {
+                if (node.type != expr::NODE_VAR_MARKER ||
+                dataframe.size(node.index) == 0)
+                    throw std::runtime_error("Could not determine intial "
+                    "value of expression \"" + node.str() + "\"");
+                return dataframe.get(node.index, 0);
+            });
+            dataframe.append(dataIndex[i], val);
+        }
+    }
+}
+
+void Sim::runStep(const ODESystem &system, size_t step, const
+std::vector<size_t> &dataIndex) {
+    for (size_t i = 0; i < system.vars.size(); i++) {
+        double val;
+        if (system.vals[i].type == expr::NODE_INTEG) {
+            double change = system.vals[i][0].evalDirect([&](const
+            expr::ExprNode &node) -> double {
+                if (node.type != expr::NODE_VAR_MARKER ||
+                step - 1 >= dataframe.size(node.index))
+                    throw std::runtime_error("Could not determine value of "
+                    "expression \"" + node.str() + "\"");
+                return dataframe.get(node.index, step - 1);
+            });
+            if (step != dataframe.size(dataIndex[i]))
+                throw std::runtime_error("Could not determine value of "
+                    "expression \"" + system.vals[i].str() + "\"");
+            val = dataframe.get(dataIndex[i], step - 1) + change * stepSize;
+        } else {
+            val = system.vals[i].evalDirect([&](const expr::ExprNode
+            &node) -> double {
+                if (node.type != expr::NODE_VAR_MARKER ||
+                step >= dataframe.size(node.index))
+                    throw std::runtime_error("Could not determine value of "
+                    "expression \"" + node.str() + "\"");
+                return dataframe.get(node.index, step);
+            });
+        }
+        const std::pair<double, double> bound = system.bounds[i];
+        dataframe.append(dataIndex[i], std::min(std::max(val, bound.first),
+        bound.second));
+    }
+}
+
 void Sim::outputEmit(std::string filename, size_t resolution) {
     std::ofstream file(filename);
     if (!file.is_open())
-        throw std::runtime_error("Could not open output file");
-    cleanEmits();
+        throw std::runtime_error("Could not open output file \"" + filename +
+        "\"");
     file << "__time__";
-    for (const auto &emit : emitVals) {
+    std::vector<std::pair<std::string, size_t>> emits = dataframe.emitList();
+    for (const std::pair<std::string, size_t> &emit : emits) {
         file << ',';
         file << emit.first;
     }
     // Gather data (includes time)
     std::vector<std::vector<double>> data;
-    for (const auto &emit : emitVals) {
-        size_t total = emit.second.size();
+    for (const std::pair<std::string, size_t> &emit : emits) {
+        size_t total = dataframe.size(emit.second);
         for (size_t i = 0, it = 0; i < total; i += std::max(total / resolution,
         1UL), it++) {
             while (data.size() <= it)
                 data.push_back({stepSize * i});
-            data[it].push_back(emit.second[i]);
+            data[it].push_back(dataframe.get(emit.second, i));
         }
     }
     // Output data as csv file
@@ -162,15 +187,6 @@ void Sim::outputEmit(std::string filename, size_t resolution) {
         }
     }
     file.close();
-}
-
-void Sim::cleanEmits() {
-    std::vector<std::string> names;
-    for (const auto &emit : emitVals)
-        if (emit.first.size() > 0 && emit.first[0] == '_')
-            names.push_back(emit.first);
-    for (const std::string &name : names)
-        emitVals.erase(name);
 }
 
 void Sim::resetStats() {

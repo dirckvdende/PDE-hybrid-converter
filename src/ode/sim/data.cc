@@ -24,7 +24,7 @@ void SimData::add(const std::string &name) {
 }
 
 double SimData::get(size_t index, size_t step) const {
-    data[index].values[step];
+    return data[index].values[step];
 }
 
 size_t SimData::size(size_t index) const {
@@ -54,4 +54,12 @@ void SimData::addEmit(const std::string &inp, const std::string &out) {
         data[emitNames.at(out)].emitRefs--;
     emitNames.emplace(out, index);
     data[index].emitRefs++;
+}
+
+std::vector<std::pair<std::string, size_t>> SimData::emitList() const {
+    std::vector<std::pair<std::string, size_t>> out;
+    for (const std::pair<std::string, size_t> &emit : emitNames)
+        if (!emit.first.empty() && emit.first.front() != '_')
+            out.push_back(emit);
+    return out;
 }

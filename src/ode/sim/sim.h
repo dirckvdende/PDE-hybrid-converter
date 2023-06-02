@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "data.h"
 #include "ode/parser/parser.h"
 #include "ode/spec.h"
 #include <string>
@@ -66,7 +67,35 @@ private:
      * Simulate a specific ODE system
      * @param system The system specification
      */
-    void runSystem(const ODESystem &system);
+    void runSystem(ODESystem system);
+
+    /**
+     * Replace the variables in all expressions in a system with indices from
+     * the ODE dataframe
+     * @param system The system in which to replace the variable references
+     */
+    void replaceVars(ODESystem &system);
+
+    /**
+     * Generate initial condition values for the given system. The data in the
+     * dataframe will be updated
+     * @param system The system being simulated
+     * @param dataIndex Can retrieve dataframe indices of the variables in the
+     * current system
+     */
+    void generateInitCond(const ODESystem &system, const std::vector<size_t>
+    &dataIndex);
+
+    /**
+     * Execute a simulation step for the given ODE system. The data in the
+     * dataframe will be updated
+     * @param system The system being simulated
+     * @param step The step index
+     * @param dataIndex Can retrieve dataframe indices of the variables in the
+     * current system
+     */
+    void runStep(const ODESystem &system, size_t step, const std::vector<size_t>
+    &dataIndex);
 
     /**
      * Output the emit values to a file
@@ -75,11 +104,6 @@ private:
      * emit variable
      */
     void outputEmit(std::string filename, size_t resolution);
-
-    /**
-     * Remove stored emits that start with '_'
-     */
-    void cleanEmits();
 
     /**
      * Reset simulation statistics
@@ -101,8 +125,6 @@ private:
     bool fileOutput;
     // Simulation step size
     double stepSize;
-    // "Emit" values stored after simulating the ODEs
-    std::unordered_map<std::string, std::vector<double>> emitVals;
     // Simulation statistics
     struct {
         size_t iterations;
@@ -113,6 +135,8 @@ private:
         double systemTime;
         double fileTime;
     } stats;
+    // Object used to keep track of emit and variable data
+    SimData dataframe;
 
 };
 
