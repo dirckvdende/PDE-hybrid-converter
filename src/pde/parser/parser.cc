@@ -78,8 +78,9 @@ void Parser::runExprParser() {
         parseAssignmentExpr(entry, system.boundary);
     for (const std::string &entry : preConfig.at("interval"))
         parseInterval(entry);
-    for (const std::string &entry : preConfig.at("emit"))
-        parseEmit(entry);
+    if (preConfig.find("emit") != preConfig.end())
+        for (const std::string &entry : preConfig.at("emit"))
+            parseEmit(entry);
     system.time = parseNum(preConfig["time"].front());
     system.iterations = size_t(0.5 + parseNum(preConfig["iterations"].front()));
 }
