@@ -170,6 +170,14 @@ public:
     double evalDirect(std::function<double(const ExprNode &)> fallback) const;
 
     /**
+     * Walk over the expression tree and execute the given function BEFORE doing
+     * the same for the node's children
+     * @param func The function to execute, which takes a reference to the
+     * current node as input
+     */
+    void walk(std::function<void(ExprNode &)> func);
+
+    /**
      * Evaluate dimension nodes with given values
      * @param vals An ordered list of the coordinates in each dimension
      * @return The evaluated value as a double. Other types are implicitly
