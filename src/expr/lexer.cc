@@ -2,6 +2,7 @@
 #include "lexer.h"
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 using namespace expr;
 
@@ -14,7 +15,7 @@ void Lexer::run() {
     while (!atEnd()) {
         if (isWhitespace(cur()))
             next();
-        else if ('0' <= cur() && cur() <= '9')
+        else if (('0' <= cur() && cur() <= '9') || cur() == '.')
             readNum();
         else if (isIdentChar(cur()))
             readIdent();
@@ -60,16 +61,36 @@ bool Lexer::isIdentChar(char c) {
 }
 
 void Lexer::readNum() {
-    bool foundDot = false;
-    tokens.push_back({TOK_NUM, ""});
-    while (('0' <= cur() && cur() <= '9') || cur() == '.') {
-        if (cur() == '.' && foundDot)
-            return;
-        if (cur() == '.')
-            foundDot = true;
-        tokens.back().content.push_back(cur());
+    tokens.emplace_back();
+    tokens.back().type = TOK_NUM;
+    tokens.back().content.append(readSubNum());
+    if (cur() != 'e' && cur() != 'E')
+        return;
+    tokens.back().content.push_back('e');
+    next();
+    std::string exp = readSubNum();
+    if (exp == "-")
+        throw std::runtime_error("Invalid number notation with only \"-\" in "
+        "exponent");
+    tokens.back().content.append(exp);
+}
+
+std::string Lexer::readSubNum() {
+    std::string out;
+    if (cur() == '-') {
+        out.push_back(cur());
         next();
     }
+    bool foundDot = false;
+    while (('0' <= cur() && cur() <= '9') || cur() == '.') {
+        if (cur() == '.' && foundDot)
+            return out;
+        if (cur() == '.')
+            foundDot = true;
+        out.push_back(cur());
+        next();
+    }
+    return out;
 }
 
 void Lexer::readIdent() {
