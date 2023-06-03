@@ -85,6 +85,13 @@ private:
     void readNum();
 
     /**
+     * Read a number, without an exponent, and possible with a minus sign in
+     * front of it
+     * @return The number as a string
+     */
+    std::string readSubNum();
+
+    /**
      * Read an identifier or a derivative
      */
     void readIdent();
