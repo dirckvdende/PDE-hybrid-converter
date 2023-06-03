@@ -1,0 +1,7 @@
+
+system {
+    var x = integ(sin(x), 1);
+    interval x = [-10, 10];
+    emit x as x;
+    time 10;
+}
