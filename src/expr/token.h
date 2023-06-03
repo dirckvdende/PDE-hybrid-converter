@@ -19,6 +19,7 @@ enum TokenType {
     TOK_OR, TOK_AND,
     TOK_INTEG,
     TOK_COMMA, TOK_LBRACKET, TOK_RBRACKET,
+    TOK_FUNC,
 };
 
 /**
