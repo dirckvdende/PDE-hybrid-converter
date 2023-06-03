@@ -1,4 +1,5 @@
 
+#include "funcs.h"
 #include "lexer.h"
 #include <string>
 #include <unordered_map>
@@ -111,6 +112,8 @@ void Lexer::readIdent() {
         tokens.back().content.clear();
         tokens.back().type = TOK_INTEG;
     }
+    if (funcs.find(tokens.back().content) != funcs.end())
+        tokens.back().type = TOK_FUNC;
 }
 
 void Lexer::readSpecialChar() {
