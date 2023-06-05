@@ -43,4 +43,4 @@ for row in data:
         heatData.append(row[1:])
 
 sns.heatmap(np.transpose(heatData))
-plt.savefig("tmp/heatmap.png", dpi=300)
+plt.savefig("tmp/heatmap.png", dpi=300, bbox_inches="tight")
