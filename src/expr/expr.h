@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "funcs.h"
 #include <functional>
 #include <string>
 #include <unordered_map>
@@ -13,20 +14,31 @@ namespace expr {
  * Expression node type
  */
 enum NodeType {
+    // Default error type
     NODE_ERR,
+    // Symbol, such as a variable
     NODE_SYMB,
+    // Floating point number
     NODE_NUM,
+    // Derivatives: used in PDE specifications
     NODE_DERIV,
+    // Arithmatic and logic
     NODE_ADD, NODE_SUB, NODE_MUL, NODE_DIV,
     NODE_LT, NODE_LTE, NODE_GT, NODE_GTE,
     NODE_EQ, NODE_NEQ,
     NODE_AND, NODE_OR,
+    // Unary minus
     NODE_MINUS,
-    NODE_INTEG, NODE_LIST,
+    // Integral definition: used in ODE specifications
+    NODE_INTEG,
+    // List in the form [A, B, C, ...]
+    NODE_LIST,
     // Dimension index indicator, uses index
     NODE_DIM,
     // Variable marker: replacement of a variable with an index
     NODE_VAR_MARKER,
+    // Special functions, such as sine, exponents, etc.
+    NODE_FUNC,
 };
 
 /**

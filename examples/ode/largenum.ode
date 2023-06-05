@@ -1,0 +1,7 @@
+
+system {
+    var x = integ(1e90, 0);
+    interval x = [-1e100, 1e100];
+    emit x as x;
+    time 20;
+}
