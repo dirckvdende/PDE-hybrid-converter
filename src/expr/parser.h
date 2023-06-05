@@ -124,6 +124,12 @@ private:
     ExprNode *readInteg();
 
     /**
+     * Read a special function expression
+     * @return A pointer to the generated expression parse node
+     */
+    ExprNode *readFunc();
+
+    /**
      * Read a list of expressions
      * @return A pointer to the generated expression parse node
      */

@@ -1,7 +1,7 @@
 
 system {
-    var x = integ(-y, 0);
-    var y = integ(x, 1);
+    var x = integ(-y, 1);
+    var y = integ(x, 0);
     emit x as xreal;
     emit y as yreal;
     interval x = [-1, 1];
@@ -10,8 +10,8 @@ system {
 }
 
 system {
-    var x = 0;
-    var y = 1;
+    var x = 1;
+    var y = 0;
     emit x as x0;
     emit y as y0;
     interval x = [-100, 100];
@@ -20,8 +20,8 @@ system {
 }
 
 system {
-    var x = integ(-y0, 0);
-    var y = integ(x0, 1);
+    var x = integ(-y0, 1);
+    var y = integ(x0, 0);
     emit x as x1;
     emit y as y1;
     interval x = [-100, 100];
@@ -30,8 +30,8 @@ system {
 }
 
 system {
-    var x = integ(-y1, 0);
-    var y = integ(x1, 1);
+    var x = integ(-y1, 1);
+    var y = integ(x1, 0);
     emit x as x2;
     emit y as y2;
     interval x = [-100, 100];
@@ -40,8 +40,8 @@ system {
 }
 
 system {
-    var x = integ(-y2, 0);
-    var y = integ(x2, 1);
+    var x = integ(-y2, 1);
+    var y = integ(x2, 0);
     emit x as x3;
     emit y as y3;
     interval x = [-100, 100];
@@ -50,8 +50,8 @@ system {
 }
 
 system {
-    var x = integ(-y3, 0);
-    var y = integ(x3, 1);
+    var x = integ(-y3, 1);
+    var y = integ(x3, 0);
     emit x as x4;
     emit y as y4;
     interval x = [-100, 100];

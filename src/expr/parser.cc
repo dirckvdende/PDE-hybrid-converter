@@ -117,7 +117,8 @@ ExprNode *Parser::readMinus() {
 }
 
 ExprNode *Parser::readTerm() {
-    expect({TOK_NUM, TOK_SYMB, TOK_DERIV, TOK_LBRACE, TOK_INTEG, TOK_LBRACKET});
+    expect({TOK_NUM, TOK_SYMB, TOK_DERIV, TOK_LBRACE, TOK_INTEG, TOK_FUNC,
+    TOK_LBRACKET});
     if (accept({TOK_NUM})) {
         ExprNode *node = new ExprNode(NODE_NUM, {}, std::stod(cur().content));
         next();
@@ -137,6 +138,8 @@ ExprNode *Parser::readTerm() {
         return readInteg();
     } else if (accept({TOK_LBRACKET})) {
         return readList();
+    } else if (accept({TOK_FUNC})) {
+        return readFunc();
     }
     return nullptr;
 }
@@ -174,6 +177,20 @@ ExprNode *Parser::readInteg() {
     node->children.push_back(readAndOr());
     expect({TOK_COMMA});
     next();
+    node->children.push_back(readAndOr());
+    expect({TOK_RBRACE});
+    next();
+    return node;
+}
+
+ExprNode *Parser::readFunc() {
+    expect({TOK_FUNC});
+    std::string name = cur().content;
+    next();
+    expect({TOK_LBRACE});
+    next();
+    ExprNode *node = new ExprNode(NODE_FUNC);
+    node->content = name;
     node->children.push_back(readAndOr());
     expect({TOK_RBRACE});
     next();

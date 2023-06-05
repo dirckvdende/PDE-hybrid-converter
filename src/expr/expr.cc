@@ -137,6 +137,8 @@ std::string ExprNode::str() const {
             return "DIM{" + std::to_string(index) + "}";
         case NODE_VAR_MARKER:
             return "VAR{" + std::to_string(index) + "}";
+        case NODE_FUNC:
+            return content + "(" + children[0]->str() + ")";
         default:
             return binaryStr();
     }
@@ -231,6 +233,8 @@ const {
             children[1]->evalDirect(fallback);
         case NODE_MINUS:
             return -children[0]->evalDirect(fallback);
+        case NODE_FUNC:
+            return funcs.at(content)(children[0]->evalDirect(fallback));
         default:
             return fallback(*this);
     }
