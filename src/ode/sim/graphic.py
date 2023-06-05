@@ -38,4 +38,4 @@ for row in data:
         plt.plot([float(x) for x in row[1:]], label=row[0])
 
 plt.legend()
-plt.savefig("tmp/ode.png", dpi=300)
+plt.savefig("tmp/ode.png", dpi=300, bbox_inches="tight")
