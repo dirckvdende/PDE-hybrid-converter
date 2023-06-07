@@ -1,7 +1,8 @@
 
-#include "pde/approx/approx.h"
 #include "dbg/dbg.h"
+#include "expr/expr.h"
 #include "internal.h"
+#include "pde/approx/approx.h"
 #include "util.h"
 #include <stack>
 
@@ -25,6 +26,17 @@ void InternalExprGenerator::generate(GridCell &cell) {
 
 void InternalExprGenerator::replaceAll(GridCell &cell) {
     approx.convert(cell);
+    replaceRawVars(cell);
+}
+
+void InternalExprGenerator::replaceRawVars(GridCell &cell) {
+    for (expr::ExprNode &val : cell.vals) {
+        val.walk([&](expr::ExprNode &node) -> void {
+            if (node.type == expr::NODE_SYMB)
+                node.content = toGridVar(node.content, grid.toLoc(cell),
+                grid.iteration);
+        });
+    }
 }
 
 void InternalExprGenerator::calcInit(GridCell &cell) {
