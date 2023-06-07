@@ -45,9 +45,10 @@ private:
     void replaceAll(GridCell &cell);
 
     /**
-     * Generate the dimension map, if it hasn't been already
+     * Replace raw variables (no derivatives) in the given grid cell
+     * @param cell A reference to the grid cell
      */
-    void genDimMap();
+    void replaceRawVars(GridCell &cell);
 
     /**
      * Calculate initial values for the given cell
