@@ -20,10 +20,13 @@ void Parser::setText(const std::string &txt) {
 void Parser::run() {
     dbg::log("Running preparser...");
     preParser.run();
+    dbg::log(preParser.getSystem().str());
     dbg::log("Running input validator...");
     validator.run();
+    dbg::log(preParser.getSystem().str());
     dbg::log("Running input transformer...");
     transformer.run();
+    dbg::log(preParser.getSystem().str());
     dbg::log("Running PDE system generator...");
     systemGen.run();
 }
