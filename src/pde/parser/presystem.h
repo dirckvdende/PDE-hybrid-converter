@@ -11,6 +11,7 @@ namespace pde::parser {
  * Contains parsed entries from a PDE configuration file
  */
 struct PreSystem {
+    std::string str() const;
     std::vector<std::string> dims;
     expr::ExprNode domain;
     std::vector<double> pivot;
