@@ -21,7 +21,7 @@ void SystemGen::run() {
     findVarNames();
     system.init.resize(system.vars.size());
     for (const expr::ExprNode &eq : preSystem.inits) {
-        size_t index = varMap[eq[0].content];
+        size_t index = varMap.at(eq[0].content);
         if (system.init[index].type != expr::NODE_ERR)
             dbg::error("Multiple init values given for variable");
         system.init[index] = eq[1];
@@ -30,7 +30,7 @@ void SystemGen::run() {
         dbg::error("Too few init values given");
     system.vals.resize(system.vars.size());
     for (const expr::ExprNode &eq : preSystem.equations) {
-        size_t index = varMap[eq[0].content];
+        size_t index = varMap[eq[0].deriv.var];
         if (system.vals[index].type != expr::NODE_ERR)
             dbg::error("Multiple equation values given for variable");
         system.vals[index] = eq[1];
@@ -39,7 +39,7 @@ void SystemGen::run() {
         dbg::error("Too few equations given");
     system.boundary.resize(system.vars.size());
     for (const expr::ExprNode &eq : preSystem.boundaries) {
-        size_t index = varMap[eq[0].content];
+        size_t index = varMap.at(eq[0].content);
         if (system.boundary[index].type != expr::NODE_ERR)
             dbg::error("Multiple boundary values given for variable");
         system.boundary[index] = eq[1];
@@ -49,7 +49,7 @@ void SystemGen::run() {
     system.bounds = std::vector<std::pair<double, double>>(system.vars.size(),
     {0, 0});
     for (const expr::ExprNode &eq : preSystem.intervals) {
-        size_t index = varMap[eq[0].content];
+        size_t index = varMap.at(eq[0].content);
         if (system.bounds[index] != std::pair<double, double>{0, 0})
             dbg::error("Multiple interval values given for variable");
         system.bounds[index] = {eq[1][0].number, eq[1][1].number};
