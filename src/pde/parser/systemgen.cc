@@ -52,7 +52,7 @@ void SystemGen::run() {
         size_t index = varMap.at(eq[0].content);
         if (system.bounds[index] != std::pair<double, double>{0, 0})
             dbg::error("Multiple interval values given for variable");
-        system.bounds[index] = {eq[1][0].number, eq[1][1].number};
+        system.bounds[index] = {eq[1][0].eval(), eq[1][1].eval()};
     }
     if (preSystem.intervals.size() != system.vars.size())
         dbg::error("Too few intervals given");
