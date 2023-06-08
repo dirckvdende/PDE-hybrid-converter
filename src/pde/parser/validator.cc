@@ -51,13 +51,7 @@ void InputValidator::checkExpressionFormats() {
 }
 
 void InputValidator::checkEmits() {
-    std::unordered_set<std::string> dimSet;
-    for (const std::string &dim : preSystem.dims)
-        dimSet.insert(dim);
-    for (const std::pair<std::string, std::string> &emit : preSystem.emits)
-        if (dimSet.find(emit.first) == dimSet.end())
-            dbg::error("Invalid emit statement, \"" + emit.first + "\" is not "
-            "a variable");
+    // TODO: implement
 }
 
 bool InputValidator::onlyTimeDeriv(const expr::ExprNode &node) {
