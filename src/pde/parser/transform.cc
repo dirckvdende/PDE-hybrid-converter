@@ -59,7 +59,7 @@ void InputTransform::genBoundary() {
         }
     }
     for (expr::ExprNode &node : boundaries)
-        preSystem.equations.push_back(node);
+        preSystem.boundaries.push_back(node);
 }
 
 void InputTransform::genInitial() {
