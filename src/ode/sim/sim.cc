@@ -111,7 +111,7 @@ void Sim::generateInitCond(const ODESystem &system, const std::vector<size_t>
             &node) -> double {
                 if (node.type != expr::NODE_VAR_MARKER ||
                 dataframe.size(node.index) == 0)
-                    throw std::runtime_error("Could not determine intial "
+                    dbg::error("Could not determine intial "
                     "value of expression \"" + node.str() + "\"");
                 return dataframe.get(node.index, 0);
             });
@@ -129,21 +129,21 @@ std::vector<size_t> &dataIndex) {
             expr::ExprNode &node) -> double {
                 if (node.type != expr::NODE_VAR_MARKER ||
                 step - 1 >= dataframe.size(node.index))
-                    throw std::runtime_error("Could not determine value of "
-                    "expression \"" + node.str() + "\"");
+                    dbg::error("Could not determine value of expression \"" +
+                    node.str() + "\"");
                 return dataframe.get(node.index, step - 1);
             });
             if (step != dataframe.size(dataIndex[i]))
-                throw std::runtime_error("Could not determine value of "
-                    "expression \"" + system.vals[i].str() + "\"");
+                dbg::error("Could not determine value of expression \"" +
+                system.vals[i].str() + "\"");
             val = dataframe.get(dataIndex[i], step - 1) + change * stepSize;
         } else {
             val = system.vals[i].evalDirect([&](const expr::ExprNode
             &node) -> double {
                 if (node.type != expr::NODE_VAR_MARKER ||
                 step >= dataframe.size(node.index))
-                    throw std::runtime_error("Could not determine value of "
-                    "expression \"" + node.str() + "\"");
+                    dbg::error("Could not determine value of expression \"" +
+                    node.str() + "\"");
                 return dataframe.get(node.index, step);
             });
         }
@@ -156,8 +156,7 @@ std::vector<size_t> &dataIndex) {
 void Sim::outputEmit(std::string filename, size_t resolution) {
     std::ofstream file(filename);
     if (!file.is_open())
-        throw std::runtime_error("Could not open output file \"" + filename +
-        "\"");
+        dbg::error("Could not open output file \"" + filename + "\"");
     file << "__time__";
     std::vector<std::pair<std::string, size_t>> emits = dataframe.emitList();
     for (const std::pair<std::string, size_t> &emit : emits) {

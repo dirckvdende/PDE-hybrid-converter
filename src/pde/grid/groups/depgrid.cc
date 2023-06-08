@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "depgrid.h"
 #include <iostream>
 #include <queue>
@@ -29,7 +30,7 @@ void DependGrid::setSpread(const std::vector<size_t> &val) {
 
 void DependGrid::calc() {
     if (spread.size() != getShape().size())
-        throw std::runtime_error("Invalid range given");
+        dbg::error("Invalid range given");
     for (size_t d = 0; d < spread.size(); d++) {
         if (spread[d] == 0)
             continue;

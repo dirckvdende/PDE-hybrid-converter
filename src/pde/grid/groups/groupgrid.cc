@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "dsu.h"
 #include "groupgrid.h"
 #include "pde/grid/hypergrid/hypergrid.h"
@@ -29,7 +30,7 @@ size_t GroupGrid::group(size_t index) {
 void GroupGrid::join(const std::vector<size_t> &locA, const std::vector<size_t>
 &locB) {
     if (!canJoin(locA, locB))
-        throw std::runtime_error("Attempted to exceed maximum group size");
+        dbg::error("Attempted to exceed maximum group size");
     dsu->join(toIndex(locA), toIndex(locB));
 }
 

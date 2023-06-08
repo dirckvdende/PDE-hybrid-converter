@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "parser.h"
 #include <algorithm>
 #include <string>
@@ -54,8 +55,8 @@ void Parser::expect(std::vector<TokenType> types) {
         std::string typeList = std::to_string(types.front());
         for (size_t i = 1; i < types.size(); i++)
             typeList.append(", " + std::to_string(types[i]));
-        throw std::runtime_error("Could not parse input, expected (" + typeList
-        + ") at position " + std::to_string(pos));
+        dbg::error("Could not parse input, expected (" + typeList + ") at "
+        "position " + std::to_string(pos));
     }
 }
 
@@ -148,7 +149,7 @@ ExprNode *Parser::readDeriv() {
     expect({TOK_DERIV});
     std::string content = cur().content.substr(1);
     if (content.size() == 0)
-        throw std::runtime_error("Invalid derivative");
+        dbg::error("Invalid derivative");
     next();
     expect({TOK_LBRACE});
     next();

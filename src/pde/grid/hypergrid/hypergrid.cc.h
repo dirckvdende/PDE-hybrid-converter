@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "hypergrid.h"
 #include <algorithm>
 #include <iterator>
@@ -111,22 +112,22 @@ const T &HyperGrid<T>::operator[](size_t index) const {
 template<class T>
 size_t HyperGrid<T>::toIndex(const std::vector<size_t> &loc) const {
     if (loc.size() != dims.size())
-        throw std::runtime_error("Invalid location conversion, invalid size");
+        dbg::error("Invalid location conversion, invalid size");
     size_t c = 0;
     for (size_t i = 0; i < loc.size(); i++) {
         c *= dims[loc.size() - i - 1];
         c += loc[loc.size() - i - 1];
     }
     if (c >= gridSize)
-        throw std::runtime_error("Invalid location conversion, " +
-        std::to_string(c) + " >= " + std::to_string(gridSize));
+        dbg::error("Invalid location conversion, " + std::to_string(c) + " >= "
+        + std::to_string(gridSize));
     return c;
 }
 
 template<class T>
 size_t HyperGrid<T>::toIndex(const T *obj) const {
     if (obj < data || obj - data >= (long int)gridSize)
-        throw std::runtime_error("Bad index conversion, invalid pointer");
+        dbg::error("Bad index conversion, invalid pointer");
     return size_t(obj - data);
 }
 
@@ -138,7 +139,7 @@ size_t HyperGrid<T>::toIndex(const T &obj) const {
 template<class T>
 std::vector<size_t> HyperGrid<T>::toLoc(size_t index) const {
     if (index >= gridSize)
-        throw std::runtime_error("Invalid index conversion, too large");
+        dbg::error("Invalid index conversion, too large");
     std::vector<size_t> out(dims.size());
     for (size_t i = 0; i < dims.size(); i++) {
         out[i] = index % dims[i];
@@ -150,7 +151,7 @@ std::vector<size_t> HyperGrid<T>::toLoc(size_t index) const {
 template<class T>
 std::vector<size_t> HyperGrid<T>::toLoc(const T *obj) const {
     if (obj < data || obj - data >= (long int)gridSize)
-        throw std::runtime_error("Bad location conversion, invalid pointer");
+        dbg::error("Bad location conversion, invalid pointer");
     return toLoc(obj - data);
 }
 
