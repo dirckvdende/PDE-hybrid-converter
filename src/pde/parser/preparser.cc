@@ -19,7 +19,7 @@ void PreParser::run() {
     runExprParser();
 }
 
-const PreSystem &PreParser::getSystem() const {
+PreSystem &PreParser::getSystem() {
     return preSystem;
 }
 
