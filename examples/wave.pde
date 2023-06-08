@@ -1,16 +1,16 @@
 
 pde {
     dims [x];
-    domain x * x < 20;
+    domain x * x < 100;
     pivot [0];
     scale 0.08;
 
     equation dt(dt(u)) = dx(dx(u));
-    init u = sin(x);
+    init u = sin(x * 3.1415 / 10);
     init dt(u) = 0;
     boundary u = 0;
-    interval u = [-50, 50];
-    interval dt(u) = [-50, 50];
+    interval u = [-2, 2];
+    interval dt(u) = [-2, 2];
 
     time 20;
     iterations 1;
