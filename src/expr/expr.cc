@@ -234,7 +234,7 @@ const {
         case NODE_MINUS:
             return -children[0]->evalDirect(fallback);
         case NODE_FUNC:
-            return funcs.at(content)(children[0]->evalDirect(fallback));
+            return funcs.at(content).eval(children[0]->evalDirect(fallback));
         default:
             return fallback(*this);
     }
@@ -308,6 +308,73 @@ bool ExprNode::containsNonTimeVars() const {
     return false;
 }
 
+ExprNode ExprNode::diff() const {
+    ExprNode *d = diffAlloc();
+    ExprNode c = *d;
+    delete d;
+    return c;
+}
+
+ExprNode *ExprNode::diffAlloc() const {
+    switch (type) {
+        case NODE_NUM:
+            return new ExprNode(NODE_NUM, {}, 0.0);
+        case NODE_ADD:
+            return new ExprNode(NODE_ADD, {
+                children[0]->diffAlloc(),
+                children[1]->diffAlloc()
+            });
+        case NODE_SUB:
+            return new ExprNode(NODE_SUB, {
+                children[0]->diffAlloc(),
+                children[1]->diffAlloc()
+            });
+        case NODE_MUL:
+            return new ExprNode(NODE_ADD, {
+                new ExprNode(NODE_MUL, {
+                    children[0]->diffAlloc(),
+                    children[1]->copy(),
+                }),
+                new ExprNode(NODE_MUL, {
+                    children[0]->copy(),
+                    children[1]->diffAlloc(),
+                }),
+            });
+        case NODE_DIV:
+            return new ExprNode(NODE_DIV, {
+                new ExprNode(NODE_SUB, {
+                    new ExprNode(NODE_MUL, {
+                        children[0]->diffAlloc(),
+                        children[1]->copy(),
+                    }),
+                    new ExprNode(NODE_MUL, {
+                        children[0]->copy(),
+                        children[1]->diffAlloc(),
+                    }),
+                }),
+                new ExprNode(NODE_MUL, {
+                    children[1]->copy(),
+                    children[1]->copy(),
+                }),
+            });
+        case NODE_MINUS:
+            return new ExprNode(NODE_MINUS, {
+                children[0]->diffAlloc(),
+            });
+        case NODE_FUNC:
+            return diffFunc();
+        default:
+            dbg::error("Could not differentiate expression \"" + str() + "\"");
+    }
+    return nullptr;
+}
+
+ExprNode *ExprNode::copy() const {
+    ExprNode *out = new ExprNode;
+    *out = *this;
+    return out;
+}
+
 std::string ExprNode::binaryStr() const {
     static const std::unordered_map<NodeType, std::string> typeMap = {
         {NODE_ADD, "+"}, {NODE_SUB, "-"}, {NODE_MUL, "*"}, {NODE_DIV, "/"},
@@ -317,4 +384,11 @@ std::string ExprNode::binaryStr() const {
     };
     return "(" + children[0]->str() + typeMap.at(type) + children[1]->str() +
     ")";
+}
+
+ExprNode *ExprNode::diffFunc() const {
+    ExprNode *out = funcs.at(content).diff(*this);
+    if (out == nullptr)
+        dbg::error("Could not differentiate expression \"" + str() + "\"");
+    return out;
 }
