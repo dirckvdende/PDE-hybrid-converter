@@ -35,8 +35,8 @@ void InputTransform::genEquations() {
         node[0].deriv.var = derivName(var, count - 1);
         node[0].deriv.dims = {"t"};
     }
-    preSystem.equations.insert(preSystem.equations.end(), eqs.begin(),
-    eqs.end());
+    for (expr::ExprNode &node : eqs)
+        preSystem.equations.push_back(node);
 }
 
 void InputTransform::genBoundary() {
@@ -53,12 +53,13 @@ void InputTransform::genBoundary() {
         for (size_t i = 1; i < vars[var]; i++) {
             d = d.diff();
             boundaries.push_back(expr::ExprNode(expr::NODE_EQ, {
+                new expr::ExprNode(expr::NODE_SYMB, {}, derivName(var, i)),
                 d.copy()
-            }, derivName(var, i)));
+            }));
         }
     }
-    preSystem.boundaries.insert(preSystem.equations.end(), boundaries.begin(),
-    boundaries.end());
+    for (expr::ExprNode &node : boundaries)
+        preSystem.equations.push_back(node);
 }
 
 void InputTransform::genInitial() {
