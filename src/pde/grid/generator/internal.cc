@@ -32,7 +32,7 @@ void InternalExprGenerator::replaceAll(GridCell &cell) {
 void InternalExprGenerator::replaceRawVars(GridCell &cell) {
     for (expr::ExprNode &val : cell.vals) {
         val.walk([&](expr::ExprNode &node) -> void {
-            if (node.type == expr::NODE_SYMB)
+            if (node.type == expr::NODE_SYMB && node.content.front() != '_')
                 node.content = toGridVar(node.content, grid.toLoc(cell),
                 grid.iteration);
         });
