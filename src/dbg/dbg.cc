@@ -28,12 +28,12 @@ void dbg::log(const std::string &txt) {
 }
 
 void dbg::error(const std::string &txt) {
-    std::cerr << "\033[91,1m" << "error: ";
+    std::cerr << std::endl << "\033[91m" << "error: ";
     for (const char &c : txt) {
         std::cerr << c;
         if (c == '\n')
             std::cerr << "    ";
     }
-    std::cerr << std::endl;
+    std::cerr << std::endl << std::endl;
     exit(1);
 }
