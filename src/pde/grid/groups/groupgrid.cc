@@ -45,7 +45,7 @@ std::string GroupGrid::str() {
     if (getShape().size() > 2 || size() > 10000)
         return "[grid]\n";
     std::string out;
-    for (size_t i = 0; i < getShape()[0]; i++) {
+    for (size_t i = 0; i < size(); i++) {
         if (i > 0 && i % getShape()[0] == 0)
             out.push_back('\n');
         out.append(std::to_string(group(i)) + " ");
