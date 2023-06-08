@@ -229,6 +229,25 @@ public:
      */
     bool containsNonTimeVars() const;
 
+    /**
+     * Differentiate the expression with respect to the time variable "t"
+     * @return The differentiated expression
+     */
+    ExprNode diff() const;
+
+    /**
+     * Differentiate the expression with respect to the time variable "t"
+     * @return A pointer to an expression, which contains the differentiated
+     * expression
+     */
+    ExprNode *diffAlloc() const;
+
+    /**
+     * Create a copy of this expression node and put it on the heap
+     * @return A pointer to the expression node copy
+     */
+    ExprNode *copy() const;
+
     // The node type
     NodeType type;
     // Node children (pointers)
@@ -257,6 +276,13 @@ private:
      * @return A string representation of the expression
      */
     std::string binaryStr() const;
+
+    /**
+     * Differentiate a special function with respect to time variable "t"
+     * @return A pointer to an expression, which contains the differentiated
+     * expression
+     */
+    ExprNode *diffFunc() const;
 
 };
 
