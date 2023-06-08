@@ -61,6 +61,7 @@ const std::unordered_map<std::string, FuncDef> expr::funcs
     {"abs", {
         [](double x) -> double { return std::abs(x); },
         [](const ExprNode &node) -> ExprNode * {
+            (void)node;
             return nullptr;
         }
     }},
