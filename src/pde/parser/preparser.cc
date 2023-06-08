@@ -116,7 +116,7 @@ void PreParser::parseEmit(const std::string &txt) {
     if (first == txt.npos || second == txt.npos)
         dbg::error("Could not parse emit statement");
     std::string inp = txt.substr(0, first);
-    std::string as = txt.substr(first + 1, second);
+    std::string as = txt.substr(first + 1, second - first - 1);
     std::string out = txt.substr(second + 1);
     if (as != "as")
         dbg::error("Could not parse emit statement");
