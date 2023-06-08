@@ -49,10 +49,15 @@ class ExprNode {
 public:
 
     /**
+     * Default constructor, the node type will be NODE_ERR
+     */
+    ExprNode();
+
+    /**
      * Constructor
      * @param type The type of the node
      */
-    ExprNode(NodeType type = NODE_ERR);
+    ExprNode(NodeType type);
 
     /**
      * Constructor

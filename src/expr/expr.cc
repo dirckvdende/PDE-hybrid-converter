@@ -7,6 +7,8 @@
 
 using namespace expr;
 
+ExprNode::ExprNode() : type(NODE_ERR) { }
+
 ExprNode::ExprNode(NodeType type) : type(type) { }
 
 ExprNode::ExprNode(NodeType type, const std::vector<ExprNode *> &
