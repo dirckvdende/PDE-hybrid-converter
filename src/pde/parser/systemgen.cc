@@ -64,7 +64,7 @@ const pde::PDESystem &SystemGen::getSystem() const {
 
 void SystemGen::findVarNames() {
     for (const expr::ExprNode &eq : preSystem.equations) {
-        std::string name = eq[0].content;
+        std::string name = eq[0].deriv.var;
         varMap.emplace(name, system.vars.size());
         system.vars.push_back(name);
     }
