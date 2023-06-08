@@ -249,7 +249,7 @@ void ExprNode::walk(std::function<void(ExprNode &)> func) {
 
 void ExprNode::walk(std::function<void(const ExprNode &)> func) const {
     func(*this);
-    for (ExprNode *child : children)
+    for (const ExprNode *child : children)
         child->walk(func);
 }
 
