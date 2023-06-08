@@ -31,6 +31,22 @@ public:
 
 private:
 
+    /**
+     * Check if all of the expression entries are in the right format
+     */
+    void checkExpressionFormats();
+
+    /**
+     * Check emit validity
+     */
+    void checkEmits();
+
+    /**
+     * Check if a derivative node only has "t" derivatives
+     * @param node The derivative node
+     */
+    static bool onlyTimeDeriv(const expr::ExprNode &node);
+
     // A constant reference to the presystem to validate
     const PreSystem &preSystem;
 

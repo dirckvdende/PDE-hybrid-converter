@@ -188,6 +188,7 @@ public:
      * current node as input
      */
     void walk(std::function<void(ExprNode &)> func);
+    void walk(std::function<void(const ExprNode &)> func) const;
 
     /**
      * Evaluate dimension nodes with given values
