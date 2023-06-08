@@ -52,7 +52,7 @@ void TestRunner::setConfig(int argc, char *argv[]) {
     if (argc >= 4)
         maxSize = std::stoull(argv[3]);
     if (dims.size() != range.size())
-        throw std::runtime_error("Dimensions and range of unequal length");
+        dbg::error("Dimensions and range of unequal length");
 }
 
 void TestRunner::showSuccess(std::string txt) {

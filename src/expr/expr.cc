@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "expr.h"
 #include <string>
 #include <unordered_map>
@@ -184,8 +185,7 @@ double ExprNode::eval() const {
     const ExprNode *cur = this;
     return evalDirect([&](const ExprNode &node) -> double {
         (void)node;
-        throw std::runtime_error("Could not evaluate expression \"" + cur->str()
-        + "\"");
+        dbg::error("Could not evaluate expression \"" + cur->str() + "\"");
         return 0.0;
     });
 }
@@ -252,8 +252,7 @@ double ExprNode::evalDims(const std::vector<double> &vals) const {
     return evalDirect([&](const ExprNode &node) -> double {
         if (node.type == NODE_DIM && node.index < vals.size())
             return vals[node.index];
-        throw std::runtime_error("Could not evaluate node \"" + cur->str() +
-        "\"");
+        dbg::error("Could not evaluate node \"" + cur->str() + "\"");
         return 0.0;
     });
 }
@@ -295,8 +294,7 @@ double ExprNode::evalVars(const std::vector<double> &vals) const {
     return evalDirect([&](const ExprNode &node) -> double {
         if (node.type == NODE_VAR_MARKER && node.index < vals.size())
             return vals[node.index];
-        throw std::runtime_error("Could not evaluate node \"" + cur->str() +
-        "\"");
+        dbg::error("Could not evaluate node \"" + cur->str() + "\"");
         return 0.0;
     });
 }

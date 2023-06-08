@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "domain.h"
 #include "expr/expr.h"
 #include "pde/grid/cell.h"
@@ -70,7 +71,7 @@ void Domain::apply() const {
     std::vector<size_t> shape;
     for (const std::pair<long, long> &r : range) {
         if (r.first < 0)
-            std::runtime_error("Domain not normalized before apply()");
+            dbg::error("Domain not normalized before apply()");
         shape.push_back(size_t(r.second) + 1);
     }
     // Check if the size of the shape will be too large
@@ -78,7 +79,7 @@ void Domain::apply() const {
     for (const size_t &s : shape)
         shapeSize *= s;
     if (shapeSize > grid.maxGridSize)
-        std::runtime_error("Domain too large to process");
+        dbg::error("Domain too large to process");
     grid.reshape(shape);
     for (size_t index = 0; index < grid.size(); index++) {
         std::vector<long> lpt;
@@ -132,7 +133,7 @@ bool Domain::isStored(const std::vector<long> &loc) const {
 void Domain::determineDomain() {
     const std::vector<long> zero(grid.dims.size(), 0);
     if (!inDomain(zero))
-        std::runtime_error("Pivot not in domain");
+        dbg::error("Pivot not in domain");
     std::queue<std::vector<long>> locs;
     locs.push(zero);
     while (!locs.empty() && size() <= grid.maxGridSize) {
@@ -146,7 +147,7 @@ void Domain::determineDomain() {
         }
     }
     if (size() > grid.maxGridSize)
-        throw std::runtime_error("Maximum domain size exceeded");
+        dbg::error("Maximum domain size exceeded");
 }
 
 void Domain::determineBorder() {

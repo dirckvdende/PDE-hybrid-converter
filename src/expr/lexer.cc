@@ -1,4 +1,5 @@
 
+#include "dbg/dbg.h"
 #include "funcs.h"
 #include "lexer.h"
 #include <string>
@@ -71,8 +72,7 @@ void Lexer::readNum() {
     next();
     std::string exp = readSubNum();
     if (exp == "-")
-        throw std::runtime_error("Invalid number notation with only \"-\" in "
-        "exponent");
+        dbg::log("Invalid number notation with only \"-\" in exponent");
     tokens.back().content.append(exp);
 }
 

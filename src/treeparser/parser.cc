@@ -90,8 +90,7 @@ void Parser::expect(TokenType type) {
 }
 
 void Parser::error(std::string content) {
-    std::cerr << "ERROR: " << content << std::endl;
-    exit(1);
+    throw std::runtime_error("Tree parser could not parse input: " + content);
 }
 
 ParseNode *Parser::readRoot() {
