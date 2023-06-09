@@ -64,7 +64,7 @@ void GridGenerator::divideGroups() {
     for (size_t i = 0; i < grid.dims.size(); i++)
         if (grid.spread[i] != 0)
             isZero = false;
-    if (isZero)
+    if (isZero || grid.componentLimit > 3000)
         alg = new groups::alg::SquaresAlg;
     else
         alg = new groups::alg::OptimalRectAlg;
