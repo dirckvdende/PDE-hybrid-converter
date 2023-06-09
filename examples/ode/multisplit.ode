@@ -1,0 +1,11 @@
+
+system {
+    var x = integ(x, 1);
+    var y = integ(x - z, 1);
+    var z = integ(y, 1);
+    interval x = [-100, 100];
+    interval y = [-100, 100];
+    interval z = [-100, 100];
+    emit z as z;
+    time 5;
+}
