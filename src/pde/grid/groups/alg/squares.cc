@@ -1,10 +1,11 @@
 
 #include "pde/grid/groups/groupgrid.h"
 #include "squares.h"
+#include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <random>
 #include <vector>
-#include <iostream>
 
 using namespace pde::grid::groups::alg;
 
@@ -17,9 +18,8 @@ void SquaresAlg::run() {
 }
 
 void SquaresAlg::calcMaxDim() {
-    maxDim = 1;
-    while (std::pow(maxDim + 1, grid->getShape().size()) <= grid->getMaxSize())
-        maxDim++;
+    double root = std::pow(grid->getMaxSize(), 1.0 / grid->getShape().size());
+    maxDim = std::max(1UL, size_t(root));
 }
 
 void SquaresAlg::assignAllCubes(std::vector<size_t> loc, size_t depth) {
