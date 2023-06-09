@@ -20,7 +20,9 @@ void InputValidator::run() {
         dbg::error("Given number of iterations too small: " +
         std::to_string(preSystem.scale));
     checkExpressionFormats();
+    findVarNames();
     checkEmits();
+    checkVarRefs();
 }
 
 void InputValidator::checkExpressionFormats() {
@@ -50,8 +52,30 @@ void InputValidator::checkExpressionFormats() {
             dbg::error("Invalid expression for entry: \"" + node.str() + "\"");
 }
 
+void InputValidator::findVarNames() {
+    varNames.clear();
+    for (const expr::ExprNode &node : preSystem.equations) {
+        std::string name = node[0].deriv.var;
+        if (varNames.find(name) != varNames.end())
+            dbg::error("Duplicate variable name \"" + name + "\"");
+        varNames.insert(name);
+    }
+}
+
 void InputValidator::checkEmits() {
-    // TODO: implement
+    // Gather variable names and emit names
+    std::unordered_set<std::string> varNames, emitNames;
+    for (const expr::ExprNode &node : preSystem.equations)
+        varNames.insert(node[0].deriv.var);
+    // Check emits
+    for (const std::pair<std::string, std::string> &emit : preSystem.emits) {
+        if (varNames.find(emit.first) == varNames.end())
+            dbg::error("Invalid emit: \"" + emit.first + " as " + emit.second +
+            "\"");
+        if (emitNames.find(emit.second) != emitNames.end())
+            dbg::error("Duplicate emit name \"" + emit.second + "\"");
+        emitNames.insert(emit.second);
+    }
 }
 
 bool InputValidator::onlyTimeDeriv(const expr::ExprNode &node) {
@@ -59,4 +83,17 @@ bool InputValidator::onlyTimeDeriv(const expr::ExprNode &node) {
         if (dim != "t")
             return false;
     return true;
+}
+
+void InputValidator::checkVarRefs() {
+    for (const expr::ExprNode &node : preSystem.equations) {
+        node[0].walk([&](const expr::ExprNode &cur) -> void {
+            if (cur.type != expr::NODE_SYMB && cur.type != expr::NODE_DERIV)
+                return;
+            std::string name = cur.type == expr::NODE_SYMB ? cur.content :
+            cur.deriv.var;
+            if (varNames.find(name) == varNames.end())
+                dbg::error("Undefined variable \"" + name + "\" referenced");
+        });
+    }
 }

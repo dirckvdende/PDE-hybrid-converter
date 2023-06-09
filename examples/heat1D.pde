@@ -12,5 +12,5 @@ pde {
 
     time 20;
     iterations 1;
-    emit x as x;
+    emit u as u;
 }

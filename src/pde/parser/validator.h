@@ -37,7 +37,12 @@ private:
     void checkExpressionFormats();
 
     /**
-     * Check emit validity
+     * Determine all variable names and check for duplicates
+     */
+    void findVarNames();
+
+    /**
+     * Check emit validity, uses the variable list
      */
     void checkEmits();
 
@@ -47,8 +52,16 @@ private:
      */
     static bool onlyTimeDeriv(const expr::ExprNode &node);
 
+    /**
+     * Check if variable references on the right of the equations are valid,
+     * uses the variable list
+     */
+    void checkVarRefs();
+
     // A constant reference to the presystem to validate
     const PreSystem &preSystem;
+    // LIst of variable names
+    std::unordered_set<std::string> varNames;
 
 };
 
