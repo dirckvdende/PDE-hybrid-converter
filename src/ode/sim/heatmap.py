@@ -14,11 +14,7 @@ if len(sys.argv) < 2:
     print("Usage: " + sys.argv[0] + " <filename> [display vars]")
     exit()
 
-varNames = set()
-for name in sys.argv[2:]:
-    varNames.add(name)
-
-os.system("./build/main -d --ode " + sys.argv[1])
+os.system("./build/main -d --ode " + " ".join(sys.argv[1:]))
 f = open("./tmp/ode.csv")
 
 data = []
@@ -38,8 +34,7 @@ data.sort(key=(lambda row : row[0]))
 
 heatData = []
 for row in data:
-    if ((row[0] in varNames or len(varNames) == 0) and row[0] != "__time__" and
-    row[0] != "t"):
+    if row[0] != "__time__" and row[0] != "t":
         heatData.append(row[1:])
 
 sns.heatmap(np.transpose(heatData))
