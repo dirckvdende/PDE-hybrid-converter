@@ -37,9 +37,9 @@ private:
     void checkExpressionFormats();
 
     /**
-     * Determine all variable names and check for duplicates
+     * Determine all variable names and dimension names and check for duplicates
      */
-    void findVarNames();
+    void findNames();
 
     /**
      * Check emit validity, uses the variable list
@@ -53,15 +53,26 @@ private:
     static bool onlyTimeDeriv(const expr::ExprNode &node);
 
     /**
+     * Check if a derivative contains a "t" derivative
+     * @param node The derivative node
+     */
+    static bool hasTimeDeriv(const expr::ExprNode &node);
+
+    /**
      * Check if variable references on the right of the equations are valid,
      * uses the variable list
      */
     void checkVarRefs();
 
+    /**
+     * Check if the derivatives on the right of the equations are all valid
+     */
+    void checkRightDerivs();
+
     // A constant reference to the presystem to validate
     const PreSystem &preSystem;
-    // LIst of variable names
-    std::unordered_set<std::string> varNames;
+    // List of variable and dimension names
+    std::unordered_set<std::string> varNames, dimNames;
 
 };
 
