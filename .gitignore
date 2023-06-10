@@ -1,6 +1,7 @@
 build
 tmp
 .vscode
+env
 
 # Prerequisites
 *.d
