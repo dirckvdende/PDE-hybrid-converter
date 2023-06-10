@@ -98,7 +98,7 @@ void Compiler::readInputFile() {
 }
 
 void Compiler::showHelp() {
-    std::cerr << "PDE hybrid system converter\n"
+    std::cerr << "PTOC: PDE to ODE converter\n"
         "Created by Dirck van den Ende, Universiteit Leiden\n"
         "GitHub: https://github.com/dirckvdende/PDE-hybrid-converter\n\n"
         "Converts PDE system specifications to discretized ODE system\n"
