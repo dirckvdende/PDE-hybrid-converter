@@ -19,6 +19,9 @@ Now run the command `build/main examples/heat1D.pde`. This will create a file `t
 
 The generated ODE can be simulated using a different tool. Running `build/main --ode tmp/compiler.ode` will simulate the ODE in the `tmp/compiler.ode` file. This will create a file `tmp/ode.csv`, which contains all data from the simulation. There are also examples of smaller ODEs that were not generated from a PDE, present in the [exmaples/ode](examples/ode) folder.
 
+> **NOTE:**
+> Before running the Python scripts below, some dependencies may need to be installed. This can be done with `python3 -m pip install -r requirements.txt`. If you wish to not install these packages globally, you can use a Python environment. Read more about Python environments [here](https://docs.python.org/3/tutorial/venv.html).
+
 For these smaller examples, a Python script [graphic.py](src/ode/sim/graphic.py) is present, which automatically simulates the given ODE system and creates a graph of all output variables. An example for the [Lorenz equation](examples/ode/lorenz.ode) is shown below. The output of the command `python3 src/ode/sim/graphic.py examples/ode/lorenz.ode` is stored in the `tmp/ode.png` file.
 
 <img src="docs/src/lorenz_ode.png" height="200">
