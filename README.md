@@ -66,9 +66,6 @@ The output ODE is in a similar format to the input PDE, but with fewer options. 
 
 For examples of ODE specifications see the [examples/ode](examples/ode) folder. A more detailed description of the ODE specification format can be found in [docs/ode_format.md](docs/ode_format.md).
 
-<img src="docs/src/wave_heatmap.png" height="200">
-<img src="docs/src/heat_heatmap.png" height="200">
-
 ## Iterative model
 
 When simulating PDEs with a large domain and therefore a large grid, the analog computer may not be able to simulate all ODEs in the output system at the same time. To combat this, an iterative model can be introduced where the ODEs are solved in groups, and values from outside the group are taken from the previous iteration. The number of iterations the simulation runs for can be set by the user in the input file. By the default, the maximum group size is set to `1000000`. This can be modified with a command-line argument.
