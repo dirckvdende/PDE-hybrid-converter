@@ -1,4 +1,10 @@
 #
+# PTOC: PDE to ODE converter
+# Created by Dirck van den Ende, Leiden University
+# https://github.com/dirckvdende/PDE-hybrid-converter
+#
+
+#
 # Visualize a 2D grid where grid cells are in groups
 # Each group will have some color
 #

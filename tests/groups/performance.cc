@@ -1,4 +1,10 @@
 /**
+ * PTOC: PDE to ODE converter
+ * Created by Dirck van den Ende, Leiden University
+ * https://github.com/dirckvdende/PDE-hybrid-converter
+ */
+
+/**
  * This program tests the time it takes for the algorithms to run
  */
 
