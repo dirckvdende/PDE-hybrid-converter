@@ -1,4 +1,10 @@
 /**
+ * PTOC: PDE to ODE converter
+ * Created by Dirck van den Ende, Leiden University
+ * https://github.com/dirckvdende/PDE-hybrid-converter
+ */
+
+/**
  * This test outputs group divisions for each algorithm to a file to a given
  * folder where text files will be placed
  * 

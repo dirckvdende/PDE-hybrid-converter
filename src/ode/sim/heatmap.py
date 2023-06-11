@@ -1,4 +1,10 @@
 #
+# PTOC: PDE to ODE converter
+# Created by Dirck van den Ende, Leiden University
+# https://github.com/dirckvdende/PDE-hybrid-converter
+#
+
+#
 # This program generates a visual output for the ODE system simulator. It runs
 # the simulator automatically. It generates a heatmap with time vertically and
 # the variables (space) horizontally

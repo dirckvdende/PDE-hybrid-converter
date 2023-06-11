@@ -1,3 +1,8 @@
+/**
+ * PTOC: PDE to ODE converter
+ * Created by Dirck van den Ende, Leiden University
+ * https://github.com/dirckvdende/PDE-hybrid-converter
+ */
 
 #include "dbg/dbg.h"
 #include "dsu.h"
