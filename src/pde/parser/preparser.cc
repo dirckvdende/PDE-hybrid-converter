@@ -86,15 +86,18 @@ void PreParser::runExprParser() {
     preSystem.iterations = std::stoull(preConfig["iterations"].front());
 }
 
-void PreParser::checkRequiredFields() const {
+void PreParser::checkRequiredFields() {
     // Check all required fields
     static const std::vector<std::string> required = {
         "dims", "domain", "pivot", "scale", "equation", "init", "boundary",
-        "interval", "time", "iterations"
+        "interval", "time"
     };
     for (const std::string &req : required)
         if (preConfig.find(req) == preConfig.end())
             dbg::error("Missing input field \"" + req + "\"");
+    // Iterations can have either no value or one value
+    if (preConfig.find("iterations") == preConfig.end())
+        preConfig.emplace("iterations", std::vector<std::string>{"1"});
     // Some inputs need to have a single input field
     static const std::vector<std::string> singles = {
         "dims", "domain", "pivot", "scale", "time", "iterations"
