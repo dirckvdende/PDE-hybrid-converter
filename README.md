@@ -22,11 +22,11 @@ The generated ODE can be simulated using a different tool. Running `build/main -
 > **NOTE:**
 > Before running the Python scripts below, some dependencies may need to be installed. This can be done with `python3 -m pip install -r requirements.txt`. If you wish to not install these packages globally, you can use a Python environment. Read more about Python environments [here](https://docs.python.org/3/tutorial/venv.html).
 
-For these smaller examples, a Python script [graphic.py](src/ode/sim/graphic.py) is present, which automatically simulates the given ODE system and creates a graph of all output variables. An example for the [Lorenz equation](examples/ode/lorenz.ode) is shown below. The output of the command `python3 src/ode/sim/graphic.py examples/ode/lorenz.ode` is stored in the `tmp/ode.png` file.
+For these smaller examples, a Python script [graphic.py](graphic.py) is present, which automatically simulates the given ODE system and creates a graph of all output variables. An example for the [Lorenz equation](examples/ode/lorenz.ode) is shown below. The output of the command `python3 graphic.py examples/ode/lorenz.ode` is stored in the `tmp/ode.png` file.
 
 <img src="docs/src/lorenz_ode.png" height="200">
 
-When simulating an ODE that was generated from a one-dimensional PDE, the [heatmap.py](src/ode/sim/heatmap.py) script can be used to create a 2D heatmap output of the simulation. Here the vertical axis represents time (the top is $t = 0$). The horizontal axis represents space. When doing this for the [one-dimensional heat equation](examples/heat1D.pde) the result is shown below. Note that for this to work you first need to run `build/main examples/heat1D.pde`, and then `python3 src/ode/sim/heatmap.py tmp/compiler.ode`. The output stored in the `tmp/heatmap.png` file.
+When simulating an ODE that was generated from a one-dimensional PDE, the [heatmap.py](heatmap.py) script can be used to create a 2D heatmap output of the simulation. Here the vertical axis represents time (the top is $t = 0$). The horizontal axis represents space. When doing this for the [one-dimensional heat equation](examples/heat1D.pde) the result is shown below. Note that for this to work you first need to run `build/main examples/heat1D.pde`, and then `python3 heatmap.py tmp/compiler.ode`. The output stored in the `tmp/heatmap.png` file.
 
 <img src="docs/src/heat_heatmap.png" height="200">
 
