@@ -51,8 +51,8 @@ The following options have to be given to the converter:
 | `init` | For each variable, an initial condition should be given for each time derivative up to (but not including) the time derivate in its equation. For example in the equation $\partial_{tt}u = \partial_{xx}u$, the initial values of $u$ and $\partial_{t} u$ need to be given |
 | `boundary` | The boundary values at each point in time should be given for each variable. In this case, the boundary values for the derivatives should not be given, as these are determined by the converter |
 | `interval` | Should be given for each variable, and all of its derivatives up to (but not including) the time derivative in its equation. This indicates a bound that the solution of the PDE (and resulting ODE approximation) is not expected to exceed |
-| `time` |  Simulation time of the PDE |
-| `iterations` | The number of iterations to generate approximation ODEs for (see [Iterative model](#iterative-model)) |
+| `time` | Simulation time of the PDE |
+| `iterations` | (optional, default: 1) The number of iterations to generate approximation ODEs for (see [Iterative model](#iterative-model)) |
 | `emit` | `emit` statements indicate that simulation data from a certain variable should be stored somewhere, this data will be gathered when simulating the output ODE |
 
 For examples of PDE specifications see the [examples](examples) folder.
