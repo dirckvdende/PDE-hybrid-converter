@@ -11,7 +11,7 @@
 
 using namespace treeparser;
 
-Lexer::Lexer(std::string txt) : txt(txt), curIndex(0) { }
+Lexer::Lexer(std::string txt) : txt(txt), curIndex(0), inComment(false) { }
 
 Lexer::~Lexer() { }
 
@@ -31,16 +31,24 @@ void Lexer::run() {
     prepareConfigOptions();
     while (!atEnd()) {
         TokenType specialType;
-        if (isWhitespaceChar(cur()))
+        if (cur() == '#') {
+            inComment = true;
             convertNameToken();
-        if (isSpecialChar(cur(), specialType)) {
-            convertNameToken();
-            tokens.push_back({ specialType, "" });
-        } else if (lastTokenWasText()) {
-            tokens.back().content.push_back(cur());
-        } else if (!isWhitespaceChar(cur())) {
-            tokens.push_back({ TOK_TEXT, std::string(1, cur()) });
         }
+        if (!inComment) {
+            if (isWhitespaceChar(cur()))
+                convertNameToken();
+            if (isSpecialChar(cur(), specialType)) {
+                convertNameToken();
+                tokens.push_back({ specialType, "" });
+            } else if (lastTokenWasText()) {
+                tokens.back().content.push_back(cur());
+            } else if (!isWhitespaceChar(cur())) {
+                tokens.push_back({ TOK_TEXT, std::string(1, cur()) });
+            }
+        }
+        if (cur() == '\n')
+            inComment = false;
         next();
     }
     convertNameToken();
