@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include "dbg/dbg.h"
 #include "lexer.h"
 #include "parser.h"
 
@@ -95,7 +96,7 @@ void Parser::expect(TokenType type) {
 }
 
 void Parser::error(std::string content) {
-    throw std::runtime_error("Tree parser could not parse input: " + content);
+    dbg::error("Tree parser could not parse input: " + content);
 }
 
 ParseNode *Parser::readRoot() {

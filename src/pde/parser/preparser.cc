@@ -46,11 +46,7 @@ void PreParser::runTreeParser() {
         }
     };
     treeParser.updateSettings(settings);
-    try {
-        treeParser.run();
-    } catch (const std::runtime_error &err) {
-        dbg::error("Invalid configuration structure or entries");
-    }
+    treeParser.run();
     if (treeParser.getRoot()->children.size() != 1)
         dbg::error("Cannot handle multiple PDE systems");
     treeparser::ParseNode *root = treeParser.getRoot()->children.front();
