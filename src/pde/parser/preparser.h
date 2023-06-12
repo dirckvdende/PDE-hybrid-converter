@@ -65,7 +65,7 @@ private:
      * if this is not the case. Also checks if configurations have the correct
      * lengths
      */
-    void checkRequiredFields() const;
+    void checkRequiredFields();
 
     /**
      * Parse dimensions configuration settings. The result is output to the PDE
