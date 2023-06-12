@@ -204,11 +204,12 @@ void Sim::resetStats() {
 }
 
 void Sim::logStats() const {
-    dbg::log("\nIterations:       " + std::to_string(stats.iterations));
-    dbg::log("Systems:          " + std::to_string(stats.systemCount));
-    dbg::log("Emits:            " + std::to_string(stats.emitCount));
-    dbg::log("\nParse time:       " + std::to_string(stats.parseTime) + " s");
-    dbg::log("Iteration time:   " + std::to_string(stats.iterationTime) + " s");
-    dbg::log("System time:      " + std::to_string(stats.systemTime) + " s");
-    dbg::log("File output time: " + std::to_string(stats.fileTime) + " s\n");
+    dbg::log("\Simulation steps: " + std::to_string(stats.iterations));
+    dbg::log("Systems:           " + std::to_string(stats.systemCount));
+    dbg::log("Emits:             " + std::to_string(stats.emitCount));
+    dbg::log("\nParse time:        " + std::to_string(stats.parseTime) + " s");
+    dbg::log("Iteration time:    " + std::to_string(stats.iterationTime) + " s"
+    );
+    dbg::log("System time:       " + std::to_string(stats.systemTime) + " s");
+    dbg::log("File output time:  " + std::to_string(stats.fileTime) + " s\n");
 }
