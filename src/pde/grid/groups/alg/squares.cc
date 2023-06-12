@@ -45,7 +45,8 @@ size_t depth) {
             grid->join(base, loc);
         return;
     }
-    for (size_t i = 0; i < maxDim && loc[depth] < grid->getShape()[depth]; i++) {
+    for (size_t i = 0; i < maxDim && loc[depth] < grid->getShape()[depth]; i++)
+    {
         assignCube(base, loc, depth + 1);
         loc[depth]++;
     }

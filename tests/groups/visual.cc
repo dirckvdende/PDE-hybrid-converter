@@ -65,7 +65,8 @@ public:
         file << ((pde::grid::groups::GroupGrid *)grid)->str();
         file.close();
         // Output border
-        std::ofstream borderFile(outputFolder + "/" + names[alg] + "_border.txt");
+        std::ofstream borderFile(outputFolder + "/" + names[alg] + "_border.txt"
+        );
         if (!borderFile.is_open())
             exit(1);
         borderFile << grid->str();

@@ -72,8 +72,8 @@ void OptimalRectAlg::assignAllRects(std::vector<size_t> loc, size_t depth) {
     }
 }
 
-void OptimalRectAlg::assignRect(std::vector<size_t> base, std::vector<size_t> loc,
-size_t depth) {
+void OptimalRectAlg::assignRect(std::vector<size_t> base, std::vector<size_t>
+loc, size_t depth) {
     if (depth == grid->getShape().size()) {
         if (grid->canJoin(base, loc))
             grid->join(base, loc);

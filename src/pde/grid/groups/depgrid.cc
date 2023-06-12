@@ -47,13 +47,15 @@ void DependGrid::calc() {
             bool mark = false;
             if (loc[d] > 0) {
                 loc[d]--;
-                if (g != group(loc) || (depends[loc] != 0 && depends[loc] != d + 1))
+                if (g != group(loc) || (depends[loc] != 0 && depends[loc] != d +
+                1))
                     mark = true;
                 loc[d]++;
             }
             if (loc[d] + 1 < getShape()[d]) {
                 loc[d]++;
-                if (g != group(loc) || (depends[loc] != 0 && depends[loc] != d + 1))
+                if (g != group(loc) || (depends[loc] != 0 && depends[loc] != d +
+                1))
                     mark = true;
                 loc[d]--;
             }
