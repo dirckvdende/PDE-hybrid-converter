@@ -146,6 +146,8 @@ private:
     Settings settings;
     // Config option names map
     std::unordered_map<std::string, const ConfigOption *> configNames;
+    // Indicates if we are currently inside a comment
+    bool inComment;
 
 };
 
