@@ -110,6 +110,7 @@ std::string DependGrid::str() const {
         if (i > 0 && i % getShape()[0] == 0)
             out.push_back('\n');
         out.push_back(depends[i] > 0 ? '1' : '0');
+        out.push_back(' ');
     }
     return out;
 }
