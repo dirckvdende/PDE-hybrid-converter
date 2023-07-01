@@ -39,9 +39,21 @@ for line in f.readlines():
 data.sort(key=(lambda row : row[0]))
 
 heatData = []
+times = []
 for row in data:
     if row[0] != "__time__" and row[0] != "t":
         heatData.append(row[1:])
+    elif row[0] == "__time__":
+        times = row[1:]
 
-sns.heatmap(np.transpose(heatData))
+# Remove some ticks
+timesShow = np.linspace(0, len(times) - 1, 5, dtype=int)
+timesShow = [i for i in timesShow]
+timesLabels = ["{:.1f}".format(times[len(times) - i - 1]) for i in timesShow]
+
+hm = sns.heatmap(np.flipud(np.transpose(heatData)))
+hm.set_yticks(timesShow)
+hm.set_yticklabels(timesLabels)
+plt.xlabel("x")
+plt.ylabel("t")
 plt.savefig("tmp/heatmap.png", dpi=300, bbox_inches="tight")
