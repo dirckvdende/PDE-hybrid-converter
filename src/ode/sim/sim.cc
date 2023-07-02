@@ -78,7 +78,7 @@ void Sim::runSystem(ODESystem system) {
     for (size_t i = 0; i < system.vars.size(); i++)
         dataIndex[i] = dataframe.getIndex(system.vars[i]);
     // Add emits of the current system
-    for (const std::pair<std::string, std::string> emit : system.emit)
+    for (const std::pair<std::string, std::string> &emit : system.emit)
         dataframe.addEmit(emit.first, emit.second);
     replaceVars(system);
     generateInitCond(system, dataIndex);

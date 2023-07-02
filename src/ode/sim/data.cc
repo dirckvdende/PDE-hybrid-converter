@@ -63,7 +63,7 @@ void SimData::addEmit(const std::string &inp, const std::string &out) {
 
 std::vector<std::pair<std::string, size_t>> SimData::emitList() const {
     std::vector<std::pair<std::string, size_t>> out;
-    for (const std::pair<std::string, size_t> &emit : emitNames)
+    for (const auto &emit : emitNames)
         if (!emit.first.empty() && emit.first.front() != '_')
             out.push_back(emit);
     return out;

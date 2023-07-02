@@ -70,12 +70,12 @@ private:
 
     // Input text
     std::string txt;
+    // The input PDE system
+    PDESystem system;
     // The parser used to convert text input into a PDE system
     parser::Parser parser;
     // System preprocessor
     parser::Preprocessor preprocess;
-    // The input PDE system
-    PDESystem system;
     // ODE system generator
     ODEGenerator generator;
     // ODE splitter, to take apart groups
