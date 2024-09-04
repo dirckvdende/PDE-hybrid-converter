@@ -17,7 +17,7 @@ import seaborn as sns
 import sys
 
 if len(sys.argv) < 2:
-    print("Usage: " + sys.argv[0] + " <filename> [display vars]")
+    print("Usage: " + sys.argv[0] + " <filename> [sim arguments]")
     exit()
 
 os.system("./build/main -d --ode " + " ".join(sys.argv[1:]))
@@ -39,9 +39,32 @@ for line in f.readlines():
 data.sort(key=(lambda row : row[0]))
 
 heatData = []
+times = []
 for row in data:
     if row[0] != "__time__" and row[0] != "t":
         heatData.append(row[1:])
+    elif row[0] == "__time__":
+        times = row[1:]
 
-sns.heatmap(np.transpose(heatData))
+# Remove some ticks
+timesShow = np.linspace(0, len(times) - 1, 5, dtype=int)
+timesLabels = ["{:.1f}".format(times[len(times) - i - 1]) for i in timesShow]
+
+xShow = np.linspace(0, len(heatData) - 1, 5, dtype=int)
+
+CUSTOM_X_LABELS = False
+if CUSTOM_X_LABELS:
+    xmin, xmax = -10, 10
+    xLabels = np.linspace(xmin, xmax, 5, dtype=float)
+else:
+    xLabels = xShow
+
+plt.subplots(figsize=(4 * 1.4, 3 * 1.4))
+hm = sns.heatmap(np.flipud(np.transpose(heatData)))
+hm.set_yticks(timesShow)
+hm.set_yticklabels(timesLabels)
+hm.set_xticks(xShow)
+hm.set_xticklabels(xLabels)
+plt.xlabel("x")
+plt.ylabel("t")
 plt.savefig("tmp/heatmap.png", dpi=300, bbox_inches="tight")

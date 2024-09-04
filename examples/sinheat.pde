@@ -7,10 +7,10 @@ pde {
 
     equation dt(u) = 2 * dx(dx(u));
     init u = sin(x);
-    boundary u = 0;
+    boundary u = sin(x);
     interval u = [-1e100, 1e100];
 
     time 1;
-    iterations 5;
+    iterations 1;
     emit u as u;
 }

@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Please cite the information below when using or modifying PTOC software"
+authors:
+  - family-names: van den Ende
+    given-names: Dirck
+title: "PTOC: PDE to ODE compiler"
+version: 1.0
+date-released: 2023-07-05
+license: MIT
+repository-code: "https://github.com/dirckvdende/PDE-hybrid-converter"
